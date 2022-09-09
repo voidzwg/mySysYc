@@ -1,12 +1,6 @@
 /**func test**/
-#include<stdio.h>
 
 
-int getint() {
-    int n;
-    scanf( "%d", &n); //test
-    return n;
-}
 
 int func_a() {
     printf( "Hello, my compiler!\n"); //test

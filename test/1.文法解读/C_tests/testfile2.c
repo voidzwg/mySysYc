@@ -1,22 +1,20 @@
 /**const and var test**/
-#include<stdio.h>
+#include<stdio.h> //test
 
 FILE *input, *output; //test
 
-int getint() {
-    int n;
+int getint() { //test
+    int n; //test
     fscanf(input, "%d", &n); //test
-    return n;
-}
+    return n; //test
+} //test
 
 int main() {
 	input = fopen("../files/input2.txt", "r"); //test
 	output = fopen("../files/output2.txt", "w"); //test
     /**BEGIN**/
     fprintf(output, "20373227\n"); //test
-    const int const_int_a = 4;
-    const int const_int_b = 6;
-    const int const_int_c = const_int_a + const_int_b;
+    const int const_int_a = 4, const_int_b = 6, const_int_c = const_int_a + const_int_b;
     fprintf(output, "%d %d %d\n", const_int_a, const_int_b, const_int_c); //test
     int int_a, int_b = 666;
     int_a = getint();

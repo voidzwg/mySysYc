@@ -1,12 +1,6 @@
 /**if else and while test**/
-#include<stdio.h>
 
 
-int getint() {
-    int n;
-    scanf( "%d", &n); //test
-    return n;
-}
 
 int main() {
     /**BEGIN**/

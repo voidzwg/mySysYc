@@ -4,4 +4,4 @@ please input b
 please input c
 please input d
 a = 555, b = 666, c = 777, d = 888
-Hello, &&
+Hello, or

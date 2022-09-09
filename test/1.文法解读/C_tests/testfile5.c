@@ -1,16 +1,16 @@
 /**func and calc and simple if test**/
-#include<stdio.h>
+#include<stdio.h> //test
 
 FILE *input, *output; //test
 
-int getint() {
-    int n;
+int getint() { //test
+    int n; //test
     fscanf(input, "%d", &n); //test
-    return n;
-}
+    return n; //test
+} //test
 
-int add(const int a, const int b) {
-    const int c = a + b;
+int add(int a, int b) {
+    int c = a + b;
     fprintf(output, "%d + %d = %d\n", a, b, c); //test
     return c;
 }
@@ -66,8 +66,8 @@ int main() {
     add_r = add(a * b / c, (a + b) * c);
     diff_r = diff(c % d + 2, a * (c / b));
     mul_r = mul((a / (c * (b - c)) - b) % d, -b + c);
-    div_r = div(a + c, -(a / (c - d)));
-    mod_r = mod(a * (b % c), +(-a * (+-+c)));
+    div_r = div(a + c, -(a * (c - d)));
+    mod_r = mod(a * (b % c), +(-a * (c)));
     fprintf(output, "add_r = %d, diff_r = %d, mul_r = %d, div_r = %d, mod_r = %d\n", add_r, diff_r, mul_r, div_r, mod_r); //test
     /**END**/
     fclose(input); //test

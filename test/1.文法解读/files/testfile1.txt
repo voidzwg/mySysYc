@@ -1,15 +1,13 @@
 /**&& and || test**/
-#include<stdio.h>
 
 
-int getint() {
-    int n;
-    scanf( "%d", &n); //test
-    return n;
-}
+
+int ccc;
 
 int main() {
     /**BEGIN**/
+    ;
+    const int ccc = 0;
     printf( "20373227\n"); //test
     int a, b, c, d;
     printf( "please input a\n"); //test
@@ -22,12 +20,13 @@ int main() {
     d = getint();
     printf( "a = %d, b = %d, c = %d, d = %d\n", a, b, c, d); //test
     int array_a[2][2] = {{a, b}, {c, d}};
-    if ((array_a[0][0] >= array_a[0][1] && array_a[0][0] >= array_a[1][0]) || !(array_a[1][1] < array_a[1][0] || array_a[1][1] < array_a[0][1])) {
-        printf( "Hello, &&\n"); //test
+    if (array_a[0][0] >= array_a[0][1] && array_a[0][0] >= array_a[1][0] || array_a[1][1] < array_a[1][0] || array_a[1][1] < array_a[0][1] && !array_a[0][0]) {
+        printf( "Hello, and\n"); //test
     }
     else {
-        printf( "Hello, ||\n"); //test
+        printf( "Hello, or\n"); //test
     }
+    {}
     /**END**/
     return 0;
 }

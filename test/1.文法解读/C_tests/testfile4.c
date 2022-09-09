@@ -1,13 +1,13 @@
 /**func test**/
-#include<stdio.h>
+#include<stdio.h>  //test
 
 FILE *input, *output; //test
 
-int getint() {
-    int n;
+int getint() { //test
+    int n; //test
     fscanf(input, "%d", &n); //test
-    return n;
-}
+    return n; //test
+} //test
 
 int func_a() {
     fprintf(output, "Hello, my compiler!\n"); //test
