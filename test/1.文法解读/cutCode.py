@@ -1,3 +1,8 @@
+import sys
+
+HOME = sys.argv[0]
+HOME = HOME[:len(HOME) - 10]
+# print(HOME)
 test_name = "testfile"
 c_tail = ".c"
 text_tail = ".txt"
@@ -6,8 +11,8 @@ i = 1
 
 while i <= n:
     name = test_name + str(i)
-    in_f = open("C_tests/" + name + c_tail, "r")
-    out_f = open("files/" + name + text_tail, "w")
+    in_f = open(HOME + "C_tests\\" + name + c_tail, "r")
+    out_f = open(HOME + "files\\" + name + text_tail, "w")
     # print(name + c_tail + ':\n', in_f.read())
     code = ''
     while True:
@@ -25,9 +30,6 @@ while i <= n:
                 if len(ss) > 7:
                     if ss == "fprintf(output,":
                         s_filter[j] = "printf("
-                        break
-                    elif ss == "fscanf(input,":
-                        s_filter[j] = "scanf("
                         break
                 j += 1
             if j == len(s_filter):
