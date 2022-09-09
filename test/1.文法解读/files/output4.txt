@@ -1,0 +1,10 @@
+20373227
+please input a
+please input b
+please input c
+Hello, my compiler!
+func_a() = 666
+Hi, my compiler!
+a = 3, b = 4
+func_c() = 3
+c = 5

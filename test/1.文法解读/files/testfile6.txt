@@ -1,0 +1,69 @@
+/**if else and while test**/
+#include<stdio.h>
+
+
+int getint() {
+    int n;
+    scanf( "%d", &n); //test
+    return n;
+}
+
+int main() {
+    /**BEGIN**/
+    printf( "20373227\n"); //test
+    int a, b, c, d;
+    printf( "please input a\n"); //test
+    a = getint();
+    printf( "please input b\n"); //test
+    b = getint();
+    printf( "please input c\n"); //test
+    c = getint();
+    printf( "please input d\n"); //test
+    d = getint();
+    printf( "a = %d, b = %d, c = %d, d = %d\n", a, b, c, d); //test
+    int sum = 0;
+    while (a) {
+        sum = sum + a / (b * (c % d));
+        a = a - 1;
+        printf( "a = %d, sum = %d\n", a, sum); //test
+    }
+    printf( "please input a again\n"); //test
+    a = getint();
+    if (a == c) {
+        printf( "a == c\n"); //test
+    } else if (a != c) {
+        printf( "a != c\n"); //test
+    }
+    if (a >= 100) {
+        printf( "a >= 100\n"); //test
+    } else if (a < 100) {
+        if (a > 0)
+            printf( "0 < a < 100\n"); //test
+        else if (a <= 0)
+            printf( "a <= 0\n"); //test
+    }
+    while (1) {
+        if (a == b) {
+            printf( "a == b\n"); //test
+            break;
+        } else if (a > b) {
+            a = a - 1;
+            continue;
+        } else {
+            a = a + 1;
+            continue;
+        }
+    }
+    if (c != d) {
+        while (c != d) {
+            if (c > d) {
+                c = c - 1;
+                continue;
+            }
+            c = c + 1;
+        }
+    }
+    printf( "a = %d, b = %d, c = %d, d = %d\n", a, b, c, d); //test
+    /**END**/
+    return 0;
+}

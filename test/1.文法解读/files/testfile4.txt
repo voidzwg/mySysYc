@@ -1,0 +1,47 @@
+/**func test**/
+#include<stdio.h>
+
+
+int getint() {
+    int n;
+    scanf( "%d", &n); //test
+    return n;
+}
+
+int func_a() {
+    printf( "Hello, my compiler!\n"); //test
+    return 666;
+}
+
+void func_b() {
+    printf( "Hi, my compiler!\n"); //test
+    return;
+}
+
+int func_c(int a, int b) {
+    printf( "a = %d, b = %d\n", a, b); //test
+    return a;
+}
+
+void func_d(int c) {
+    printf( "c = %d\n", c); //test
+    return;
+}
+
+int main() {
+	/**BEGIN**/
+    printf( "20373227\n"); //test
+    int a, b, c;
+    printf( "please input a\n"); //test
+    a = getint();
+    printf( "please input b\n"); //test
+    b = getint();
+    printf( "please input c\n"); //test
+    c = getint();
+    printf( "func_a() = %d\n", func_a()); //test
+    func_b();
+    printf( "func_c() = %d\n", func_c(a, b)); //test
+    func_d(c);
+    /**END**/
+    return 0;
+}
