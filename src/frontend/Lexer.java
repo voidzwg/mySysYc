@@ -18,17 +18,21 @@ public class Lexer {
         return token.getNum();
     }
 
+    public int getLine() {
+        return token.getLine();
+    }
+
     public Token next() {
         token.clearToken();
         if (token.readChar() == -1) {
-            System.out.println("EOF");
             symbol = Token.ERROR;
             return symbol;
         }
         while (isBlank(token.getCh())) {
-            System.out.println("Read blank");
+            if (isRet(token.getCh())) {
+                token.nextLine();
+            }
             if (token.readChar() == -1) {
-                System.out.println("EOF");
                 symbol = Token.ERROR;
                 return symbol;
             }
@@ -175,6 +179,7 @@ public class Lexer {
                     token.catToken();
                     token.readChar();
                 }
+                token.nextLine();
                 symbol = Token.NOTE;
             } else {
                 token.retract();

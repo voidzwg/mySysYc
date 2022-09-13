@@ -1,12 +1,12 @@
 import frontend.*;
-
 import java.io.*;
-import java.io.Reader;
 
-public class mySysYc {
+public class Compiler {
     char ch;
+    String frURL = "./test/2.词法分析/testfile.txt"/*"testfile.txt"*/;
+    String fwURL = "./test/2.词法分析/output.txt"/*"output.txt"*/;
     public static void main(String[] args) {
-        mySysYc test = new mySysYc();
+        Compiler test = new Compiler();
         try {
             test.test();
         } catch (IOException e) {
@@ -17,8 +17,8 @@ public class mySysYc {
     }
 
     void test() throws IOException{
-        File fr = new File("./test/2.词法分析/testfile.txt");
-        File fw = new File("./test/2.词法分析/output.txt");
+        File fr = new File(frURL);
+        File fw = new File(fwURL);
         if (!fw.exists()) {
             boolean ret = fw.createNewFile();
         }
@@ -29,7 +29,7 @@ public class mySysYc {
             if (token.equals(Token.ERROR)) {
                 break;
             }
-            String result = token + " " + lexer.getToken() + "\n";
+            String result = token + " " + lexer.getToken() + " " + lexer.getLine() + "\n";
             System.out.print(result);
             if (token.equals(Token.NOTE)) {
                 continue;

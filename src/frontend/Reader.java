@@ -3,7 +3,7 @@ package frontend;
 import java.io.*;
 
 public class Reader {
-    private int num;
+    private int num, line;
     private String token;
     private int head = -1;
     private char ch;
@@ -11,6 +11,7 @@ public class Reader {
 
     Reader(File f) {
         clearToken();
+        line = 1;
         try {
             this.reader = new BufferedInputStream(new FileInputStream(f));
         } catch (FileNotFoundException e) {
@@ -25,6 +26,10 @@ public class Reader {
 
     protected String getToken() {
         return token;
+    }
+
+    protected int getLine() {
+        return line;
     }
 
     protected void setNum() {
@@ -75,5 +80,9 @@ public class Reader {
     protected void clearToken() {
         token = "";
         head = -1;
+    }
+
+    protected void nextLine() {
+        line++;
     }
 }
