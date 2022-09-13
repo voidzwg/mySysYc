@@ -8,8 +8,8 @@ public class Compiler {
     public static void main(String[] args) {
         Compiler test = new Compiler();
         try {
-            test.test();
-            //test.submit2();
+            //test.test();
+            test.submit2();
         } catch (IOException e) {
             System.out.println("Caught IOException in mySysYc");
             e.printStackTrace();

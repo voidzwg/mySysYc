@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Lexer {
-    private Token symbol;
-    private Reader token;
+    private final Reader token;
 
     public Lexer(File f) {
         token = new Reader(f);
@@ -28,6 +27,7 @@ public class Lexer {
     }
 
     public Token next() {
+        Token symbol;
         token.clearToken();
         do {
             if (token.readChar() == -1) {
