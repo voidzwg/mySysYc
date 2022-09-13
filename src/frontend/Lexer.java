@@ -1,6 +1,7 @@
 package frontend;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Lexer {
     private Token symbol;
@@ -8,6 +9,10 @@ public class Lexer {
 
     public Lexer(File f) {
         token = new Reader(f);
+    }
+
+    public void close() throws IOException {
+        token.close();
     }
 
     public String getToken() {
@@ -24,19 +29,15 @@ public class Lexer {
 
     public Token next() {
         token.clearToken();
-        if (token.readChar() == -1) {
-            symbol = Token.ERROR;
-            return symbol;
-        }
-        while (isBlank(token.getCh())) {
+        do {
+            if (token.readChar() == -1) {
+                symbol = Token.EOF;
+                return symbol;
+            }
             if (isRet(token.getCh())) {
                 token.nextLine();
             }
-            if (token.readChar() == -1) {
-                symbol = Token.ERROR;
-                return symbol;
-            }
-        }
+        } while (isBlank(token.getCh()));
         if (Character.isLetter(token.getCh())) {
             while (isIdent(token.getCh())) {
                 token.catToken();
@@ -189,16 +190,6 @@ public class Lexer {
             symbol = Token.ERROR;
         }
         return symbol;
-    }
-
-    public boolean isEmpty() {
-        int ret = token.readChar();
-        if (ret == -1) {
-            return true;
-        } else {
-            token.retract();
-            return false;
-        }
     }
 
     private boolean isBlank(char ch) {

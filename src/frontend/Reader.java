@@ -20,6 +20,10 @@ public class Reader {
         }
     }
 
+    protected void close() throws IOException {
+        reader.close();
+    }
+
     protected char getCh() {
         return ch;
     }

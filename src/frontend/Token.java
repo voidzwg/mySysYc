@@ -39,8 +39,9 @@ public enum Token {
     RBRACK(35, "]"),
     LBRACE(36, "{"),
     RBRACE(37, "}"),
-    ERROR(38, "`"),
+    ERROR(38, "o"),
     NOTE(39, "//"),
+    EOF(40, "\0"),
     ;
 
     private final int index;
