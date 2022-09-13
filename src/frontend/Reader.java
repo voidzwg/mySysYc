@@ -42,15 +42,18 @@ public class Reader {
     protected int readChar(){
         int ret = -1;
         try {
-            ret = reader.read();
             reader.mark(10);
+            ret = reader.read();
         } catch (java.io.IOException e) {
+            System.out.println("Caught IOException in readChar()");
+            System.out.println(ret);
             e.printStackTrace();
         }
         if (ret == -1) {
             return ret;
         } else {
             ch = (char) ret;
+            System.out.println("Already read " + ch);
             return 0;
         }
     }
@@ -63,6 +66,7 @@ public class Reader {
     protected void retract() {
         try {
             reader.reset();
+            System.out.println("Already reset");
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

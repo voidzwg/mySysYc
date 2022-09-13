@@ -39,6 +39,8 @@ public enum Token {
     RBRACK(35, "]"),
     LBRACE(36, "{"),
     RBRACE(37, "}"),
+    ERROR(38, "`"),
+    NOTE(39, "//"),
     ;
 
     private final int index;
@@ -64,5 +66,14 @@ public enum Token {
             }
         }
         return null;
+    }
+
+    public static Token getToken(String name) {
+        for (Token t : values()) {
+            if (t.name.equals(name)) {
+                return t;
+            }
+        }
+        return ERROR;
     }
 }
