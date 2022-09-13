@@ -7,7 +7,7 @@ int ccc;
 int main() {
     /**BEGIN**/
     ;
-    const int ccc = 0;
+    const int _ccc = 0;
     printf( "20373227\n"); //test
     int a, b, c, d;
     printf( "please input a\n"); //test

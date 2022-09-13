@@ -38,7 +38,7 @@ public class Lexer {
                 token.nextLine();
             }
         } while (isBlank(token.getCh()));
-        if (Character.isLetter(token.getCh())) {
+        if (isLetterOr_(token.getCh())) {
             while (isIdent(token.getCh())) {
                 token.catToken();
                 token.readChar();
@@ -198,6 +198,10 @@ public class Lexer {
 
     private boolean isRet(char ch) {
         return ch == '\n';
+    }
+
+    private boolean isLetterOr_(char ch) {
+        return Character.isLetter(ch) || ch == '_';
     }
 
     private boolean isIdent(char ch) {
