@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import frontend.CompTree.*;
-import frontend.CompTree.Number;
+import frontend.SyntaxParsingTree.*;
+import frontend.SyntaxParsingTree.Number;
 
 public class Parser {
     private final Lexer lexer;
@@ -21,8 +21,8 @@ public class Parser {
         lexer = new Lexer(fr);
     }
 
-    public CompTree build() throws IOException, CompileErrorException {
-        CompTree tree = new CompUnit();
+    public SyntaxParsingTree build() throws IOException, CompileErrorException {
+        SyntaxParsingTree tree;
         read();
         tree = parseCompUnit();
         return tree;
@@ -49,7 +49,7 @@ public class Parser {
         }
     }
 
-    private int readLexer() throws CompileErrorException {
+    private int readLexer() {
         Token token;
         String symbol;
         while (true) {
@@ -69,7 +69,7 @@ public class Parser {
         return 0;
     }
 
-    private Token readToken(int n) throws CompileErrorException {
+    private Token readToken(int n) {
         while (head <= tail + n) {
             if (readLexer() == -1) {
                 break;
@@ -82,7 +82,7 @@ public class Parser {
         }
     }
 
-    private String readSymbol(int n) throws CompileErrorException {
+    private String readSymbol(int n) {
         while (head <= tail + n) {
             readLexer();
         }
@@ -93,7 +93,7 @@ public class Parser {
         }
     }
 
-    private void read() throws CompileErrorException {
+    private void read() {
         if (head > tail) {
             pop();
         } else {
@@ -119,13 +119,16 @@ public class Parser {
             return true;
         } else if (token == Token.INTTK) {
             if (readToken(0) == Token.IDENFR) {
-                return readToken(1) == Token.COMMA || readToken(1) == Token.SEMICN || readToken(1) == Token.ASSIGN || readToken(1) == Token.LBRACK;
+                return readToken(1) == Token.COMMA ||
+                        readToken(1) == Token.SEMICN ||
+                        readToken(1) == Token.ASSIGN ||
+                        readToken(1) == Token.LBRACK;
             }
         }
         return false;
     }
 
-    private boolean isFuncDef() throws CompileErrorException {
+    private boolean isFuncDef() {
         if (token == Token.INTTK || token == Token.VOIDTK) {
             if (readToken(0) == Token.IDENFR) {
                 return readToken(1) == Token.LPARENT;
