@@ -62,7 +62,7 @@ public class Reader {
             return ret;
         } else {
             ch = (char) ret;
-            System.out.println("Already read " + ch);
+            //System.out.println("Already read " + ch);
             return 0;
         }
     }
@@ -75,7 +75,7 @@ public class Reader {
     protected void retract() {
         try {
             reader.reset();
-            System.out.println("Already reset");
+            //System.out.println("Already reset");
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

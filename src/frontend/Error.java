@@ -9,19 +9,25 @@ public enum Error {
     ReturnValueExists("f", "Does Not Need Return Value"),
     ReturnValueNotExists("g", "Need Return Value"),
     ChangeConstValue("h", "Cannot Change Value of Constant"),
-    MissedSemicolon("i", "Need ;"),
-    MissedRightParentheses("j", "Need )"),
-    MissedRightBrackets("k", "Need ]"),
+    MissedSemicolon("i", "Need ';'"),
+    MissedRightParentheses("j", "Need ')'"),
+    MissedRightBrackets("k", "Need ']'"),
     IllegalFormatStringInPrintf("l", "Number of Format String and Expressions Mismatched"),
     IllegalBreakOrContinue("m", "Use 'break' or 'continue' outside the 'while'"),
     UnknownSymbol("o", "Unknown Symbol"),
+    UndefinedError("p", "Undefined"),
     ;
 
-    final String code;
-    final String description;
+    private final String code;
+    private final String description;
 
     Error(String code, String description) {
         this.code = code;
         this.description = description;
     }
+
+    String getDescription() {
+        return description;
+    }
 }
+

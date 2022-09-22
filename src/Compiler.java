@@ -3,21 +3,60 @@ import java.io.*;
 
 public class Compiler {
     char ch;
-    String frURL = "./test/2.词法分析/testfile.txt";
-    String fwURL = "./test/2.词法分析/output.txt";
+    String frURL = "./test/3.语法分析/testfile.txt";
+    String fwURL = "./test/3.语法分析/output.txt";
     public static void main(String[] args) {
         Compiler test = new Compiler();
         try {
-            //test.test();
-            test.submit2();
+            //test.test2();
+            //test.submit2();
+            //test.test3();
+            test.submit3();
         } catch (IOException e) {
-            System.out.println("Caught IOException in mySysYc");
             e.printStackTrace();
         }
         //System.out.println("Hello, my compiler!");
     }
 
-    void test() throws IOException {
+    void test3() throws IOException{
+        File fr = new File(frURL);
+        File fw = new File(fwURL);
+        Parser parser = new Parser(fr);
+        FileWriter out = new FileWriter(fw);
+        String str = "";
+        try {
+            str = new Parser(fr).build().print();
+            out.append(str);
+            out.close();
+            parser.close();
+        } catch (CompileErrorException e) {
+            System.out.print(str);
+            out.close();
+            parser.close();
+            e.printStackTrace();
+        }
+    }
+
+    void submit3() throws IOException{
+        File fr = new File("testfile.txt");
+        File fw = new File("output.txt");
+        Parser parser = new Parser(fr);
+        FileWriter out = new FileWriter(fw);
+        String str = "";
+        try {
+            str = new Parser(fr).build().print();
+            out.append(str);
+            out.close();
+            parser.close();
+        } catch (CompileErrorException e) {
+            System.out.print(str);
+            out.close();
+            parser.close();
+            e.printStackTrace();
+        }
+    }
+
+    void test2() throws IOException {
         File fr = new File(frURL);
         File fw = new File(fwURL);
         if (!fw.exists()) {
