@@ -14,16 +14,16 @@ public class PrimaryExp extends SyntaxParsingTree {
         number = null;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         if (exp != null) {
             builder.append(Token.LPARENT).append(" ").append(Token.LPARENT.getName()).append("\n");
-            builder.append(exp.print());
+            builder.append(exp.toString());
             builder.append(Token.RPARENT).append(" ").append(Token.RPARENT.getName()).append("\n");
         } else if (lVal != null) {
-            builder.append(lVal.print());
+            builder.append(lVal.toString());
         } else {
-            builder.append(number.print());
+            builder.append(number.toString());
         }
         builder.append(label).append("\n");
         return builder.toString();

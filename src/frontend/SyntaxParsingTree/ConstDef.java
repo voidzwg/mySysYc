@@ -18,16 +18,16 @@ public class ConstDef extends SyntaxParsingTree {
         constInitVal = null;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Token.IDENFR).append(" ").append(ident).append("\n");
         for (ConstExp constExp : constExps) {
             builder.append(Token.LBRACK).append(" ").append(Token.LBRACK.getName()).append("\n");
-            builder.append(constExp.print());
+            builder.append(constExp.toString());
             builder.append(Token.RBRACK).append(" ").append(Token.RBRACK.getName()).append("\n");
         }
         builder.append(Token.ASSIGN).append(" ").append(Token.ASSIGN.getName()).append("\n");
-        builder.append(constInitVal.print());
+        builder.append(constInitVal.toString());
         builder.append(label).append("\n");
         return builder.toString();
     }
@@ -56,8 +56,8 @@ public class ConstDef extends SyntaxParsingTree {
         mode = 2;
     }
 
-    public ConstExp visitConstExps(int i) {
-        return constExps.get(i);
+    public ArrayList<ConstExp> getConstExps() {
+        return constExps;
     }
 
     public ConstInitVal getConstInitVal() {

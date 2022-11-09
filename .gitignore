@@ -25,3 +25,6 @@ hs_err_pid*
 # IDEA env files
 *.iml
 .idea
+
+# assembly code
+*.asm

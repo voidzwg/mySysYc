@@ -910,7 +910,7 @@ IDENFR tab2
 <AddExp>
 <Exp>
 COMMA ,
-INTCON 10
+INTCON 9
 <Number>
 <PrimaryExp>
 <UnaryExp>

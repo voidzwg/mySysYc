@@ -1,0 +1,6 @@
+const int a = 0;
+int b;
+
+int main() {
+    int c = 0;
+}

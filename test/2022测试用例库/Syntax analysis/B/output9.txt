@@ -1085,7 +1085,7 @@ SEMICN ;
 <Stmt>
 IDENFR va_row1
 LBRACK [
-INTCON 3
+INTCON 2
 <Number>
 <PrimaryExp>
 <UnaryExp>

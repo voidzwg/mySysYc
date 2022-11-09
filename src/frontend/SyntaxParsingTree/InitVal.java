@@ -14,17 +14,17 @@ public class InitVal extends SyntaxParsingTree {
         initVals = new ArrayList<>();
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         if (exp != null) {
-            builder.append(exp.print());
+            builder.append(exp.toString());
         } else {
             builder.append(Token.LBRACE).append(" ").append(Token.LBRACE.getName()).append("\n");
             if (initVals.size() > 0) {
-                builder.append(initVals.get(0).print());
+                builder.append(initVals.get(0).toString());
                 for (int i = 1; i < initVals.size(); i++) {
                     builder.append(Token.COMMA).append(" ").append(Token.COMMA.getName()).append("\n");
-                    builder.append(initVals.get(i).print());
+                    builder.append(initVals.get(i).toString());
                 }
             }
             builder.append(Token.RBRACE).append(" ").append(Token.RBRACE.getName()).append("\n");
@@ -45,7 +45,7 @@ public class InitVal extends SyntaxParsingTree {
         initVals.add(initVal);
     }
 
-    public InitVal visitInitVal(int i) {
-        return initVals.get(i);
+    public ArrayList<InitVal> getInitVal() {
+        return initVals;
     }
 }

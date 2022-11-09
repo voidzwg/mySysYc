@@ -1354,7 +1354,7 @@ LBRACE {
 INTTK int
 IDENFR i
 ASSIGN =
-INTCON 0
+INTCON 1
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -1374,7 +1374,7 @@ IDENFR i
 <MulExp>
 <AddExp>
 <RelExp>
-LSS <
+LEQ <=
 IDENFR n
 <LVal>
 <PrimaryExp>
@@ -1709,13 +1709,6 @@ IDENFR n
 COMMA ,
 IDENFR num
 <LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-PLUS +
-INTCON 1
-<Number>
 <PrimaryExp>
 <UnaryExp>
 <MulExp>

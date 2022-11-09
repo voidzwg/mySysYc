@@ -16,16 +16,16 @@ public class LVal extends SyntaxParsingTree {
         mode = 0;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Token.IDENFR).append(" ").append(ident).append("\n");
         if (mode > 0) {
             builder.append(Token.LBRACK).append(" ").append(Token.LBRACK.getName()).append("\n");
-            builder.append(exps.get(0).print());
+            builder.append(exps.get(0).toString());
             builder.append(Token.RBRACK).append(" ").append(Token.RBRACK.getName()).append("\n");
             if (mode == 2) {
                 builder.append(Token.LBRACK).append(" ").append(Token.LBRACK.getName()).append("\n");
-                builder.append(exps.get(1).print());
+                builder.append(exps.get(1).toString());
                 builder.append(Token.RBRACK).append(" ").append(Token.RBRACK.getName()).append("\n");
             }
         }
@@ -37,8 +37,8 @@ public class LVal extends SyntaxParsingTree {
         exps.add(exp);
     }
 
-    public Exp visitExp(int i) {
-        return exps.get(i);
+    public ArrayList<Exp> getExps() {
+        return exps;
     }
 
     public String getIdent() {

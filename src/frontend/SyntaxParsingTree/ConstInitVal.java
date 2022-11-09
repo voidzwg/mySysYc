@@ -14,17 +14,17 @@ public class ConstInitVal extends SyntaxParsingTree {
         constInitVals = new ArrayList<>();
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         if (constExp != null) {
-            builder.append(constExp.print());
+            builder.append(constExp.toString());
         } else {
             builder.append(Token.LBRACE).append(" ").append(Token.LBRACE.getName()).append("\n");
             if (constInitVals.size() > 0) {
-                builder.append(constInitVals.get(0).print());
+                builder.append(constInitVals.get(0).toString());
                 for (int i = 1; i < constInitVals.size(); i++) {
                     builder.append(Token.COMMA).append(" ").append(Token.COMMA.getName()).append("\n");
-                    builder.append(constInitVals.get(i).print());
+                    builder.append(constInitVals.get(i).toString());
                 }
             }
             builder.append(Token.RBRACE).append(" ").append(Token.RBRACE.getName()).append("\n");
@@ -45,7 +45,7 @@ public class ConstInitVal extends SyntaxParsingTree {
         constInitVals.add(constInitVal);
     }
 
-    public ConstInitVal visitConstInitVal(int i) {
-        return constInitVals.get(i);
+    public ArrayList<ConstInitVal> getConstInitVal() {
+        return constInitVals;
     }
 }

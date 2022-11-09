@@ -3,6 +3,8 @@ package frontend;
 import java.io.File;
 import java.io.IOException;
 
+import static frontend.Token.*;
+
 public class Lexer {
     private final Reader token;
 
@@ -26,12 +28,16 @@ public class Lexer {
         return token.getLine();
     }
 
+    public int getCol() {
+        return token.getCol();
+    }
+
     public Token next() {
         Token symbol;
         token.clearToken();
         do {
             if (token.readChar() == -1) {
-                symbol = Token.EOF;
+                symbol = EOF;
                 return symbol;
             }
             if (isRet(token.getCh())) {
@@ -52,7 +58,7 @@ public class Lexer {
             }
             token.setNum();
             token.retract();
-            symbol = Token.INTCON;
+            symbol = INTCON;
         } else if (isQuota(token.getCh())) {
             token.catToken();
             token.readChar();
@@ -61,7 +67,7 @@ public class Lexer {
                 token.readChar();
             }
             token.catToken();
-            symbol = Token.STRCON;
+            symbol = STRCON;
         } else if (isExclam(token.getCh())) {
             token.catToken();
             token.readChar();
@@ -71,11 +77,11 @@ public class Lexer {
                 token.retract();
             }
             if (token.getToken().equals("!=")) {
-                symbol = Token.NEQ;
+                symbol = NEQ;
             } else if (token.getToken().equals("!")) {
-                symbol = Token.NOT;
+                symbol = NOT;
             } else {
-                symbol = Token.ERROR;
+                symbol = ERROR;
             }
         } else if (isRef(token.getCh())) {
             token.catToken();
@@ -86,9 +92,9 @@ public class Lexer {
                 token.retract();
             }
             if (token.getToken().equals("&&")) {
-                symbol = Token.AND;
+                symbol = AND;
             } else {
-                symbol = Token.ERROR;
+                symbol = ERROR;
             }
         } else if (isVer(token.getCh())) {
             token.catToken();
@@ -99,9 +105,9 @@ public class Lexer {
                 token.retract();
             }
             if (token.getToken().equals("||")) {
-                symbol = Token.OR;
+                symbol = OR;
             } else {
-                symbol = Token.ERROR;
+                symbol = ERROR;
             }
         } else if (isSingleSymbol(token.getCh())) {
             token.catToken();
@@ -115,11 +121,11 @@ public class Lexer {
                 token.retract();
             }
             if (token.getToken().equals("==")) {
-                symbol = Token.EQL;
+                symbol = EQL;
             } else if (token.getToken().equals("=")) {
-                symbol = Token.ASSIGN;
+                symbol = ASSIGN;
             } else {
-                symbol = Token.ERROR;
+                symbol = ERROR;
             }
         } else if (isLss(token.getCh())) {
             token.catToken();
@@ -130,11 +136,11 @@ public class Lexer {
                 token.retract();
             }
             if (token.getToken().equals("<=")) {
-                symbol = Token.LEQ;
+                symbol = LEQ;
             } else if (token.getToken().equals("<")) {
-                symbol = Token.LSS;
+                symbol = LSS;
             } else {
-                symbol = Token.ERROR;
+                symbol = ERROR;
             }
         } else if (isGre(token.getCh())) {
             token.catToken();
@@ -145,11 +151,11 @@ public class Lexer {
                 token.retract();
             }
             if (token.getToken().equals(">=")) {
-                symbol = Token.GEQ;
+                symbol = GEQ;
             } else if (token.getToken().equals(">")) {
-                symbol = Token.GRE;
+                symbol = GRE;
             } else {
-                symbol = Token.ERROR;
+                symbol = ERROR;
             }
         } else if (isDiv(token.getCh())) {
             token.catToken();
@@ -174,20 +180,20 @@ public class Lexer {
                         break;
                     }
                 }
-                symbol = Token.NOTE;
+                symbol = NOTE;
             } else if (isDiv(token.getCh())) {
                 while (!isRet(token.getCh())) {
                     token.catToken();
                     token.readChar();
                 }
                 token.nextLine();
-                symbol = Token.NOTE;
+                symbol = NOTE;
             } else {
                 token.retract();
-                symbol = Token.DIV;
+                symbol = DIV;
             }
         } else {
-            symbol = Token.ERROR;
+            symbol = ERROR;
         }
         return symbol;
     }
@@ -254,7 +260,7 @@ public class Lexer {
         if (token == null) {
             return null;
         }
-        for (Token t : Token.values()) {
+        for (Token t : values()) {
             int ordinal = t.ordinal();
             if ((ordinal >= 3 && ordinal <= 9) || (ordinal >= 13 && ordinal <= 16) || ordinal == 19) {
                 if (t.getName().equals(token)) {
@@ -262,6 +268,6 @@ public class Lexer {
                 }
             }
         }
-        return Token.IDENFR;
+        return IDENFR;
     }
 }

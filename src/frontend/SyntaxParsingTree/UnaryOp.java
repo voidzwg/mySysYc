@@ -11,7 +11,7 @@ public class UnaryOp extends SyntaxParsingTree {
         op = null;
     }
 
-    public String print() {
+    public String toString() {
         Token tok;
         switch (op) {
             case "+":

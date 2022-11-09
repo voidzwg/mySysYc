@@ -1,0 +1,65 @@
+.data
+	_: .word 20373117
+	value1: .word 1
+	value10: .word 10
+	value11: .word 11
+	value12: .word 12
+	value13: .word 0
+	__fString_0: .asciiz "\0A\00"
+	__fString_1: .asciiz "\0A\0A\0A\0A\0A\0A\00"
+.text
+# function main()
+_main_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -64
+	sw		$fp, ($sp)
+	addiu	$t0, $sp, 16
+	sw		$t0, 20($sp)
+	addiu	$t0, $sp, 12
+	sw		$t0, 24($sp)
+	addiu	$t0, $sp, 8
+	sw		$t0, 28($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 32($sp)
+	addiu	$t0, $sp, 0
+	sw		$t0, 36($sp)
+	li		$t0, 13
+	sw		$t0, 40($sp)
+	lw		$t0, value13
+	sw		$t0, 44($sp)
+	lw		$t1, 44($sp)
+	lw		$t2, 40($sp)
+	sw		$t2, ($t1)
+	li		$t0, 14
+	sw		$t0, 48($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 48($sp)
+	sw		$t2, ($t1)
+	li		$t0, 15
+	sw		$t0, 52($sp)
+	lw		$t1, 32($sp)
+	lw		$t2, 52($sp)
+	sw		$t2, ($t1)
+	li		$t0, 20373117
+	sw		$t0, 56($sp)
+	lw		$t1, 56($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_0
+	li		$v0, 4
+	syscall
+	li		$t0, 3
+	sw		$t0, 60($sp)
+	lw		$t1, 20($sp)
+	lw		$t2, 60($sp)
+	sw		$t2, ($t1)
+	la		$a0, __fString_1
+	li		$v0, 4
+	syscall
+	li		$v0, 0
+	addiu	$sp, $sp, 64
+	lw		$fp, ($sp)
+	li		$v0, 10
+	syscall
+

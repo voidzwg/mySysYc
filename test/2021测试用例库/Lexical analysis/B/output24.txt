@@ -332,7 +332,7 @@ RPARENT )
 SEMICN ;
 PRINTFTK printf
 LPARENT (
-STRCON "3.function of kinds of parameters testified\n"
+STRCON "3.function of kinds of parameter testified\n"
 RPARENT )
 SEMICN ;
 SEMICN ;

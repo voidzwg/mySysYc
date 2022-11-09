@@ -12,13 +12,14 @@ public class Decl extends SyntaxParsingTree {
         varDecl = null;
     }
 
-    public String print() {
+    @Override
+    public String toString() {
         //不要求输出标签
         StringBuilder builder = new StringBuilder();
         if (constDecl != null) {
-            builder.append(constDecl.print());
+            builder.append(constDecl.toString());
         } else {
-            builder.append(varDecl.print());
+            builder.append(varDecl.toString());
         }
         return builder.toString();
     }

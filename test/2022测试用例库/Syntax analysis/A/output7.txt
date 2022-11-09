@@ -27,7 +27,6 @@ INTCON 10
 <ConstDef>
 SEMICN ;
 <ConstDecl>
-CONSTTK const
 INTTK int
 IDENFR arr
 LBRACK [
@@ -47,8 +46,8 @@ INTCON 666
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -56,8 +55,8 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -65,8 +64,8 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -74,8 +73,8 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -83,8 +82,8 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -92,8 +91,8 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -101,8 +100,8 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -110,8 +109,8 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -119,8 +118,8 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 0
 <Number>
@@ -128,13 +127,13 @@ INTCON 0
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 RBRACE }
-<ConstInitVal>
-<ConstDef>
+<InitVal>
+<VarDef>
 SEMICN ;
-<ConstDecl>
+<VarDecl>
 INTTK int
 IDENFR one
 LBRACK [
@@ -1325,7 +1324,6 @@ IDENFR sum
 RPARENT )
 SEMICN ;
 <Stmt>
-CONSTTK const
 INTTK int
 IDENFR ca
 LBRACK [
@@ -1354,8 +1352,8 @@ RBRACK ]
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 IDENFR arr
 LBRACK [
@@ -1372,13 +1370,13 @@ RBRACK ]
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 RBRACE }
-<ConstInitVal>
-<ConstDef>
+<InitVal>
+<VarDef>
 SEMICN ;
-<ConstDecl>
+<VarDecl>
 PRINTFTK printf
 LPARENT (
 STRCON "%d\n"

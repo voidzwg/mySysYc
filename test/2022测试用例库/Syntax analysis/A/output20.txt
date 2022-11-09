@@ -2531,7 +2531,7 @@ IDENFR i
 <AddExp>
 <RelExp>
 LSS <
-INTCON 5
+INTCON 3
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -2773,7 +2773,7 @@ IDENFR a1
 <AddExp>
 <Exp>
 COMMA ,
-INTCON 4
+INTCON 2
 <Number>
 <PrimaryExp>
 <UnaryExp>

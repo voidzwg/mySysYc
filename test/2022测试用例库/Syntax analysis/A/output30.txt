@@ -846,7 +846,6 @@ RBRACE }
 <VarDef>
 SEMICN ;
 <VarDecl>
-CONSTTK const
 INTTK int
 IDENFR a4
 LBRACK [
@@ -876,8 +875,8 @@ INTCON 1
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 2
 <Number>
@@ -885,10 +884,10 @@ INTCON 2
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 RBRACE }
-<ConstInitVal>
+<InitVal>
 COMMA ,
 LBRACE {
 INTCON 3
@@ -897,8 +896,8 @@ INTCON 3
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 4
 <Number>
@@ -906,13 +905,13 @@ INTCON 4
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 RBRACE }
-<ConstInitVal>
+<InitVal>
 RBRACE }
-<ConstInitVal>
-<ConstDef>
+<InitVal>
+<VarDef>
 COMMA ,
 IDENFR a5
 LBRACK [
@@ -932,8 +931,8 @@ INTCON 1
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 2
 <Number>
@@ -941,8 +940,8 @@ INTCON 2
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 3
 <Number>
@@ -950,13 +949,13 @@ INTCON 3
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 RBRACE }
-<ConstInitVal>
-<ConstDef>
+<InitVal>
+<VarDef>
 SEMICN ;
-<ConstDecl>
+<VarDecl>
 INTTK int
 IDENFR a6
 LBRACK [
@@ -1094,7 +1093,7 @@ SEMICN ;
 <VarDecl>
 IDENFR C
 LBRACK [
-INTCON 1
+INTCON 0
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -1123,7 +1122,7 @@ SEMICN ;
 <Stmt>
 IDENFR C
 LBRACK [
-INTCON 2
+INTCON 1
 <Number>
 <PrimaryExp>
 <UnaryExp>

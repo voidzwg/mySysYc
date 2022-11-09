@@ -14,13 +14,13 @@ public class VarDecl extends SyntaxParsingTree {
         varDefs = new ArrayList<>();
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(bType.print());
-        builder.append(varDefs.get(0).print());
+        builder.append(bType.toString());
+        builder.append(varDefs.get(0).toString());
         for (int i = 1; i < varDefs.size(); i++) {
             builder.append(Token.COMMA).append(" ").append(Token.COMMA.getName()).append("\n");
-            builder.append(varDefs.get(i).print());
+            builder.append(varDefs.get(i).toString());
         }
         builder.append(Token.SEMICN).append(" ").append(Token.SEMICN.getName()).append("\n");
         builder.append(label).append("\n");
@@ -31,8 +31,8 @@ public class VarDecl extends SyntaxParsingTree {
         varDefs.add(varDef);
     }
 
-    public VarDef visitVarDef(int i) {
-        return varDefs.get(i);
+    public ArrayList<VarDef> getVarDefs() {
+        return varDefs;
     }
 
     public BType getbType() {

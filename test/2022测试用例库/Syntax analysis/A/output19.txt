@@ -2324,30 +2324,6 @@ SEMICN ;
 <Stmt>
 IDENFR f4
 LPARENT (
-IDENFR tmp_0
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-PLUS +
-INTCON 1
-<Number>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-<Exp>
-<FuncRParams>
-RPARENT )
-<UnaryExp>
-<MulExp>
-<AddExp>
-<Exp>
-SEMICN ;
-<Stmt>
-IDENFR f4
-LPARENT (
 IDENFR d
 LBRACK [
 INTCON 1

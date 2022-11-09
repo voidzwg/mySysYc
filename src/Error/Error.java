@@ -1,6 +1,7 @@
-package frontend;
+package Error;
 
 public enum Error {
+    //实验要求输出的错误
     IllegalSymbol("a", "Illegal Symbol in Format String"),
     Redeclaration("b", "Redeclaration of Identifier"),
     Undeclared("c", "Undeclared Identifier"),
@@ -14,8 +15,14 @@ public enum Error {
     MissedRightBrackets("k", "Need ']'"),
     IllegalFormatStringInPrintf("l", "Number of Format String and Expressions Mismatched"),
     IllegalBreakOrContinue("m", "Use 'break' or 'continue' outside the 'while'"),
-    UnknownSymbol("o", "Unknown Symbol"),
-    UndefinedError("p", "Undefined"),
+
+    //自定义的错误
+    UninitializedConstant("o", "Uninitialized constant"),
+    InitializationFailed("p", "Cannot initialize constant with non-constant value"),
+    ArrayNeedLength("q", "The length of the array needs to be determined number"),
+    InitialFormError("r", "The initialization has wrong dimension"),
+    UnknownSymbol("z", "Unknown Symbol"),
+    UndefinedError("z", "Undefined"),
     ;
 
     private final String code;
@@ -26,8 +33,13 @@ public enum Error {
         this.description = description;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     String getDescription() {
         return description;
     }
+
 }
 

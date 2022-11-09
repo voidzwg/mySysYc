@@ -3,6 +3,8 @@ package frontend.SyntaxParsingTree;
 import frontend.State;
 import frontend.Token;
 
+import java.util.ArrayList;
+
 public class FuncDef extends SyntaxParsingTree {
     private FuncType funcType;
     private String ident;
@@ -17,16 +19,16 @@ public class FuncDef extends SyntaxParsingTree {
         block = null;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(funcType.print());
+        builder.append(funcType.toString());
         builder.append(Token.IDENFR).append(" ").append(ident).append("\n");
         builder.append(Token.LPARENT).append(" ").append(Token.LPARENT.getName()).append("\n");
         if (funcFParams != null) {
-            builder.append(funcFParams.print());
+            builder.append(funcFParams.toString());
         }
         builder.append(Token.RPARENT).append(" ").append(Token.RPARENT.getName()).append("\n");
-        builder.append(block.print());
+        builder.append(block.toString());
         builder.append(label).append("\n");
         return builder.toString();
     }
@@ -36,13 +38,6 @@ public class FuncDef extends SyntaxParsingTree {
     }
 
     public void setFuncType(FuncType funcType) {
-        if (block != null) {
-            if (funcType.getType().equals("int")) {
-                block.setMode2();
-            } else if (funcType.getType().equals("void")) {
-                block.setMode1();
-            }
-        }
         this.funcType = funcType;
     }
 
@@ -54,8 +49,12 @@ public class FuncDef extends SyntaxParsingTree {
         this.ident = ident;
     }
 
-    public FuncFParams getFuncFParams() {
-        return funcFParams;
+    public ArrayList<FuncFParam> getFuncFParams() {
+        if (funcFParams == null) {
+            return null;
+        } else {
+            return funcFParams.getFuncFParams();
+        }
     }
 
     public void setFuncFParams(FuncFParams funcFParams) {
@@ -67,13 +66,6 @@ public class FuncDef extends SyntaxParsingTree {
     }
 
     public void setBlock(Block block) {
-        if (block != null && funcType.getType() != null) {
-            if (funcType.getType().equals("int")) {
-                block.setMode2();
-            } else if (funcType.getType().equals("void")) {
-                block.setMode1();
-            }
-        }
         this.block = block;
     }
 }

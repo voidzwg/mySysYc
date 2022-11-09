@@ -11,7 +11,7 @@ public class FuncType extends SyntaxParsingTree {
         type = null;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         if ("int".equals(type)) {
             builder.append(Token.INTTK).append(" ").append(type).append("\n");

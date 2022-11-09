@@ -13,13 +13,13 @@ public class LOrExp extends SyntaxParsingTree {
         lOrExp = null;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(lAndExp.print());
+        builder.append(lAndExp.toString());
         builder.append(label).append("\n");     //左递归形式输出
         if (lOrExp != null) {
             builder.append(Token.OR).append(" ").append(Token.OR.getName()).append("\n");
-            builder.append(lOrExp.print());
+            builder.append(lOrExp.toString());
         }
         //builder.append(label).append("\n");     //右递归形式输出
         return builder.toString();

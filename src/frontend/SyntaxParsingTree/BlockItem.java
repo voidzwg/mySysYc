@@ -12,13 +12,13 @@ public class BlockItem extends SyntaxParsingTree {
         stmt = null;
     }
 
-    public String print() {
+    public String toString() {
         //不要求输出标签
         StringBuilder builder = new StringBuilder();
         if (decl != null) {
-            builder.append(decl.print());
+            builder.append(decl.toString());
         } else if (stmt != null) {
-            builder.append(stmt.print());
+            builder.append(stmt.toString());
         }
         return builder.toString();
     }

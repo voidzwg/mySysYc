@@ -65,7 +65,6 @@ RBRACK ]
 <VarDef>
 SEMICN ;
 <VarDecl>
-CONSTTK const
 INTTK int
 IDENFR array
 LBRACK [
@@ -95,8 +94,8 @@ INTCON 1
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 2
 <Number>
@@ -104,10 +103,10 @@ INTCON 2
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 RBRACE }
-<ConstInitVal>
+<InitVal>
 COMMA ,
 LBRACE {
 INTCON 2
@@ -116,8 +115,8 @@ INTCON 2
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 COMMA ,
 INTCON 4
 <Number>
@@ -125,15 +124,15 @@ INTCON 4
 <UnaryExp>
 <MulExp>
 <AddExp>
-<ConstExp>
-<ConstInitVal>
+<Exp>
+<InitVal>
 RBRACE }
-<ConstInitVal>
+<InitVal>
 RBRACE }
-<ConstInitVal>
-<ConstDef>
+<InitVal>
+<VarDef>
 SEMICN ;
-<ConstDecl>
+<VarDecl>
 INTTK int
 <FuncType>
 IDENFR add_three
@@ -852,7 +851,23 @@ LBRACE {
 IFTK if
 LPARENT (
 IDENFR var_array
+LBRACK [
+INTCON 0
+<Number>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<Exp>
+RBRACK ]
 <LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+PLUS +
+INTCON 99
+<Number>
 <PrimaryExp>
 <UnaryExp>
 <MulExp>
@@ -1364,6 +1379,15 @@ INTCON 2
 <LAndExp>
 AND &&
 IDENFR var_array
+LBRACK [
+INTCON 0
+<Number>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<Exp>
+RBRACK ]
 <LVal>
 <PrimaryExp>
 <UnaryExp>
@@ -1533,6 +1557,15 @@ INTCON 0
 <LOrExp>
 OR ||
 IDENFR var_array
+LBRACK [
+INTCON 0
+<Number>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<Exp>
+RBRACK ]
 <LVal>
 <PrimaryExp>
 <UnaryExp>

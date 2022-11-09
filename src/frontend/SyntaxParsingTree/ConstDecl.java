@@ -14,14 +14,15 @@ public class ConstDecl extends SyntaxParsingTree {
         constDefs = new ArrayList<>();
     }
 
-    public String print() {
+    @Override
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Token.CONSTTK).append(" ").append(Token.CONSTTK.getName()).append("\n");
-        builder.append(bType.print());
-        builder.append(constDefs.get(0).print());
+        builder.append(bType.toString());
+        builder.append(constDefs.get(0).toString());
         for (int i = 1; i < constDefs.size(); i++) {
             builder.append(Token.COMMA).append(" ").append(Token.COMMA.getName()).append("\n");
-            builder.append(constDefs.get(i).print());
+            builder.append(constDefs.get(i).toString());
         }
         builder.append(Token.SEMICN).append(" ").append(Token.SEMICN.getName()).append("\n");
         builder.append(label).append("\n");
@@ -36,8 +37,8 @@ public class ConstDecl extends SyntaxParsingTree {
         return bType;
     }
 
-    public ConstDef visitConstDefs(int i) {
-        return constDefs.get(i);
+    public ArrayList<ConstDef> getConstDefs() {
+        return constDefs;
     }
 
     public void addConstDefs(ConstDef constDef) {

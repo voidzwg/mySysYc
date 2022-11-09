@@ -514,7 +514,7 @@ INTCON 0
 <Exp>
 RBRACK ]
 LBRACK [
-INTCON 2
+INTCON 0
 <Number>
 <PrimaryExp>
 <UnaryExp>

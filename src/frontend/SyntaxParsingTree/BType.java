@@ -15,7 +15,7 @@ public class BType extends SyntaxParsingTree {
         return content;
     }
 
-    public String print() {
+    public String toString() {
         //不要求输出标签
         return Token.INTTK + " " + Token.INTTK.getName() + "\n";
     }

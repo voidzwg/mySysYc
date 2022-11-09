@@ -10,8 +10,8 @@ public class ConstExp extends SyntaxParsingTree {
         addExp = null;
     }
 
-    public String print() {
-        return addExp.print() +
+    public String toString() {
+        return addExp.toString() +
                 label + "\n";
     }
 

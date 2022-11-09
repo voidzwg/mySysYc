@@ -17,16 +17,16 @@ public class FuncFParam extends SyntaxParsingTree {
         mode = 0;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(bType.print());
+        builder.append(bType.toString());
         builder.append(Token.IDENFR).append(" ").append(ident).append("\n");
         if (mode > 0) {
             builder.append(Token.LBRACK).append(" ").append(Token.LBRACK.getName()).append("\n");
             builder.append(Token.RBRACK).append(" ").append(Token.RBRACK.getName()).append("\n");
             if (mode == 2) {
                 builder.append(Token.LBRACK).append(" ").append(Token.LBRACK.getName()).append("\n");
-                builder.append(constExp.print());
+                builder.append(constExp.toString());
                 builder.append(Token.RBRACK).append(" ").append(Token.RBRACK.getName()).append("\n");
             }
         }

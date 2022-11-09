@@ -13,13 +13,13 @@ public class LAndExp extends SyntaxParsingTree {
         lAndExp = null;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(eqExp.print());
+        builder.append(eqExp.toString());
         builder.append(label).append("\n");     //左递归形式输出
         if (lAndExp != null) {
             builder.append(Token.AND).append(" ").append(Token.AND.getName()).append("\n");
-            builder.append(lAndExp.print());
+            builder.append(lAndExp.toString());
         }
         //builder.append(label).append("\n");     //右递归形式输出
         return builder.toString();

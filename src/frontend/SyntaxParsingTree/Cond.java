@@ -10,8 +10,8 @@ public class Cond extends SyntaxParsingTree {
         lOrExp = null;
     }
 
-    public String print() {
-        return lOrExp.print() +
+    public String toString() {
+        return lOrExp.toString() +
                 label + "\n";
     }
 

@@ -11,12 +11,12 @@ public class MainFuncDef extends SyntaxParsingTree {
         block = null;
     }
 
-    public String print() {
+    public String toString() {
         return Token.INTTK + " " + Token.INTTK.getName() + "\n" +
                 Token.MAINTK + " " + Token.MAINTK.getName() + "\n" +
                 Token.LPARENT + " " + Token.LPARENT.getName() + "\n" +
                 Token.RPARENT + " " + Token.RPARENT.getName() + "\n" +
-                block.print() +
+                block.toString() +
                 label + "\n";
     }
 
@@ -25,9 +25,6 @@ public class MainFuncDef extends SyntaxParsingTree {
     }
 
     public void setBlock(Block block) {
-        if (block != null) {
-            block.setMode2();
-        }
         this.block = block;
     }
 }

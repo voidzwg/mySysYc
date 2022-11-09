@@ -15,9 +15,9 @@ public class AddExp extends SyntaxParsingTree {
         op = null;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(mulExp.print());
+        builder.append(mulExp.toString());
         builder.append(label).append("\n");     //左递归形式输出
         if (op != null) {
             Token tok = null;
@@ -32,7 +32,7 @@ public class AddExp extends SyntaxParsingTree {
                     break;
             }
             builder.append(tok).append(" ").append(op).append("\n");
-            builder.append(addExp.print());
+            builder.append(addExp.toString());
         }
         //builder.append(label).append("\n");     //右递归形式输出
         return builder.toString();

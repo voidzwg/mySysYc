@@ -1356,43 +1356,6 @@ RPARENT )
 <Exp>
 SEMICN ;
 <Stmt>
-IDENFR y
-<LVal>
-ASSIGN =
-IDENFR y
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-MOD %
-IDENFR y
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-DIV /
-IDENFR y
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-MULT *
-IDENFR y
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-PLUS +
-IDENFR op
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-<Exp>
-SEMICN ;
-<Stmt>
 RBRACE }
 <Block>
 <Stmt>

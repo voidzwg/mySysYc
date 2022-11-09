@@ -3,7 +3,8 @@ package frontend;
 import java.io.*;
 
 public class Reader {
-    private int num, line;
+    private int num, line, col;
+    private int markedLine, markedCol;
     private String token;
     private int head = -1;
     private char ch;
@@ -12,6 +13,7 @@ public class Reader {
     Reader(File f) {
         clearToken();
         line = 1;
+        col = 1;
         try {
             this.reader = new BufferedInputStream(new FileInputStream(f));
         } catch (FileNotFoundException e) {
@@ -36,6 +38,10 @@ public class Reader {
         return line;
     }
 
+    protected int getCol() {
+        return col;
+    }
+
     protected void setNum() {
         try {
             this.num = Integer.parseInt(token);
@@ -48,10 +54,21 @@ public class Reader {
         return num;
     }
 
+    private void markPos() {
+        markedLine = line;
+        markedCol = col;
+    }
+
+    private void resetPos() {
+        line = markedLine;
+        col = markedCol;
+    }
+
     protected int readChar(){
         int ret = -1;
         try {
             reader.mark(10);
+            markPos();
             ret = reader.read();
         } catch (java.io.IOException e) {
             System.out.println("Caught IOException in readChar()");
@@ -62,6 +79,7 @@ public class Reader {
             return ret;
         } else {
             ch = (char) ret;
+            col++;
             //System.out.println("Already read " + ch);
             return 0;
         }
@@ -75,6 +93,7 @@ public class Reader {
     protected void retract() {
         try {
             reader.reset();
+            resetPos();
             //System.out.println("Already reset");
         } catch (java.io.IOException e) {
             e.printStackTrace();
@@ -88,5 +107,6 @@ public class Reader {
 
     protected void nextLine() {
         line++;
+        col = 1;
     }
 }

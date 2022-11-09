@@ -15,15 +15,16 @@ public class CompUnit extends SyntaxParsingTree {
         mainFuncDef = null;
     }
 
-    public String print() {
+    @Override
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         for (Decl decl : decls) {
-            builder.append(decl.print());
+            builder.append(decl.toString());
         }
         for (FuncDef funcDef : funcDefs) {
-            builder.append(funcDef.print());
+            builder.append(funcDef.toString());
         }
-        builder.append(mainFuncDef.print());
+        builder.append(mainFuncDef.toString());
         builder.append(label).append("\n");
         return builder.toString();
     }
@@ -40,18 +41,12 @@ public class CompUnit extends SyntaxParsingTree {
         this.mainFuncDef = mainFuncDef;
     }
 
-    public Decl visitDecls(int i) {
-        if (i >= decls.size()) {
-            return null;
-        }
-        return decls.get(i);
+    public ArrayList<Decl> getDecls() {
+        return decls;
     }
 
-    public FuncDef visitFuncDefs(int i) {
-        if (i >= funcDefs.size()) {
-            return null;
-        }
-        return funcDefs.get(i);
+    public ArrayList<FuncDef> getFuncDefs() {
+        return funcDefs;
     }
 
     public MainFuncDef getMainFuncDef() {

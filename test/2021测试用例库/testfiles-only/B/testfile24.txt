@@ -39,7 +39,7 @@ int main(){
     
     assignmentArray(n,localVirableArray1, localVirableArray2);
     printf("%d?\n",localVirableArray2[1][1]);
-    printf("3.function of kinds of parameters testified\n");
+    printf("3.function of kinds of parameter testified\n");
     ;
     if(1>0)
     {

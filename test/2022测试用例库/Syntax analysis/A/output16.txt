@@ -1305,13 +1305,6 @@ RBRACE }
 <Stmt>
 ELSETK else
 LBRACE {
-CONTINUETK continue
-SEMICN ;
-<Stmt>
-RBRACE }
-<Block>
-<Stmt>
-<Stmt>
 IDENFR i
 <LVal>
 ASSIGN =
@@ -1330,6 +1323,13 @@ INTCON 1
 <AddExp>
 <Exp>
 SEMICN ;
+<Stmt>
+CONTINUETK continue
+SEMICN ;
+<Stmt>
+RBRACE }
+<Block>
+<Stmt>
 <Stmt>
 RBRACE }
 <Block>

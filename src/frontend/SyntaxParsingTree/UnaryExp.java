@@ -19,18 +19,18 @@ public class UnaryExp extends SyntaxParsingTree {
         unaryExp = null;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         if (primaryExp != null) {
-            builder.append(primaryExp.print());
+            builder.append(primaryExp.toString());
         } else if (unaryOp != null) {
-            builder.append(unaryOp.print());
-            builder.append(unaryExp.print());
+            builder.append(unaryOp.toString());
+            builder.append(unaryExp.toString());
         } else {
             builder.append(Token.IDENFR).append(" ").append(ident).append("\n");
             builder.append(Token.LPARENT).append(" ").append(Token.LPARENT.getName()).append("\n");
             if (funcRParams != null) {
-                builder.append(funcRParams.print());
+                builder.append(funcRParams.toString());
             }
             builder.append(Token.RPARENT).append(" ").append(Token.RPARENT.getName()).append("\n");
         }

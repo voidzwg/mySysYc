@@ -11,7 +11,7 @@ public class Number extends SyntaxParsingTree {
         number = 0;
     }
 
-    public String print() {
+    public String toString() {
         return Token.INTCON + " " + number + "\n" +
                 label + "\n";
     }

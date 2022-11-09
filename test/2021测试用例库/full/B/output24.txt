@@ -5,5 +5,5 @@
 [1][0]:8|8 , [1]:-8|20
 [0][0]:6|6 , [0]:-9|10
 9?
-3.function of kinds of parameters testified
+3.function of kinds of parameter testified
 4.non exp testified

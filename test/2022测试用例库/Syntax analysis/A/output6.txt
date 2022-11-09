@@ -1150,7 +1150,7 @@ SEMICN ;
 <VarDecl>
 IDENFR vararray2
 LBRACK [
-INTCON 2
+INTCON 1
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -1159,7 +1159,7 @@ INTCON 2
 <Exp>
 RBRACK ]
 LBRACK [
-INTCON 2
+INTCON 1
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -2240,7 +2240,7 @@ STRCON "%d\n"
 COMMA ,
 IDENFR vararray2
 LBRACK [
-INTCON 2
+INTCON 1
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -2249,7 +2249,7 @@ INTCON 2
 <Exp>
 RBRACK ]
 LBRACK [
-INTCON 2
+INTCON 1
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -2272,7 +2272,7 @@ STRCON "%d\n"
 COMMA ,
 IDENFR vararray2
 LBRACK [
-INTCON 2
+INTCON 1
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -2281,7 +2281,7 @@ INTCON 2
 <Exp>
 RBRACK ]
 LBRACK [
-INTCON 1
+INTCON 0
 <Number>
 <PrimaryExp>
 <UnaryExp>

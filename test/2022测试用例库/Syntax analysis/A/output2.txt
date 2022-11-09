@@ -775,7 +775,7 @@ IDENFR mat
 LBRACK [
 RBRACK ]
 LBRACK [
-INTCON 3
+INTCON 4
 <Number>
 <PrimaryExp>
 <UnaryExp>

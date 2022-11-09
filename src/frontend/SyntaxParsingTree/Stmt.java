@@ -39,33 +39,33 @@ public class Stmt extends SyntaxParsingTree {
         type = 0;
     }
 
-    public String print() {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         switch (type) {
             case 0:
                 builder.append(Token.SEMICN).append(" ").append(Token.SEMICN.getName()).append("\n");
                 break;
             case 1:
-                builder.append(exp.print());
+                builder.append(exp.toString());
                 builder.append(Token.SEMICN).append(" ").append(Token.SEMICN.getName()).append("\n");
                 break;
             case 2:
                 builder.append(Token.IFTK).append(" ").append(Token.IFTK.getName()).append("\n");
                 builder.append(Token.LPARENT).append(" ").append(Token.LPARENT.getName()).append("\n");
-                builder.append(cond.print());
+                builder.append(cond.toString());
                 builder.append(Token.RPARENT).append(" ").append(Token.RPARENT.getName()).append("\n");
-                builder.append(stmts.get(0).print());
+                builder.append(stmts.get(0).toString());
                 if (stmts.size() == 2) {
                     builder.append(Token.ELSETK).append(" ").append(Token.ELSETK.getName()).append("\n");
-                    builder.append(stmts.get(1).print());
+                    builder.append(stmts.get(1).toString());
                 }
                 break;
             case 3:
                 builder.append(Token.WHILETK).append(" ").append(Token.WHILETK.getName()).append("\n");
                 builder.append(Token.LPARENT).append(" ").append(Token.LPARENT.getName()).append("\n");
-                builder.append(cond.print());
+                builder.append(cond.toString());
                 builder.append(Token.RPARENT).append(" ").append(Token.RPARENT.getName()).append("\n");
-                builder.append(stmts.get(0).print());
+                builder.append(stmts.get(0).toString());
                 break;
             case 4:
                 builder.append(Token.BREAKTK).append(" ").append(Token.BREAKTK.getName()).append("\n");
@@ -78,7 +78,7 @@ public class Stmt extends SyntaxParsingTree {
             case 6:
                 builder.append(Token.RETURNTK).append(" ").append(Token.RETURNTK.getName()).append("\n");
                 if (exp != null) {
-                    builder.append(exp.print());
+                    builder.append(exp.toString());
                 }
                 builder.append(Token.SEMICN).append(" ").append(Token.SEMICN.getName()).append("\n");
                 break;
@@ -88,19 +88,19 @@ public class Stmt extends SyntaxParsingTree {
                 builder.append(Token.STRCON).append(" ").append(formatString).append("\n");
                 for (Exp exp : exps) {
                     builder.append(Token.COMMA).append(" ").append(Token.COMMA.getName()).append("\n");
-                    builder.append(exp.print());
+                    builder.append(exp.toString());
                 }
                 builder.append(Token.RPARENT).append(" ").append(Token.RPARENT.getName()).append("\n");
                 builder.append(Token.SEMICN).append(" ").append(Token.SEMICN.getName()).append("\n");
                 break;
             case 8:
-                builder.append(lVal.print());
+                builder.append(lVal.toString());
                 builder.append(Token.ASSIGN).append(" ").append(Token.ASSIGN.getName()).append("\n");
-                builder.append(exp.print());
+                builder.append(exp.toString());
                 builder.append(Token.SEMICN).append(" ").append(Token.SEMICN.getName()).append("\n");
                 break;
             case 9:
-                builder.append(lVal.print());
+                builder.append(lVal.toString());
                 builder.append(Token.ASSIGN).append(" ").append(Token.ASSIGN.getName()).append("\n");
                 builder.append(Token.GETINTTK).append(" ").append(Token.GETINTTK.getName()).append("\n");
                 builder.append(Token.LPARENT).append(" ").append(Token.LPARENT.getName()).append("\n");
@@ -108,7 +108,7 @@ public class Stmt extends SyntaxParsingTree {
                 builder.append(Token.SEMICN).append(" ").append(Token.SEMICN.getName()).append("\n");
                 break;
             case 10:
-                builder.append(block.print());
+                builder.append(block.toString());
                 break;
             default:
                 break;
@@ -129,8 +129,8 @@ public class Stmt extends SyntaxParsingTree {
         exps.add(exp);
     }
 
-    public Exp visitExp(int i) {
-        return exps.get(i);
+    public ArrayList<Exp> getExps() {
+        return exps;
     }
 
     public LVal getlVal() {
