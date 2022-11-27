@@ -7,7 +7,7 @@ $"??_C@_03PMGGPEJJ@?$CFd?6?$AA@" = comdat any
 
 $"??_C@_06CIFJMGCF@a?5?$DO?50?6?$AA@" = comdat any
 
-$"??_C@_06MJGFGHAO@a?5?$DM?$DN?50?$AA@" = comdat any
+$"??_C@_07BNJOKAOK@a?5?$DM?$DN?50?6?$AA@" = comdat any
 
 $"??_C@_06LFANMJDA@?6?6?6?6?6?6?$AA@" = comdat any
 
@@ -19,7 +19,7 @@ $"??_C@_06LFANMJDA@?6?6?6?6?6?6?$AA@" = comdat any
 @value13 = dso_local global i32 0, align 4
 @"??_C@_03PMGGPEJJ@?$CFd?6?$AA@" = linkonce_odr dso_local unnamed_addr constant [4 x i8] c"%d\0A\00", comdat, align 1
 @"??_C@_06CIFJMGCF@a?5?$DO?50?6?$AA@" = linkonce_odr dso_local unnamed_addr constant [7 x i8] c"a > 0\0A\00", comdat, align 1
-@"??_C@_06MJGFGHAO@a?5?$DM?$DN?50?$AA@" = linkonce_odr dso_local unnamed_addr constant [7 x i8] c"a <= 0\00", comdat, align 1
+@"??_C@_07BNJOKAOK@a?5?$DM?$DN?50?6?$AA@" = linkonce_odr dso_local unnamed_addr constant [8 x i8] c"a <= 0\0A\00", comdat, align 1
 @"??_C@_06LFANMJDA@?6?6?6?6?6?6?$AA@" = linkonce_odr dso_local unnamed_addr constant [7 x i8] c"\0A\0A\0A\0A\0A\0A\00", comdat, align 1
 
 ; Function Attrs: noinline nounwind optnone uwtable
@@ -47,7 +47,7 @@ define dso_local i32 @main() #0 {
   br label %16
 
 14:                                               ; preds = %0
-  %15 = call i32 (ptr, ...) @printf(ptr noundef @"??_C@_06MJGFGHAO@a?5?$DM?$DN?50?$AA@")
+  %15 = call i32 (ptr, ...) @printf(ptr noundef @"??_C@_07BNJOKAOK@a?5?$DM?$DN?50?6?$AA@")
   br label %16
 
 16:                                               ; preds = %14, %12

@@ -21,6 +21,14 @@ public class ArrayType extends Type {
         return this.maxLength;
     }
 
+    public int getDim() {
+        int dim = 1;
+        if (elementType.isArrayType()) {
+            dim += ((ArrayType) elementType).getDim();
+        }
+        return dim;
+    }
+
     // how much space will this array cost in bytes
     @Override
     public int getSize() {

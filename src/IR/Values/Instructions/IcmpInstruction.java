@@ -4,25 +4,19 @@ import IR.Values.BasicBlock;
 import IR.Values.ConstantInteger;
 import IR.Values.Value;
 
-import static IR.Types.IntegerType.i32;
+import static IR.Types.IntegerType.i1;
 
-public class BinaryInstruction extends Instruction {
-    public BinaryInstruction(BasicBlock basicBlock, Operator op, Value leftValue, Value rightValue) {
-        super(basicBlock, i32, op);
-        addOperands(leftValue, rightValue);
-        setName("");
-    }
-
-    public void addOperands(Value leftValue, Value rightValue) {
-        this.addOperand(leftValue);
-        this.addOperand(rightValue);
+public class IcmpInstruction extends BinaryInstruction {
+    public IcmpInstruction(BasicBlock basicBlock, Operator scheme, Value leftValue, Value rightValue) {
+        super(basicBlock, scheme, leftValue, rightValue);
+        this.setType(i1);
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         Value o0 = getOperands().get(0), o1 = getOperands().get(1);
-        builder.append(getName()).append(" = ").append(op.symbolOf()).append(o0.getType()).append(" ");
+        builder.append(getName()).append(" = icmp ").append(op.symbolOf()).append(o0.getType()).append(" ");
         if (o0 instanceof ConstantInteger) {
             builder.append(((ConstantInteger) o0).getValue());
         } else {

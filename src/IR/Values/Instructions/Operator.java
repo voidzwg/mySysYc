@@ -22,6 +22,8 @@ public enum Operator {
     STR("store"),
     RET("ret"),
     GEP("getelementptr"),
+    BR("br"),
+    ZEXT("zext"),
     ;
 
     private String op;
@@ -30,53 +32,45 @@ public enum Operator {
         this.op = op;
     }
 
-    public String getOp() {
-        return op;
-    }
-
     public String symbolOf() {
-        String s;
         switch (this) {
             case PLUS:
-                s = "add i32 ";
-                break;
+                return "add ";
             case MINU:
-                s = "sub i32 ";
-                break;
+                return "sub ";
             case MULT:
-                s = "mul i32 ";
-                break;
+                return "mul ";
             case DIV:
-                s = "sdiv i32 ";
-                break;
+                return "sdiv ";
             case MOD:
-                s = "srem i32 ";
-                break;
+                return "srem ";
+            case EQL:
+                return "eq ";
+            case NEQ:
+                return "ne ";
+            case GEQ:
+                return "sge ";
+            case GRE:
+                return "sgt ";
+            case LEQ:
+                return "sle ";
+            case LSS:
+                return "slt ";
             default:
-                s = this.getOp();
-                break;
+                return "";
         }
-        return s;
     }
 
     public void setOp(String op) {
         this.op = op;
     }
 
-    public static Operator getOp(String op) {
-        switch (op) {
-            case "+":
-                return PLUS;
-            case "-":
-                return MINU;
-            case "*":
-                return MULT;
-            case "/":
-                return DIV;
-            case "%":
-                return MOD;
-            default:
-                return null;
+    public static Operator OP(String op) {
+        for (Operator operator : Operator.values()) {
+            if (operator.op.equals(op)) {
+                return operator;
+            }
         }
+        return null;
     }
 }

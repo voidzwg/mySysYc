@@ -6,7 +6,7 @@ import IR.Types.Type;
 
 import java.util.ArrayList;
 
-public class ConstantArray extends Constant {
+public class   ConstantArray extends Constant {
     private Type elementType;
     private final int capacity;
     private int blockLength = 1;
@@ -62,8 +62,11 @@ public class ConstantArray extends Constant {
     }
 
     // get value at index if this array is a constant array
-    public ConstantInteger getValueAt(ArrayList<Value> index) {
-        if (values.size() == 0) {
+    public static ConstantInteger getValueAt(ConstantArray array, ArrayList<Value> index) {
+        if (array.getValues().size() == 0) {
+            return null;
+        }
+        if (index.size() != array.getDim()) {
             return null;
         }
         for (int i = 0; i < index.size(); i++) {
@@ -71,16 +74,41 @@ public class ConstantArray extends Constant {
             if (!(value instanceof ConstantInteger)) {
                 return null;
             }
-            Value nextValue = index.get(((ConstantInteger) value).getValue());
+            Value nextValue = array.getValues().get(((ConstantInteger) value).getValue());
             if (nextValue instanceof ConstantInteger && i != index.size() - 1) {
                 return null;
             } else if (nextValue instanceof ConstantInteger) {
                 return (ConstantInteger) nextValue;
             } else if (nextValue instanceof ConstantArray){
-                return getValueAt((ArrayList<Value>) index.subList(1, index.size()));
+                ArrayList<Value> indexSubList = new ArrayList<>(index.subList(1, index.size()));
+                return getValueAt((ConstantArray) nextValue, indexSubList);
             }
         }
         return null;
+    }
+
+    // set value at index if this array is a constant array
+    public static void setValueAt(ConstantArray array, ArrayList<Value> index, Value newValue) {
+        if (array.getValues().size() == 0) {
+            return;
+        }
+        if (index.size() != array.getDim()) {
+            return;
+        }
+        Value value = array;
+        int i;
+        for (i = 0; i < index.size() - 1; i++) {
+            Value in = index.get(i);
+            if (!(in instanceof ConstantInteger)) {
+                return;
+            }
+            value = ((ConstantArray) value).getValues().get(((ConstantInteger) in).getValue());
+        }
+        ((ConstantArray) value).getValues().set(((ConstantInteger) index.get(i)).getValue(), newValue);
+    }
+
+    public int getDim() {
+        return ((ArrayType) getType()).getDim();
     }
 
     public int getCapacity() {

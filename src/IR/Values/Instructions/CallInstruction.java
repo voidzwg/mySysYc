@@ -1,18 +1,17 @@
-package IR.Values.Instructions.Terminator;
+package IR.Values.Instructions;
 
 import IR.Types.FunctionType;
 import IR.Types.Type;
 import IR.Values.*;
-import IR.Values.Instructions.Mem.GEPInstruction;
+import IR.Values.Instructions.Instruction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static IR.Types.IntegerType.i32;
-import static IR.Values.ConstantInteger.constantZero;
 import static IR.Values.Instructions.Operator.CALL;
 
-public class CallInstruction extends TerminatorBase {
+public class CallInstruction extends Instruction {
     private final Function function;
     private final ArrayList<Value> realParameters;
     private String fString;

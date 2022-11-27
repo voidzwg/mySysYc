@@ -1,18 +1,19 @@
 package IR;
 
 import Error.CompileErrorException;
-import IR.Types.ArrayType;
-import IR.Types.FunctionType;
-import IR.Types.Type;
+import IR.Types.*;
 import IR.Values.*;
 import IR.Values.Instructions.BinaryInstruction;
+import IR.Values.Instructions.Cast.ZextInstruction;
+import IR.Values.Instructions.IcmpInstruction;
 import IR.Values.Instructions.Instruction;
 import IR.Values.Instructions.Mem.AllocaInstruction;
 import IR.Values.Instructions.Mem.GEPInstruction;
 import IR.Values.Instructions.Mem.LoadInstruction;
 import IR.Values.Instructions.Mem.StoreInstruction;
 import IR.Values.Instructions.Operator;
-import IR.Values.Instructions.Terminator.CallInstruction;
+import IR.Values.Instructions.Terminator.BrInstruction;
+import IR.Values.Instructions.CallInstruction;
 import IR.Values.Instructions.Terminator.RetInstruction;
 import frontend.Parser;
 import frontend.SyntaxParsingTree.Number;
@@ -24,8 +25,11 @@ import java.util.*;
 
 import static Error.CompileErrorException.error;
 import static Error.Error.*;
+import static IR.Types.IntegerType.i1;
 import static IR.Types.IntegerType.i32;
 import static IR.Types.VoidType.Void;
+import static IR.Values.ConstantArray.getValueAt;
+import static IR.Values.ConstantArray.setValueAt;
 import static IR.Values.ConstantInteger.constantZero;
 import static IR.Values.Instructions.Operator.*;
 
@@ -39,8 +43,11 @@ public class Visitor {
     private HashMap<String, Value> chm = null;  // current hashmap
     private ArrayList<Value> cfrp = null;  // current function real parameters
     private Integer ci;  // length of array
-    private Queue<Integer> arrLength = new LinkedList<>();
     private ConstantArray ca = null;  // current array
+    private Stack<BasicBlock> whileEntry = new Stack<>();
+    private Stack<BasicBlock> whileExit = new Stack<>();
+
+    public static int LLVM_VERSION = 6;  // 线上评测机的llvm版本与我本地的llvm版本不同，语法规则也有不同
 
     public Visitor(File fr) throws IOException {
         parser = new Parser(fr);
@@ -71,8 +78,17 @@ public class Visitor {
                 return new ConstantInteger(a.getValue() / b.getValue());
             case MOD:
                 return new ConstantInteger(a.getValue() % b.getValue());
+            case GRE:
+                return new ConstantInteger(a.getValue() > b.getValue());
+            case GEQ:
+                return new ConstantInteger(a.getValue() >= b.getValue());
+            case LEQ:
+                return new ConstantInteger(a.getValue() <= b.getValue());
+            case LSS:
+                return new ConstantInteger(a.getValue() < b.getValue());
+            default:
+                return null;
         }
-        return null;
     }
 
     private Value find(String s, int line, int col) {
@@ -94,27 +110,14 @@ public class Visitor {
         return value;
     }
 
-    private void initArray(ConstantArray array, Instruction ptr) {
-        ArrayList<Value> initial = new ArrayList<>();
-        initArray(array, ptr, initial, 0);
-    }
-
     private void initArray(ConstantArray array, Instruction ptr, ArrayList<Value> initial, int index) {
         initial.add(new ConstantInteger(index));
         for (int i = 0; i < array.getCapacity(); i++) {
             Value v = array.getValues().get(i);
-            if (v instanceof ConstantInteger) {
-                ConstantInteger integer = (ConstantInteger) v;
+            if (v.getType().isIntType()) {
                 initial.add(new ConstantInteger(i));
                 GEPInstruction gep = new GEPInstruction(cbb, ptr, initial);
-                new StoreInstruction(cbb, gep, integer);
-                initial.subList(initial.size() - 1, initial.size()).clear();
-            } else if (v instanceof AllocaInstruction) {
-                AllocaInstruction alloca = (AllocaInstruction) v;
-                initial.add(new ConstantInteger(i));
-                GEPInstruction gep = new GEPInstruction(cbb, ptr, initial);
-                cv = new LoadInstruction(cbb, alloca);
-                new StoreInstruction(cbb, gep, cv);
+                new StoreInstruction(cbb, gep, v);
                 initial.subList(initial.size() - 1, initial.size()).clear();
             } else if (v instanceof ConstantArray) {
                 ConstantArray nextArray = (ConstantArray) v;
@@ -127,14 +130,9 @@ public class Visitor {
         }
     }
 
-    private boolean isConstantValue() {
-        return (cv instanceof ConstantInteger) ||
-                (cv instanceof GlobalVariable && ((GlobalVariable) cv).isConstant()) ||
-                (cv instanceof LoadInstruction && (((LoadInstruction) cv).getOperands().get(0)) instanceof AllocaInstruction && ((AllocaInstruction) ((LoadInstruction) cv).getOperands().get(0)).isConstant());
-    }
-
-    private boolean isConstantValue(Value v) {
+    public static boolean isConstantValue(Value v) {
         return (v instanceof ConstantInteger) ||
+                (v instanceof AllocaInstruction && ((AllocaInstruction) v).isConstant()) ||
                 (v instanceof GlobalVariable && ((GlobalVariable) v).isConstant()) ||
                 (v instanceof LoadInstruction && (((LoadInstruction) v).getOperands().get(0)) instanceof AllocaInstruction && ((AllocaInstruction) ((LoadInstruction) v).getOperands().get(0)).isConstant());
     }
@@ -157,12 +155,7 @@ public class Visitor {
         ArrayList<Value> frp = new ArrayList<>();
         // 排除函数参数列表以外加减乘除模号的影响
         for (Exp e : expArrayList) {
-            visitExp(e);
-            if (cv instanceof GlobalVariable && ((GlobalVariable) cv).isConstant()) {
-                cv = ((GlobalVariable) cv).getValue();
-            } else if (cv instanceof GlobalVariable && !((GlobalVariable) cv).isConstant()) {
-                cv = new LoadInstruction(cbb, cv);
-            }
+            visitExp(e, 1);
             frp.add(cv);
         }
         return frp;
@@ -170,6 +163,70 @@ public class Visitor {
 
     public void visit() throws CompileErrorException {
         visitCompUnit((CompUnit) syntaxParsingTree);
+    }
+
+    private Value GlobalVariable2Load(Value v) {
+        if (v instanceof GlobalVariable && !((GlobalVariable) v).isConstant()) {
+            v = new LoadInstruction(cbb, v);
+        }
+        return v;
+    }
+
+    private void Exp2Cond() {
+        if (!cv.getType().equals(i1)) {
+            cv = GlobalVariable2Load(cv);
+            cv = new IcmpInstruction(cbb, NEQ, cv, constantZero);
+        }
+    }
+
+    private Value Cond2Exp(Value value) {
+        if (!value.getType().equals(i32)) {
+            value = GlobalVariable2Load(value);
+            value = new ZextInstruction(cbb, value, i32);
+        }
+        return value;
+    }
+
+    private Value constValue2Int(Value value) {
+        if (value instanceof ConstantArray) {
+            // array
+            ConstantArray array = (ConstantArray) value;
+            for (int i = 0; i < array.getValues().size(); i++) {
+                Value v = array.getValues().get(i);
+                ArrayList<Value> index = new ArrayList<>();
+                index.add(new ConstantInteger(i));
+                setValueAt(array, index, constValue2Int(v));
+            }
+        } else if (value instanceof LoadInstruction) {
+            // global array can only be initialized by other global var or array
+            GEPInstruction gep = (GEPInstruction) ((LoadInstruction) value).getOperands().get(0);
+            Value targetValue = gep.getTargetValue();
+            if (targetValue instanceof GlobalVariable) {
+                GlobalVariable global = (GlobalVariable) targetValue;
+                // global var has already been cast to integer
+                ConstantArray globalArr = (ConstantArray) global.getValue();
+                ArrayList<Value> index = new ArrayList<>();
+                for (int i = 2; i < gep.getOperands().size(); i++) {
+                    Value v = constValue2Int(gep.getOperands().get(i));
+                    index.add(v);
+                }
+                value = getValueAt(globalArr, index);
+            } else if (targetValue instanceof AllocaInstruction) {
+                for (BasicBlock bb : cf.getBasicBlocks()) {
+                    for (Instruction instr : bb.getInstList()) {
+                        if (instr instanceof StoreInstruction && instr.getOperands().get(1) == gep) {
+                            value = constValue2Int(instr.getOperands().get(0));
+                        }
+                    }
+                }
+            }
+        } else if (value instanceof BinaryInstruction) {
+            BinaryInstruction binary = (BinaryInstruction) value;
+            Value leftValue = constValue2Int(binary.getOperands().get(0));
+            Value rightValue = constValue2Int(binary.getOperands().get(1));
+            value = calculate(leftValue, binary.getOp(), rightValue);
+        }
+        return value;
     }
 
     private void visitCompUnit(CompUnit compUnitTree) throws CompileErrorException {
@@ -205,6 +262,7 @@ public class Visitor {
         cbb = new BasicBlock(cf, true);
         // 将符号表插入模型的栈式符号表中
         module.pushSymbolTable(chm);
+        cf.addBasicBlock(cbb);
         // 处理函数的函数体部分
         visitBlock(mainFuncDef.getBlock());
         // 重命名寄存器
@@ -227,20 +285,36 @@ public class Visitor {
         chm = new HashMap<>();
         // 为这个函数实体创建入口基本块，向基本块的子模块传递这个引用
         cbb = new BasicBlock(cf, true);
+        cf.addBasicBlock(cbb);
         // 处理函数的形参
         if (funcDef.getFuncFParams() != null) {
             // 函数的返回类型
             FunctionType functionType = (FunctionType) cf.getType();
             for (FuncFParam funcFParam : funcDef.getFuncFParams()) {
                 // 分配一个形参实体
-                Type type = i32;
-                cv = new Parameter(type, cf);
+                Type type;
+                int mode = funcFParam.getMode();
+                if (mode == 0) {
+                    type = i32;
+                } else if (mode == 1) {
+                    type = new PointerType(i32);
+                } else {
+                    visitConstExp(funcFParam.getConstExp());
+                    int length = 0;
+                    if (cv instanceof ConstantInteger) {
+                        length = ((ConstantInteger) cv).getValue();
+                    } else if (cv instanceof GlobalVariable) {
+                        length = ((ConstantInteger) ((GlobalVariable) cv).getValue()).getValue();
+                    }
+                    type = new PointerType(new ArrayType(i32, length));
+                }
+                cv = new Parameter(type, funcFParam.getIdent(), cf);
                 // 将形参类型的实体插入函数类型实体的形参类型表中
                 functionType.addFuncFParam(type);
                 // 将形参实体插入函数的形参表中
                 cf.addParameter((Parameter) cv);
                 // 将形参插入符号表中
-                AllocaInstruction a = new AllocaInstruction(cbb, type, false);
+                AllocaInstruction a = new AllocaInstruction(cbb, funcFParam.getIdent() + ".addr", type, false);
                 new StoreInstruction(cbb, a, cv);
                 cv = a;
                 putCVIntoCHM("%" + funcFParam.getIdent(), funcFParam.getLine(), funcFParam.getCol());
@@ -266,7 +340,6 @@ public class Visitor {
         if (block == null) {
             return;
         }
-        cf.addBasicBlock(cbb);
         for (BlockItem blockItem : block.getBlockItem()) {
             visitBlockItem(blockItem);
         }
@@ -280,38 +353,204 @@ public class Visitor {
         }
     }
 
-    private void visitCond(Cond cond) {
+    private Value calculateLogical(Value leftValue, Operator op, Value rightValue) {
+        if (isConstantValue(leftValue) && isConstantValue(rightValue)) {
+            if (!(leftValue instanceof ConstantInteger)) {
+                leftValue = ((GlobalVariable) leftValue).getValue();
+            }
+            if (!(rightValue instanceof ConstantInteger)) {
+                rightValue = ((GlobalVariable) rightValue).getValue();
+            }
+        } else {
+            leftValue = GlobalVariable2Load(leftValue);
+            rightValue = GlobalVariable2Load(rightValue);
+        }
+        return new IcmpInstruction(cbb, op, Cond2Exp(leftValue), Cond2Exp(rightValue));
+    }
 
+    private void visitCond(Cond cond, BasicBlock trueBlock, BasicBlock falseBlock) {
+        visitLOrExp(cond.getLOrExp(), trueBlock, falseBlock);
+        // if Cond is not bool exp, change it to bool exp
+        Exp2Cond();
+    }
+
+    private void visitLOrExp(LOrExp lOrExp, BasicBlock trueBlock, BasicBlock falseBlock) {
+        BasicBlock next = falseBlock;
+        if (lOrExp.getlOrExp() != null) {
+            next = new BasicBlock(cf);
+        }
+        visitLAndExp(lOrExp.getlAndExp(), next);
+        Exp2Cond();
+        new BrInstruction(cbb, cv, trueBlock, next);
+        if (lOrExp.getlOrExp() != null) {
+            cbb = next;
+            cf.addBasicBlock(cbb);
+            visitLOrExp(lOrExp.getlOrExp(), trueBlock, falseBlock);
+        }
+    }
+
+    private void visitLAndExp(LAndExp lAndExp, BasicBlock falseBlock) {
+        visitEqExp(lAndExp.getEqExp());
+        if (lAndExp.getlAndExp() != null) {
+            BasicBlock next = new BasicBlock(cf);
+            Exp2Cond();
+            new BrInstruction(cbb, cv, next, falseBlock);
+            cbb = next;
+            cf.addBasicBlock(cbb);
+            visitLAndExp(lAndExp.getlAndExp(), falseBlock);
+        }
+    }
+
+    private void visitEqExp(EqExp eqExp) {
+        visitRelExp(eqExp.getRelExp());
+        if (eqExp.getEqExp() != null) {
+            Value leftValue = cv;
+            Operator op = Operator.OP(eqExp.getOp());
+            if (visitEqExp(eqExp.getEqExp(), leftValue, op)) {
+                cv = calculateLogical(leftValue, op, cv);
+            }
+        }
+    }
+
+    private boolean visitEqExp(EqExp eqExp, Value leftEqExp, Operator fop) {
+        visitRelExp(eqExp.getRelExp());
+        boolean usedFatherValue = false;
+        if (eqExp.getEqExp() != null) {
+            Value leftValue = calculateLogical(leftEqExp, fop, cv);
+            Operator op = Operator.OP(eqExp.getOp());
+            usedFatherValue = true;
+            if (visitEqExp(eqExp.getEqExp(), leftValue, op)) {
+                cv = calculateLogical(leftValue, op, cv);
+            }
+        }
+        return !usedFatherValue;
+    }
+
+    private void visitRelExp(RelExp relExp) {
+        visitAddExp(relExp.getAddExp(), 0);
+        if (relExp.getRelExp() != null) {
+            Value leftValue = cv;
+            Operator op = Operator.OP(relExp.getOp());
+            if (visitRelExp(relExp.getRelExp(), leftValue, op)) {
+                cv = calculateLogical(leftValue, op, cv);
+            }
+        }
+    }
+
+    private boolean visitRelExp(RelExp relExp, Value leftRelExp, Operator fop) {
+        visitAddExp(relExp.getAddExp(), 0);
+        boolean usedFatherValue = false;
+        if (relExp.getRelExp() != null) {
+            Value leftValue = calculateLogical(leftRelExp, fop, cv);
+            Operator op = Operator.OP(relExp.getOp());
+            usedFatherValue = true;
+            if (visitRelExp(relExp.getRelExp(), leftValue, op)) {
+                cv = calculateLogical(leftValue, op, cv);
+            }
+        }
+        return !usedFatherValue;
+    }
+
+    private void enterNewBlock(BasicBlock newBasicBlock) {
+        // change current basic block
+        cbb = newBasicBlock;
+        // create new symbol table for new block
+        chm = new HashMap<>();
+        // push block into the stack
+        module.pushSymbolTable(chm);
+    }
+
+    private void exitBasicBlock() {
+        // pop the top symbol table from the stack (if.then symbol table)
+        module.popSymbolTable();
+        // change the current symbol table to the top of the stack
+        chm = module.topSymbolTable();
     }
 
     private void visitStmt(Stmt stmt) {
         LVal lVal = stmt.getlVal();
         Exp exp = stmt.getExp();
+        ArrayList<Stmt> stmts = stmt.getStmts();
         switch (stmt.getType()) {
             case 0:
                 break;
             case 1:
-                visitExp(stmt.getExp());
+                visitExp(stmt.getExp(), 0);
                 break;
             case 2:
-                // TODO: 'if' '(' Cond ')' Stmt [ 'else' Stmt ]
-                visitCond(stmt.getCond());
+                // 'if' '(' Cond ')' Stmt [ 'else' Stmt ]
+                // 1. create if.then block, if.else block and exitBlock
+                BasicBlock ifBasicBlock = new BasicBlock(cf);
+                BasicBlock elseBasicBlock = new BasicBlock(cf);
+                BasicBlock exitBasicBlock = new BasicBlock(cf);
+                if (stmts.size() == 1) {
+                    visitCond(stmt.getCond(), ifBasicBlock, exitBasicBlock);
+                    enterNewBlock(ifBasicBlock);
+                    cf.addBasicBlock(cbb);
+                    visitStmt(stmts.get(0));
+                } else {
+                    visitCond(stmt.getCond(), ifBasicBlock, elseBasicBlock);
+                    enterNewBlock(ifBasicBlock);
+                    cf.addBasicBlock(cbb);
+                    visitStmt(stmts.get(0));
+                    new BrInstruction(cbb, exitBasicBlock);
+                    exitBasicBlock();
+                    enterNewBlock(elseBasicBlock);
+                    cf.addBasicBlock(cbb);
+                    visitStmt(stmts.get(1));
+                }
+                new BrInstruction(cbb, exitBasicBlock);
+                exitBasicBlock();
+                cbb = exitBasicBlock;
+                cf.addBasicBlock(cbb);
                 break;
             case 3:
-                // TODO: 'while' '(' Cond ')' Stmt
+                // 'while' '(' Cond ')' Stmt
+                BasicBlock whileEntryBlock = new BasicBlock(cf);
+                BasicBlock whileBasicBlock = new BasicBlock(cf);
+                BasicBlock exitBasicBlock0 = new BasicBlock(cf);
+                new BrInstruction(cbb, whileEntryBlock);
+                whileEntry.push(whileEntryBlock);
+                whileExit.push(exitBasicBlock0);
+                enterNewBlock(whileEntryBlock);
+                cf.addBasicBlock(cbb);
+                visitCond(stmt.getCond(), whileBasicBlock, exitBasicBlock0);
+                cbb = whileBasicBlock;
+                cf.addBasicBlock(cbb);
+                visitStmt(stmts.get(0));
+                new BrInstruction(cbb, whileEntryBlock);
+                exitBasicBlock();
+                whileEntry.pop();
+                whileExit.pop();
+                cbb = exitBasicBlock0;
+                cf.addBasicBlock(cbb);
                 break;
             case 4:
-                // TODO: 'break' ';'
+                // 'break' ';'
+                if (whileExit.isEmpty()) {
+                    error(IllegalBreakOrContinue, stmt.getLine(), stmt.getCol());
+                } else {
+                    new BrInstruction(cbb, whileExit.peek());
+                    cbb = new BasicBlock(cf);
+                    cf.addBasicBlock(cbb);
+                }
                 break;
             case 5:
-                // TODO: 'continue' ';'
+                // 'continue' ';'
+                if (whileEntry.isEmpty()) {
+                    error(IllegalBreakOrContinue, stmt.getLine(), stmt.getCol());
+                } else {
+                    new BrInstruction(cbb, whileEntry.peek());
+                    cbb = new BasicBlock(cf);
+                    cf.addBasicBlock(cbb);
+                }
                 break;
             case 6:
                 // 'return' [ Exp ] ';'
                 if (exp == null) {
                     new RetInstruction(cbb);
                 } else {
-                    visitExp(exp);
+                    visitExp(exp, 0);
                     new RetInstruction(cbb, cv);
                 }
                 break;
@@ -349,24 +588,21 @@ public class Visitor {
                 break;
             case 8:
                 // LVal '=' Exp ';'
+                visitExp(exp, 0);
+                Value expValue = cv;
                 visitLVal(lVal);
-                if (isConstantValue()) {
+                Value leftValue = cv;
+                Value v = find(lVal.getIdent(), lVal.getLine(), lVal.getCol());
+                if (isConstantValue(v)) {
                     error(ChangeConstValue, lVal.getLine(), lVal.getCol());
                 }
-                Value leftValue = cv;
-                //System.out.println("left Value: " + leftValue);
-                visitExp(exp);
-                if (cv instanceof GlobalVariable && ((GlobalVariable) cv).isConstant()) {
-                    cv = ((GlobalVariable) cv).getValue();
-                } else if (cv instanceof GlobalVariable && !((GlobalVariable) cv).isConstant()) {
-                    cv = new LoadInstruction(cbb, cv);
-                }
-                new StoreInstruction(cbb, leftValue, cv);
+                new StoreInstruction(cbb, leftValue, expValue);
                 break;
             case 9:
                 // LVal '=' 'getint' '(' ')' ';'
                 visitLVal(lVal);
-                if (isConstantValue()) {
+                v = find(lVal.getIdent(), lVal.getLine(), lVal.getCol());
+                if (isConstantValue(v)) {
                     error(ChangeConstValue, lVal.getLine(), lVal.getCol());
                 }
                 tv = cv;
@@ -375,7 +611,17 @@ public class Visitor {
                 new StoreInstruction(cbb, tv, cv);
                 break;
             case 10:
-                // TODO: Block
+                // Block
+                BasicBlock basicBlock = new BasicBlock(cf);
+                BasicBlock exitBasicBlock1 = new BasicBlock(cf);
+                new BrInstruction(cbb, basicBlock);
+                enterNewBlock(basicBlock);
+                cf.addBasicBlock(cbb);
+                visitBlock(stmt.getBlock());
+                new BrInstruction(cbb, exitBasicBlock1);
+                cbb = exitBasicBlock1;
+                cf.addBasicBlock(cbb);
+                exitBasicBlock();
                 break;
             default:
                 error(UndefinedError, stmt.getLine(), stmt.getCol());
@@ -420,13 +666,16 @@ public class Visitor {
         ci = -1;
         visitConstInitVal(constDef.getConstInitVal());
         if (cbb == null) {
+            cv = constValue2Int(cv);
             cv = new GlobalVariable(constDef.getIdent(), cv, true);
             module.addGlobalVariable((GlobalVariable) cv);
         } else {
-            if (!(cv instanceof ConstantInteger)) {
-                tv = cv;
-                cv = new AllocaInstruction(cbb, cv.getType(), true);
-                new StoreInstruction(cbb, cv, tv);
+            Value value = cv;
+            cv = new AllocaInstruction(cbb, constDef.getIdent(), cv.getType(), true);
+            if (((AllocaInstruction) cv).getAllocated().isArrayType()) {
+                initArray((ConstantArray) value, (Instruction) cv, new ArrayList<>(), 0);
+            } else {
+                new StoreInstruction(cbb, cv, value);
             }
             cv.setName("%" + constDef.getIdent());
         }
@@ -448,7 +697,7 @@ public class Visitor {
         } else {
             for (ConstInitVal constInitVal1 : constInitVal.getConstInitVal()) {
                 visitConstInitVal(constInitVal1);
-                if (cv instanceof ConstantInteger) {
+                if (!(cv instanceof ConstantArray)) {
                     ca.insert(cv, ci);
                 }
             }
@@ -497,25 +746,20 @@ public class Visitor {
             }
         }
         if (cbb == null) {
+            cv = constValue2Int(cv);
             cv = new GlobalVariable(varDef.getIdent(), cv, false);
             module.addGlobalVariable((GlobalVariable) cv);
         } else {
-            if (cv instanceof GlobalVariable) {
-                cv = ((GlobalVariable) cv).getValue();
-            }
-            tv = cv;
-            cv = new AllocaInstruction(cbb, cv.getType(), false);
+            Value value = cv;
+            cv = new AllocaInstruction(cbb, varDef.getIdent(), cv.getType(), false);
             if (flag) {
-                if (((AllocaInstruction) cv).getAllocated() instanceof ArrayType) {
-                    ConstantArray array = (ConstantArray) tv;
+                if (((AllocaInstruction) cv).getAllocated().isArrayType()) {
+                    ConstantArray array = (ConstantArray) value;
                     if (!array.isNeedInit()) {
-                        initArray(array, (Instruction) cv);
+                        initArray(array, (Instruction) cv, new ArrayList<>(), 0);
                     }
                 } else {
-                    if (tv instanceof GlobalVariable && !((GlobalVariable) tv).isConstant()) {
-                        tv = new LoadInstruction(cbb, tv);
-                    }
-                    new StoreInstruction(cbb, cv, tv);
+                    new StoreInstruction(cbb, cv, value);
                 }
             }
             cv.setName("%" + varDef.getIdent());
@@ -524,7 +768,7 @@ public class Visitor {
 
     private void visitInitVal(InitVal initVal) throws CompileErrorException {
         if (initVal.getExp() != null) {
-            visitExp(initVal.getExp());
+            visitExp(initVal.getExp(), 0);
             if (ca != null) {
                 ci++;
             }
@@ -539,11 +783,8 @@ public class Visitor {
         }
     }
 
-    private void visitExp(Exp exp) throws CompileErrorException {
-        visitAddExp(exp.getAddExp());
-        if ((cv instanceof GlobalVariable) && ((GlobalVariable) cv).isConstant()) {
-            cv = ((GlobalVariable) cv).getValue();
-        }
+    private void visitExp(Exp exp, int mode) throws CompileErrorException {
+        visitAddExp(exp.getAddExp(), mode);
     }
 
     private void visitNumber(Number number) {
@@ -551,100 +792,151 @@ public class Visitor {
     }
 
     private void visitLVal(LVal lVal) throws CompileErrorException {
-        // lVal instanceof ConstantInteger, GEPInstruction or AllocaInstruction
-        int mode = lVal.getMode();
-        cv = find(lVal.getIdent(), lVal.getLine(), lVal.getCol());
-        if (cv instanceof AllocaInstruction) {
-            // lVal instanceof AllocaInstruction or GEPInstruction
-            if (mode != 0) {
-                AllocaInstruction alloca = (AllocaInstruction) cv;
-                ArrayList<Value> initial = new ArrayList<>();
-                initial.add(constantZero);
-                for (Exp exp : lVal.getExps()) {
-                    visitExp(exp);
-                    initial.add(cv);
-                }
-                cv = new GEPInstruction(cbb, alloca, initial);
-            }
-        } else if (cv instanceof GlobalVariable) {
-            // lVal instanceof ConstantInteger or GEPInstruction
-            GlobalVariable gVal = (GlobalVariable) cv;
-            if (!gVal.isConstant()) {
-                // lVal instanceof ConstantInteger or GEPInstruction
-                if (mode != 0) {
-                    ArrayList<Value> initial = new ArrayList<>();
-                    initial.add(constantZero);
-                    for (Exp exp : lVal.getExps()) {
-                        visitExp(exp);
-                        initial.add(cv);
+        // LVal may be: var array const constArray globalVar globalArray globalConst globalConstArray param paramArray
+        // After visit, cv may be value if LVal is constant var, or pointer if LVal is var, all kinds of array
+        Value v = find(lVal.getIdent(), lVal.getLine(), lVal.getCol());
+        if (v instanceof AllocaInstruction) {
+            // var array const constArray param paramArray
+            Type allocated = ((AllocaInstruction) v).getAllocated();
+            if (allocated.isIntType()) {
+                // var const param
+                if (((AllocaInstruction) v).isConstant()) {
+                    // const
+                    for (BasicBlock bb : cf.getBasicBlocks()) {
+                        for (Instruction instr : bb.getInstList()) {
+                            if (instr instanceof StoreInstruction) {
+                                if (instr.getOperands().get(1) == v) {
+                                    cv = instr.getOperands().get(0);
+                                }
+                            }
+                        }
                     }
-                    cv = new GEPInstruction(cbb, gVal, initial);
+                } else {
+                    // var param
+                    cv = v;
+                }
+            } else if (allocated.isArrayType()) {
+                // array constArray
+                ArrayList<Value> index = new ArrayList<>();
+                index.add(constantZero);
+                for (Exp e : lVal.getExps()) {
+                    visitExp(e, 0);
+                    index.add(cv);
+                }
+                if (index.size() == 1) {
+                    // has no exp
+                    cv = v;
+                } else {
+                    cv = new GEPInstruction(cbb, v, index);
+                }
+            } else if (allocated.isPointerType()) {
+                // paramArray
+                v = new LoadInstruction(cbb, v);
+                ArrayList<Value> index = new ArrayList<>();
+                for (Exp e : lVal.getExps()) {
+                    visitExp(e, 0);
+                    index.add(cv);
+                }
+                if (index.size() == 0) {
+                    // has no exp
+                    cv = v;
+                } else {
+                    cv = new GEPInstruction(cbb, v, index);
+                }
+            }
+        } else if (v instanceof GlobalVariable) {
+            // globalVar globalArray globalConst globalConstArray
+            Value global = ((GlobalVariable) v).getValue();
+            if (global.getType().isIntType()) {
+                // globalVar globalConst
+                if (((GlobalVariable) v).isConstant()) {
+                    // globalConst
+                    cv = global;
+                } else {
+                    // globalVar
+                    cv = v;
                 }
             } else {
-                // lVal instanceof ConstantInteger or GEPInstruction
-                Value v = gVal.getValue();
-                if (v instanceof ConstantInteger) {
+                // globalArray globalConstArray
+                ArrayList<Value> index = new ArrayList<>();
+                index.add(constantZero);
+                for (Exp e : lVal.getExps()) {
+                    visitExp(e, 0);
+                    index.add(cv);
+                }
+                if (index.size() == 1) {
+                    // has no exp
                     cv = v;
-                } else if (v instanceof ConstantArray) {
-                    ArrayList<Value> initial = new ArrayList<>();
-                    initial.add(constantZero);
-                    for (Exp exp : lVal.getExps()) {
-                        visitExp(exp);
-                        initial.add(cv);
-                    }
-                    ConstantInteger integer = ((ConstantArray) v).getValueAt((ArrayList<Value>) initial.subList(1, initial.size()));
-                    cv = integer != null ? integer : new GEPInstruction(cbb, gVal, initial);
+                } else {
+                    cv = new GEPInstruction(cbb, v, index);
                 }
             }
         }
     }
 
-    private void visitPrimaryExp(PrimaryExp primaryExp) throws CompileErrorException {
-        // primaryExp instanceof AllocaInstruction, GEPInstruction, ConstantInteger or CallInstruction
+    private void visitPrimaryExp(PrimaryExp primaryExp, int mode) throws CompileErrorException {
         if (primaryExp.getNumber() != null) {
             visitNumber(primaryExp.getNumber());
         } else if (primaryExp.getExp() != null) {
-            visitExp(primaryExp.getExp());
+            visitExp(primaryExp.getExp(), mode);
         } else {
             visitLVal(primaryExp.getlVal());
-            if (cv instanceof GEPInstruction || cv instanceof AllocaInstruction) {
-                cv = new LoadInstruction(cbb, cv);
+            if (mode == 0) {
+                if (cv.getType().isPointerType()) {
+                    cv = new LoadInstruction(cbb, cv);
+                }
+                // cv.getType().isIntType(): nothing need to do
+            } else if (mode == 1) {
+                // real param
+                Type type = cv.getType();
+                if (type.isPointerType()) {
+                    Type targetType = ((PointerType) type).gettType();
+                    if (cv instanceof LoadInstruction) {
+                        // paramArray with no index
+                        // nothing to do
+                    } else if (targetType.isArrayType()) {
+                        // paramArray with index
+                        ArrayList<Value> initial = new ArrayList<>();
+                        initial.add(constantZero);
+                        initial.add(constantZero);
+                        cv = new GEPInstruction(cbb, cv, initial);
+                    } else if (targetType.isIntType()) {
+                        // paramVar
+                        cv = new LoadInstruction(cbb, cv);
+                    }
+                }
+                // type.isIntType(): nothing need to do
             }
         }
     }
 
-    private void visitUnaryExp(UnaryExp unaryExp) throws CompileErrorException {
+    private void visitUnaryExp(UnaryExp unaryExp, int mode) throws CompileErrorException {
         // unaryExp instanceof AllocaInstruction, GEPInstruction, ConstantInteger or CallInstruction
         if (unaryExp.getPrimaryExp() != null) {
-            visitPrimaryExp(unaryExp.getPrimaryExp());
+            visitPrimaryExp(unaryExp.getPrimaryExp(), mode);
         } else if (unaryExp.getUnaryOp() != null) {
-            Operator op = getOp(unaryExp.getUnaryOp().getOp());
-            visitUnaryExp(unaryExp.getUnaryExp());
+            Operator op = Operator.OP(unaryExp.getUnaryOp().getOp());
+            visitUnaryExp(unaryExp.getUnaryExp(), mode);
             if (op == NOT) {
-                if (cv instanceof GlobalVariable && !((GlobalVariable) cv).isConstant()) {
-                    cv = new LoadInstruction(cbb, cv);
-                    cv = new BinaryInstruction(cbb, EQL, cv, constantZero);
-                } else if (cv instanceof GlobalVariable && ((GlobalVariable) cv).isConstant()) {
-                    cv = new ConstantInteger(-((ConstantInteger) ((GlobalVariable) cv).getValue()).getValue());
-                } else {
-                    cv = new BinaryInstruction(cbb, EQL, cv, constantZero);
-                }
+                cv = GlobalVariable2Load(cv);
+                cv = new IcmpInstruction(cbb, EQL, cv, constantZero);
             } else if (op == MINU) {
                 cv = calculate(constantZero, MINU, cv);
             }
         } else {
-            if (unaryExp.getFuncRParams() != null) {
-                visitFuncRParams(unaryExp.getFuncRParams());
-            } else {
-                cfrp = new ArrayList<>();
-            }
             Value value = find(unaryExp.getIdent(), unaryExp.getLine(), unaryExp.getCol());
             if (!(value instanceof Function)) {
                 error(UndefinedError, unaryExp.getLine(), unaryExp.getCol());
             } else {
                 Function f = (Function) value;
+                if (unaryExp.getFuncRParams() != null) {
+                    visitFuncRParams(unaryExp.getFuncRParams());
+                } else {
+                    cfrp = new ArrayList<>();
+                }
                 f.match(cfrp, unaryExp.getLine(), unaryExp.getCol());
                 cv = new CallInstruction(cbb, f, cfrp);
+
             }
         }
     }
@@ -654,26 +946,26 @@ public class Visitor {
     }
 
     // visitAddExp(AddExp addExp) visitAddExp(AddExp addExp, Value leftAddExp, Operator fop) 调用此方法
-    private void visitMulExp(MulExp mulExp) throws CompileErrorException {
-        visitUnaryExp(mulExp.getUnaryExp());
+    private void visitMulExp(MulExp mulExp, int mode) throws CompileErrorException {
+        visitUnaryExp(mulExp.getUnaryExp(), mode);
         if (mulExp.getMulExp() != null) {
             Value leftValue = cv;
-            Operator op = getOp(mulExp.getOp());
-            if (visitMulExp(mulExp.getMulExp(), leftValue, op)) {
+            Operator op = Operator.OP(mulExp.getOp());
+            if (visitMulExp(mulExp.getMulExp(), leftValue, op, mode)) {
                 cv = calculate(leftValue, op, cv);
             }
         }
     }
 
     // visitMulExp(MulExp mulExp)调用此方法
-    private boolean visitMulExp(MulExp mulExp, Value leftMulExp, Operator fop) throws CompileErrorException {
-        visitUnaryExp(mulExp.getUnaryExp());
+    private boolean visitMulExp(MulExp mulExp, Value leftMulExp, Operator fop, int mode) throws CompileErrorException {
+        visitUnaryExp(mulExp.getUnaryExp(), mode);
         boolean usedFatherValue = false;
         if (mulExp.getMulExp() != null) {
             Value leftValue = calculate(leftMulExp, fop, cv);
-            Operator op = getOp(mulExp.getOp());
+            Operator op = Operator.OP(mulExp.getOp());
             usedFatherValue = true;
-            if (visitMulExp(mulExp.getMulExp(), leftValue, op)) {
+            if (visitMulExp(mulExp.getMulExp(), leftValue, op, mode)) {
                 cv = calculate(leftValue, op, cv);
             }
         }
@@ -681,26 +973,26 @@ public class Visitor {
     }
 
     // visitExp(Exp exp)调用此方法
-    private void visitAddExp(AddExp addExp) throws CompileErrorException {
-        visitMulExp(addExp.getMulExp());
+    private void visitAddExp(AddExp addExp, int mode) throws CompileErrorException {
+        visitMulExp(addExp.getMulExp(), mode);
         if (addExp.getAddExp() != null) {
             Value leftValue = cv;
-            Operator op = getOp(addExp.getOp());
-            if (visitAddExp(addExp.getAddExp(), leftValue, op)) {
+            Operator op = Operator.OP(addExp.getOp());
+            if (visitAddExp(addExp.getAddExp(), leftValue, op, mode)) {
                 cv = calculate(leftValue, op, cv);
             }
         }
     }
 
     // visitAddExp(AddExp addExp)调用此方法
-    private boolean visitAddExp(AddExp addExp, Value leftAddExp, Operator fop) throws CompileErrorException {
-        visitMulExp(addExp.getMulExp());
+    private boolean visitAddExp(AddExp addExp, Value leftAddExp, Operator fop, int mode) throws CompileErrorException {
+        visitMulExp(addExp.getMulExp(), mode);
         boolean usedFatherValue = false;
         if (addExp.getAddExp() != null) {
             Value leftValue = calculate(leftAddExp, fop, cv);
-            Operator op = getOp(addExp.getOp());
+            Operator op = Operator.OP(addExp.getOp());
             usedFatherValue = true;
-            if (visitAddExp(addExp.getAddExp(), leftValue, op)) {
+            if (visitAddExp(addExp.getAddExp(), leftValue, op, mode)) {
                 cv = calculate(leftValue, op, cv);
             }
         }
@@ -728,18 +1020,18 @@ public class Visitor {
             if (rightValue instanceof GlobalVariable) {
                 rightValue = new LoadInstruction(cbb, rightValue);
             }
+            if (((IntegerType) leftValue.getType()).getLength() < ((IntegerType) rightValue.getType()).getLength()) {
+                leftValue = new ZextInstruction(cbb, leftValue, rightValue.getType());
+            } else if (((IntegerType) leftValue.getType()).getLength() > ((IntegerType) rightValue.getType()).getLength()) {
+                rightValue = new ZextInstruction(cbb, rightValue, leftValue.getType());
+            }
             return new BinaryInstruction(cbb, op, leftValue, rightValue);
         }
     }
 
     private void visitConstExp(ConstExp constExp) throws CompileErrorException {
-        visitAddExp(constExp.getAddExp());
-        if (!isConstantValue()) {
-            error(InitializationFailed, constExp.getLine(), constExp.getCol());
-        }
-        if ((cv instanceof GlobalVariable) && ((GlobalVariable) cv).isConstant()) {
-            cv = ((GlobalVariable) cv).getValue();
-        }
+        visitAddExp(constExp.getAddExp(), 0);
+        cv = constValue2Int(cv);
     }
 
     public void close() throws IOException {

@@ -61,10 +61,10 @@ public class Module {
 
     public Value find(String s) {
         Value v = null;
-        String t = "%" + s;
+        String t = "%" + s.replaceAll("[%@]", "");
         for (int i = symbolTable.size() - 1; i >= 0 && v == null; i--) {
             if (i == 0) {
-                t = "@" + s;
+                t = t.replace('%', '@');
             }
             v = symbolTable.get(i).get(t);
         }

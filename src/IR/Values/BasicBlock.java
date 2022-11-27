@@ -4,6 +4,8 @@ import IR.Types.LabelType;
 import IR.Values.Instructions.Instruction;
 import utils.List;
 
+import java.util.Iterator;
+
 public class BasicBlock extends Value {
     private final Function function;
     private final List<Instruction, BasicBlock> instructions;
@@ -14,6 +16,23 @@ public class BasicBlock extends Value {
         instructions = new List<>(this);
         this.function = function;
         this.isEntry = isEntry;
+    }
+
+    public BasicBlock(Function function) {
+        super(new LabelType(""), "");
+        instructions = new List<>(this);
+        this.function = function;
+        this.isEntry = false;
+    }
+
+    @Override
+    public void setName(String name) {
+        ((LabelType) this.type).setName(name);
+    }
+
+    @Override
+    public String getName() {
+        return ((LabelType) this.type).getName();
     }
 
     public boolean isEntry() {
@@ -29,7 +48,12 @@ public class BasicBlock extends Value {
     }
 
     public void addAllocaInstruction(Instruction alloca) {
-        instructions.addFirst(alloca);
+        if (isEntry) {
+            instructions.addFirst(alloca);
+        } else {
+            BasicBlock entryBlock = function.getBasicBlocks().get(0);
+            entryBlock.addAllocaInstruction(alloca);
+        }
     }
 
     public List<Instruction, BasicBlock> getInstList() {

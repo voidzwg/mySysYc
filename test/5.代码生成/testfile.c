@@ -1,28 +1,63 @@
+const int my=20373778,ra=123456;
+void test1(){
+    printf("%d\n",my);
+    return;
+}
 
-const int _ = 20373117 + -+-1 * 1 / 1 - +1 % 2;
-const int value1 = 1;
+void test2(int x){
+    printf("%d\n",x+my);
+}
+int main(){
+    test1();
+    test2(ra);
+    int x = 0;
+    if(0==1){
+        x = x + 1;
+    }
+    if(0==0){
+        x = x + 3;
+    }
+    printf("%d\n",x);
+    if(0<=1){
+        x = x + 1;
+    }
+    if(0<=0){
+        x = x + 3;
+    }
+    printf("%d\n",x);
+    if(0>=1){
+        x = x + 1;
+    }
+    if(0>=0){
+        x = x + 3;
+    }
+    printf("%d\n",x);
+    if(0!=1){
+        x = x + 1;
+    }
+    if(0!=0){
+        x = x + 3;
+    }
+    printf("%d\n",x);
+    if(0<1){
+        x = x + 1;
+    }
+    if(0<0){
+        x = x + 3;
+    }
+    printf("%d\n",x);
+    if(0>1){
+        x = x + 1;
+    }
+    if(0>0){
+        x = x + 3;
+    }
+    printf("%d\n",x);
 
-int value10 = 10;
-int value11 = 11, value12 = 12, value13;
+    printf("%d\n",5%3);
+    while(0);
+    {}
+    printf("end\n");
 
-
-int main() {
-	value13 = 13;
-	int value14 = 14, value15 = 15, value16;
-	int value17;
-
-	printf("%d\n", _);
-	int a;
-	a = getint();
-	if (a > 0) {
-	    printf("a > 0\n");
-	} else {
-	    printf("a <= 0");
-	}
-
-	int n = 3;
-
-	printf("\n\n\n\n\n\n");
-
-	return 0;
+    return 0;
 }

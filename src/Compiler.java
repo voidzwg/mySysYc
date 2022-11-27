@@ -1,12 +1,11 @@
 import Error.CompileErrorException;
-import IR.Values.Function;
-import IR.Values.Value;
+import IR.Values.ConstantInteger;
+import IR.Values.Instructions.Operator;
 import IR.Visitor;
 import backend.CodeGenerate;
 import frontend.Lexer;
 import frontend.Parser;
 import frontend.Token;
-import utils.Graph;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static java.util.Collections.sort;
+import static IR.Visitor.LLVM_VERSION;
 
 public class Compiler {
     char ch;
@@ -28,31 +28,32 @@ public class Compiler {
             //test.test3();
             //test.submit3();
             //test.test4();
-            //test.submit4();
+            test.submit4();
             //test.test5();
-            test.submit5();
-            //test.testt();
+            //test.submit5();
+            //test.tete();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    void testt() throws IOException {
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        arrayList.add(1);
-        arrayList.add(2);
-        arrayList.add(3);
-        arrayList.add(4);
-        arrayList.add(5);
-        List<Integer> sub = arrayList.subList(4, arrayList.size());
-        List<Integer> before = arrayList.subList(0, 4);
-        System.out.println(sub);
-        System.out.println(before);
+    void tete() throws IOException {
+        ConstantInteger a = new ConstantInteger(22);
+        ConstantInteger b = new ConstantInteger(22);
+        ConstantInteger c = new ConstantInteger(33);
+        System.out.println(a.equals(b));
+        System.out.println(b.equals(c));
+        System.out.println(c.equals(a));
+        ConstantInteger d = new ConstantInteger(22, 8);
+        System.out.println(d.equals(a));
+        ConstantInteger e = new ConstantInteger(-1, 1);
+        System.out.println(e.equals(ConstantInteger.True));
     }
 
     void submit5() throws IOException {
         File fr = new File("testfile.txt");
         File fw = new File("mips.txt");
+        LLVM_VERSION = 6;
         Visitor visitor;
         CodeGenerate generator;
         while (true) {
@@ -78,6 +79,7 @@ public class Compiler {
         File fw = new File(fwURL);
         File fw2 = new File("./test/5.代码生成/llvm_ir.ll");
         File fe = new File(feURL);
+        LLVM_VERSION = 8;
         FileWriter fwe = new FileWriter(fe);
         Visitor visitor;
         CodeGenerate generator;
@@ -113,6 +115,7 @@ public class Compiler {
         File fr = new File(frURL);
         File fw = new File(fwURL);
         File fe = new File(feURL);
+        LLVM_VERSION = 8;
         FileWriter fwe = new FileWriter(fe);
         Visitor visitor;
         ArrayList<CompileErrorException> eList = new ArrayList<>();
@@ -122,9 +125,9 @@ public class Compiler {
                 //System.out.println("Syntax Tree:\n" + visitor.printSyntaxTree());
                 visitor.visit();
                 String str = visitor.toString();
-                System.out.println(str);
+                //System.out.println(str);
                 out.append(str);
-                System.out.println("\nSymbol Table:\n" + visitor.printSymTbl());
+                //System.out.println("\nSymbol Table:\n" + visitor.printSymTbl());
                 break;
             } catch (CompileErrorException e) {
                 System.out.println("Caught a compile Error at " + e.getPos() + ": " + e.getMessage());
@@ -142,16 +145,15 @@ public class Compiler {
     void submit4() throws IOException {
         File fr = new File("testfile.txt");
         File fw = new File("llvm_ir.txt");
+        LLVM_VERSION = 8;
         Visitor visitor;
         while (true) {
             try (FileWriter out = new FileWriter(fw)) {
                 visitor =  new Visitor(fr);
-                //System.out.println("Syntax Tree:\n" + visitor.printSyntaxTree());
                 visitor.visit();
                 String str = visitor.toString();
-                System.out.println(str);
                 out.append(str);
-                System.out.println("\nSymbol Table:\n" + visitor.printSymTbl());
+                //System.out.println("\nSymbol Table:\n" + visitor.printSymTbl());
                 break;
             } catch (CompileErrorException e) {
                 System.out.println("Caught a compile Error at " + e.getPos() + ": " + e.getMessage());
@@ -163,6 +165,7 @@ public class Compiler {
     void test3() throws IOException {
         File fr = new File(frURL);
         File fw = new File(fwURL);
+        LLVM_VERSION = 8;
         Parser parser = new Parser(fr);
         try (FileWriter out = new FileWriter(fw)) {
             String str;
@@ -178,6 +181,7 @@ public class Compiler {
     void submit3() throws IOException {
         File fr = new File("testfile.txt");
         File fw = new File("output.txt");
+        LLVM_VERSION = 6;
         Parser parser = new Parser(fr);
         FileWriter out = new FileWriter(fw);
         String str = "";
@@ -197,6 +201,7 @@ public class Compiler {
     void test2() throws IOException {
         File fr = new File(frURL);
         File fw = new File(fwURL);
+        LLVM_VERSION = 8;
         if (!fw.exists()) {
             boolean ret = fw.createNewFile();
         }
@@ -221,6 +226,7 @@ public class Compiler {
     void submit2() throws IOException {
         File fr = new File("testfile.txt");
         File fw = new File("output.txt");
+        LLVM_VERSION = 6;
         if (!fw.exists()) {
             boolean ret = fw.createNewFile();
         }

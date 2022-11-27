@@ -4,11 +4,12 @@ import Error.CompileErrorException;
 import IR.Types.FunctionType;
 import IR.Types.PointerType;
 import IR.Types.Type;
+import IR.Values.Instructions.CallInstruction;
 import IR.Values.Instructions.Instruction;
 import IR.Values.Instructions.Mem.AllocaInstruction;
 import IR.Values.Instructions.Mem.GEPInstruction;
 import IR.Values.Instructions.Mem.StoreInstruction;
-import IR.Values.Instructions.Terminator.CallInstruction;
+import IR.Values.Instructions.Terminator.BrInstruction;
 import utils.List;
 
 import java.util.ArrayList;
@@ -17,15 +18,25 @@ import java.util.Iterator;
 import static Error.Error.ParamNumbersMismatched;
 import static Error.Error.ParamTypeMismatched;
 import static IR.Types.VoidType.Void;
+import static IR.Visitor.LLVM_VERSION;
 
 public class Function extends Value {
     private final List<BasicBlock, Function> basicBlocks;
     private final ArrayList<Parameter> parameters;
+    private BasicBlock retBB;
 
     public Function(Type type, String name) {
         super(new FunctionType(type), "@" + name);
         basicBlocks = new List<>(this);
         parameters = new ArrayList<>();
+    }
+
+    public BasicBlock getRetBB() {
+        return retBB;
+    }
+
+    public void setRetBB(BasicBlock retBB) {
+        this.retBB = retBB;
     }
 
     public List<BasicBlock, Function> getBasicBlocks() {
@@ -51,13 +62,6 @@ public class Function extends Value {
         for (int i = 0; i < parameters.size(); i++) {
             Value parameter = realParameters.get(i);
             Type type = parameter.getType();
-            if (parameter instanceof GlobalVariable) {
-                type = ((GlobalVariable) parameter).getValue().getType();
-            } else if (parameter instanceof AllocaInstruction) {
-                type = ((PointerType) parameter.getType()).gettType();
-            } else if (parameter instanceof GEPInstruction) {
-                type = ((PointerType) parameter.getType()).gettType();
-            }
             if (!type.equals(parameters.get(i).getType())) {
                 CompileErrorException.error(ParamTypeMismatched, line, col);
             }
@@ -67,21 +71,45 @@ public class Function extends Value {
     private boolean needName(Instruction instr) {
         return !(instr instanceof StoreInstruction
                 || (instr instanceof CallInstruction && instr.getType() == Void)
+                || instr instanceof BrInstruction
         );
     }
 
     public void reorder() {
-        int count = 0;
-        for (Parameter param : parameters) {
-            param.setName("%" + count++);
-        }
-        for (BasicBlock bb : basicBlocks) {
-            bb.setName(String.valueOf(count++));
-            for (Instruction instr : bb.getInstList()) {
-                if (needName(instr)) {
-                    instr.setName("%" + count++);
+        int count;
+        int blockCount;
+        switch (LLVM_VERSION) {
+            case 8:
+                count = 1;
+                blockCount = 0;
+                for (Parameter param : parameters) {
+                    param.setName(param.getName());
                 }
-            }
+                for (BasicBlock bb : basicBlocks) {
+                    bb.setName("basicBlock" + blockCount++);
+                    for (Instruction instr : bb.getInstList()) {
+                        if (needName(instr)) {
+                            instr.setName("%" + count++);
+                        }
+                    }
+                }
+                break;
+            case 6:
+                count = 0;
+                for (Parameter param : parameters) {
+                    param.setName("%" + count++);
+                }
+                for (BasicBlock bb : basicBlocks) {
+                    bb.setName(String.valueOf(count++));
+                    for (Instruction instr : bb.getInstList()) {
+                        if (needName(instr)) {
+                            instr.setName("%" + count++);
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -92,6 +120,9 @@ public class Function extends Value {
         for (Iterator<Parameter> it = parameters.iterator(); it.hasNext(); ) {
             Parameter parameter = it.next();
             builder.append(parameter.getType());
+            if (LLVM_VERSION == 8) {
+                builder.append(" ").append(parameter.getName());
+            }
             if (it.hasNext()) {
                 builder.append(", ");
             }

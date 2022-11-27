@@ -121,8 +121,8 @@ public class Stmt extends SyntaxParsingTree {
         stmts.add(stmt);
     }
 
-    public Stmt visitStmt(int i) {
-        return stmts.get(i);
+    public ArrayList<Stmt> getStmts() {
+        return stmts;
     }
 
     public void addExp(Exp exp) {

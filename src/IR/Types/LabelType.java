@@ -1,9 +1,13 @@
 package IR.Types;
 
 public class LabelType extends Type {
-    private final String name;
+    private String name;
 
     public LabelType(String name) {
+        this.name = name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 

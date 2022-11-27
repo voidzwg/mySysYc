@@ -11,10 +11,10 @@ public class AllocaInstruction extends MemBase {
     private Type allocated;
     private Type arrayAllocated;
 
-    public AllocaInstruction(BasicBlock basicBlock, Type allocated, boolean isConstant) {
+    public AllocaInstruction(BasicBlock basicBlock, String name, Type allocated, boolean isConstant) {
         super(basicBlock, new PointerType(allocated), Operator.ALC);
         this.allocated = allocated;
-        this.setName("");
+        this.setName("%" + name);
         this.isConstant = isConstant;
         if (allocated.isArrayType()) {
             this.arrayAllocated = new PointerType(((ArrayType) allocated).getElementType());

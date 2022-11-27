@@ -1,10 +1,16 @@
 package IR.Types;
 
+import java.util.Objects;
+
 public class IntegerType extends Type {
-    private int length;
+    private final int length;
 
     public IntegerType(int length) {
         this.length = length;
+    }
+
+    public int getLength() {
+        return length;
     }
 
     public static final IntegerType i32 = new IntegerType(32);
@@ -33,12 +39,15 @@ public class IntegerType extends Type {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        if (o == this) {
-            return true;
-        }
-        return o instanceof IntegerType;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        IntegerType that = (IntegerType) o;
+        return length == that.length;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(length);
     }
 }

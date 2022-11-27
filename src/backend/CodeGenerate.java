@@ -5,14 +5,11 @@ import IR.Types.ArrayType;
 import IR.Types.IntegerType;
 import IR.Types.Type;
 import IR.Values.*;
-import IR.Values.Instructions.BinaryInstruction;
-import IR.Values.Instructions.Instruction;
+import IR.Values.Instructions.*;
 import IR.Values.Instructions.Mem.AllocaInstruction;
 import IR.Values.Instructions.Mem.GEPInstruction;
 import IR.Values.Instructions.Mem.LoadInstruction;
 import IR.Values.Instructions.Mem.StoreInstruction;
-import IR.Values.Instructions.Operator;
-import IR.Values.Instructions.Terminator.CallInstruction;
 import IR.Values.Instructions.Terminator.RetInstruction;
 import backend.MachineCode.MCBlock;
 import backend.MachineCode.MCData;
@@ -28,6 +25,7 @@ import backend.MachineCode.MCInstructions.MCRTypeInstructions.div;
 import backend.MachineCode.MCInstructions.MCRTypeInstructions.move;
 import backend.MachineCode.MCInstructions.MCRTypeInstructions.mult;
 import backend.MachineCode.MCInstructions.MCTerminator.syscall;
+import backend.MachineCode.MCInstructions.MCjump.j;
 import backend.MachineCode.MCInstructions.MCjump.jal;
 import backend.MachineCode.MCInstructions.MCjump.jr;
 import backend.MachineCode.MCInstructions.mnemonic;
@@ -209,6 +207,17 @@ public class CodeGenerate {
             } else {
                 cb.addInstruction(new MCITypeInstruction(mnemonic.addiu, base, reg, offset));
             }
+        } else if (instr instanceof IcmpInstruction) {
+            IcmpInstruction icmp = (IcmpInstruction) instr;
+            Registers result = value2Register(icmp);
+            Value leftValue = icmp.getOperands().get(0);
+            Value rightValue = icmp.getOperands().get(1);
+            mnemonic scheme = operator2RType(instr.getOp());
+            if (leftValue instanceof ConstantInteger && rightValue instanceof ConstantInteger) {
+                boolean to = compare(instr.getOp(), ((ConstantInteger) leftValue).getValue(), ((ConstantInteger) rightValue).getValue());
+                if (to) {
+                }
+            }
         } else if (instr instanceof BinaryInstruction) {
             BinaryInstruction bInstr = (BinaryInstruction) instr;
             Registers result = value2Register(bInstr);
@@ -388,7 +397,7 @@ public class CodeGenerate {
         cb.addInstruction(new syscall());
     }
 
-    public int calculate(Operator op, int left, int right) {
+    private int calculate(Operator op, int left, int right) {
         switch (op) {
             case PLUS:
                 return left + right;
@@ -402,6 +411,25 @@ public class CodeGenerate {
                 return left % right;
             default:
                 return 0;
+        }
+    }
+
+    private boolean compare(Operator op, int left, int right) {
+        switch (op) {
+            case EQL:
+                return left == right;
+            case NEQ:
+                return left != right;
+            case LSS:
+                return left < right;
+            case LEQ:
+                return left <= right;
+            case GRE:
+                return left > right;
+            case GEQ:
+                return left >= right;
+            default:
+                return true;
         }
     }
 
@@ -420,6 +448,18 @@ public class CodeGenerate {
                 return and;
             case OR:
                 return or;
+            case NEQ:
+                return bne;
+            case EQL:
+                return beq;
+            case LSS:
+                return blt;
+            case LEQ:
+                return ble;
+            case GRE:
+                return bgt;
+            case GEQ:
+                return bge;
             default:
                 return nop;
         }

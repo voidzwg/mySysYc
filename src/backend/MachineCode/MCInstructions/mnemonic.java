@@ -39,6 +39,10 @@ public enum mnemonic {
     beqz,
     bne,
     beq,
+    ble,
+    blt,
+    bge,
+    bgt,
 
     // jump
     j,
