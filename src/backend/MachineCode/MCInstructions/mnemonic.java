@@ -5,8 +5,9 @@ public enum mnemonic {
     // R-R calculation
     addu,
     sub,
-    mult,
+    mul,
     div,
+    rem,
 
     slt,
     sle,

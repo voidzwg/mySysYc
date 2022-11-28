@@ -10,6 +10,10 @@ public class MCBlock {
     private MCFunction function;
     private final List<MCInstruction, MCBlock> instructions;
     private final boolean isEntry;
+    private MCBlock trueBlock;
+    private MCBlock falseBlock;
+    private boolean hasSuc = false;
+    private boolean hasFalseSuc = false;
 
     public MCBlock(MCFunction function, boolean isEntry) {
         this.name = "_" + function.getName() + "_block_" + function.block_count++;
@@ -39,9 +43,36 @@ public class MCBlock {
         return instructions;
     }
 
+    public void setTrueBlock(MCBlock trueBlock) {
+        this.trueBlock = trueBlock;
+        this.hasSuc = true;
+    }
+
+    public void setFalseBlock(MCBlock falseBlock) {
+        this.falseBlock = falseBlock;
+        this.hasSuc = true;
+        this.hasFalseSuc = true;
+    }
+
+    public boolean hasSuc() {
+        return hasSuc;
+    }
+
+    public boolean hasFalseSuc() {
+        return hasFalseSuc;
+    }
+
+    public MCBlock getTrueBlock() {
+        return trueBlock;
+    }
+
+    public MCBlock getFalseBlock() {
+        return falseBlock;
+    }
+
     public void addInstruction(MCInstruction instruction) {
         instructions.addLast(instruction);
-        instruction.addBB(this);
+        instruction.setBB(this);
     }
 
     // if function find afterThis in the list, insert instruction after afterThis
@@ -51,7 +82,7 @@ public class MCBlock {
             MCInstruction nextInstruction = iterator.next();
             if (afterThis.equals(nextInstruction)) {
                 iterator.add(instruction);
-                instruction.addBB(this);
+                instruction.setBB(this);
                 return;
             }
         }
@@ -65,7 +96,7 @@ public class MCBlock {
             if (beforeThis.equals(nextInstruction)) {
                 iterator.previous();
                 iterator.add(instruction);
-                instruction.addBB(this);
+                instruction.setBB(this);
                 return;
             }
         }

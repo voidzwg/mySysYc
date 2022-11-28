@@ -16,6 +16,7 @@ public class CastBase extends Instruction {
         this.newType = newType;
         this.oldType = value.getType();
         this.value = value;
+        addOperand(value);
     }
 
     public Value getValue() {

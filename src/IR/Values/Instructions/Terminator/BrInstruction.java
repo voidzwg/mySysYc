@@ -48,6 +48,10 @@ public class BrInstruction extends TerminatorBase {
         return targetFalse;
     }
 
+    public BasicBlock getUnconditionalJumpTarget() {
+        return targetTrue;
+    }
+
     public boolean isUnconditional() {
         return result == null;
     }

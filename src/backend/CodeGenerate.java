@@ -2,18 +2,21 @@ package backend;
 
 import IR.Module;
 import IR.Types.ArrayType;
-import IR.Types.IntegerType;
+import IR.Types.PointerType;
 import IR.Types.Type;
 import IR.Values.*;
 import IR.Values.Instructions.*;
+import IR.Values.Instructions.Cast.ZextInstruction;
 import IR.Values.Instructions.Mem.AllocaInstruction;
 import IR.Values.Instructions.Mem.GEPInstruction;
 import IR.Values.Instructions.Mem.LoadInstruction;
 import IR.Values.Instructions.Mem.StoreInstruction;
+import IR.Values.Instructions.Terminator.BrInstruction;
 import IR.Values.Instructions.Terminator.RetInstruction;
 import backend.MachineCode.MCBlock;
 import backend.MachineCode.MCData;
 import backend.MachineCode.MCFunction;
+import backend.MachineCode.MCInstructions.MCBranch.bnez;
 import backend.MachineCode.MCInstructions.MCITypeInstructions.MCITypeInstruction;
 import backend.MachineCode.MCInstructions.MCITypeInstructions.li;
 import backend.MachineCode.MCInstructions.MCInstruction;
@@ -21,16 +24,12 @@ import backend.MachineCode.MCInstructions.MCMemory.la;
 import backend.MachineCode.MCInstructions.MCMemory.lw;
 import backend.MachineCode.MCInstructions.MCMemory.sw;
 import backend.MachineCode.MCInstructions.MCRTypeInstructions.MCRTypeInstruction;
-import backend.MachineCode.MCInstructions.MCRTypeInstructions.div;
 import backend.MachineCode.MCInstructions.MCRTypeInstructions.move;
-import backend.MachineCode.MCInstructions.MCRTypeInstructions.mult;
 import backend.MachineCode.MCInstructions.MCTerminator.syscall;
 import backend.MachineCode.MCInstructions.MCjump.j;
 import backend.MachineCode.MCInstructions.MCjump.jal;
 import backend.MachineCode.MCInstructions.MCjump.jr;
 import backend.MachineCode.MCInstructions.mnemonic;
-import backend.MachineCode.MCInstructions.specialInstruction.mfhi;
-import backend.MachineCode.MCInstructions.specialInstruction.mflo;
 import backend.Registers.MCRegisterPool;
 import backend.Registers.MCRegisters;
 import backend.Registers.Registers;
@@ -38,7 +37,10 @@ import backend.Registers.VirtualRegisters;
 import utils.Graph;
 import utils.List;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Stack;
 
 import static IR.Types.IntegerType.i32;
 import static backend.MachineCode.MCInstructions.mnemonic.*;
@@ -50,6 +52,7 @@ public class CodeGenerate {
     private final ArrayList<MCFunction> functions;
     private final HashMap<String, Boolean> isLeafFunction;
     private final HashMap<String, Integer> functionSize;
+    private final HashMap<String, MCBlock> MCBlockNameMap;
 
     private MCFunction cf;  // current machine code function
     private MCBlock cb;  // current machine code basic block
@@ -69,6 +72,7 @@ public class CodeGenerate {
         functions = new ArrayList<>();
         isLeafFunction = new HashMap<>();
         functionSize = new HashMap<>();
+        MCBlockNameMap = new HashMap<>();
     }
 
     public void generateMIPS() {
@@ -87,7 +91,7 @@ public class CodeGenerate {
     public void generateGlobalVariable(GlobalVariable globalVariable) {
         String name = globalVariable.getName().replace("@", "");
         Type type = globalVariable.getValue().getType();
-        if (type instanceof ArrayType) {
+        if (type.isArrayType()) {
             ConstantArray array = (ConstantArray) globalVariable.getValue();
             ArrayList<Value> initialValues = array.getAllValues();
             ArrayList<Integer> initials = new ArrayList<>();
@@ -101,7 +105,7 @@ public class CodeGenerate {
             }
             mcData.setSize(array.getCapacity() * array.getBlockLength() * 4);
             data.add(mcData);
-        } else if (type instanceof IntegerType) {
+        } else if (type.isIntType()) {
             ConstantInteger constInitial = (ConstantInteger) globalVariable.getValue();
             data.add(new MCData(name, constInitial.getValue()));
         }
@@ -115,23 +119,34 @@ public class CodeGenerate {
 
         boolean isEntry = true;
         val2Reg.clear();
+        MCBlockNameMap.clear();
 
         for (BasicBlock bb : blocks) {
-            cb = new MCBlock(cf, isEntry);
+            MCBlock mcb = new MCBlock(cf, isEntry);
             if (isEntry) {
                 isEntry = false;
             }
+            MCBlockNameMap.put(mcb.getName(), mcb);
+        }
+
+        for (BasicBlock bb : blocks) {
+            String bName = BasicBlock2MCBlockName(bb);
+            cb = MCBlockNameMap.get(bName);
             generateBasicBlock(bb);
         }
         functions.add(cf);
         //reallocateRegisters();
         stupidReallocateRegisters();
         int nowSize = cst;
-        for (MCInstruction instr : cf.getBlocks().get(0).getInstructions()) {
-            if (instr.def.contains(sp) && instr.op == addiu) {
-                assert instr instanceof MCITypeInstruction;
-                ((MCITypeInstruction) instr).setImmediate(-nowSize);
-                nowSize = -nowSize;
+        for (MCBlock block : cf.getBlocks()) {
+            for (MCInstruction instr : block.getInstructions()) {
+                if (instr.def.contains(sp) && instr.op == addiu) {
+                    assert instr instanceof MCITypeInstruction;
+                    ((MCITypeInstruction) instr).setImmediate(-nowSize);
+                    if (nowSize > 0) {
+                        nowSize = -nowSize;
+                    }
+                }
             }
         }
         cf = null;
@@ -174,125 +189,89 @@ public class CodeGenerate {
             cb.addInstruction(new MCITypeInstruction(mnemonic.addiu, sp, reg, raTop));
         } else if (instr instanceof GEPInstruction) {
             GEPInstruction gepInstr = (GEPInstruction) instr;
-            Registers reg = value2Register(gepInstr);
+            Registers gepReg = value2Register(gepInstr);
             ArrayList<Value> operands = gepInstr.getOperands();
-            Value ptr = gepInstr.getTargetValue();
-            Type type;
-            int offset = 0;
-            if (ptr instanceof AllocaInstruction) {
-                type = ((AllocaInstruction) ptr).getAllocated();
-            } else {
-                assert ptr instanceof GlobalVariable;
-                type = ((GlobalVariable) ptr).getValue().getType();
+            Value target = gepInstr.getTargetValue();
+            Type ptr = target.getType();
+
+            // calculate size of each dim
+            ArrayList<Integer> dimSize = new ArrayList<>();
+            int size;
+            if (ptr.isPointerType()) {
+                // ptr must be pointer type
+                Type type = ((PointerType) ptr).gettType();
+                size = type.getSize();
+                while (type.isArrayType()) {
+                    dimSize.add(size);
+                    type = ((ArrayType) type).getElementType();
+                    size = type.getSize();
+                }
+                dimSize.add(size);
             }
-            Registers base = value2Register(ptr);
-            String name = ptr.getName().replace("@", "");
+
+            // calculate offset of this gep instr
+            Registers offsetReg = buildVirtualRegister();
+            int offset = 0;
+            // operands.size() must be dimSize.size() + 1
+            // operands.get(0) is target
+            for (int i = 1; i < operands.size(); i++) {
+                // v.getType() must be i32
+                Value v = operands.get(i);
+                int dim = dimSize.get(i - 1);
+                if (v instanceof ConstantInteger) {
+                    offset += dim * ((ConstantInteger) v).getValue();
+                }
+            }
+            cb.addInstruction(new li(offsetReg, offset));
             for (int i = 1; i < operands.size(); i++) {
                 Value v = operands.get(i);
-                if (v instanceof ConstantInteger) {
-                    ConstantInteger integer = (ConstantInteger) v;
-                    int position = integer.getValue();  // position in this level
-                    offset += position * type.getSize();  // offset += position * level size
-                } else {
-                    generateInstruction((Instruction) v);  // calculate the offset
-                    Registers result = value2Register(v);  // get the result of calculation
-                    cb.addInstruction(new MCRTypeInstruction(mnemonic.addu, base, result, base));  // calculate new base
-                }
-                if (type instanceof ArrayType) {
-                    type = ((ArrayType) type).getElementType();
+                int dim = dimSize.get(i - 1);
+                if (!(v instanceof ConstantInteger)) {
+                    Registers valReg = value2Register(v);
+                    Registers dimOffset = buildVirtualRegister();
+                    cb.addInstruction(new MCITypeInstruction(mul, valReg, dimOffset, dim));
+                    cb.addInstruction(new MCRTypeInstruction(addu, offsetReg, dimOffset, offsetReg));
                 }
             }
-            if (ptr instanceof GlobalVariable) {
-                cb.addInstruction(new la(name, offset, reg));
+
+            // target address + offset = result address
+            Registers base;
+            String name = target.getName().replace("@", "");
+            if (target instanceof GlobalVariable) {
+                base = buildVirtualRegister();
+                cb.addInstruction(new la(name, 0, base));
+                cb.addInstruction(new MCRTypeInstruction(addu, base, offsetReg, gepReg));
             } else {
-                cb.addInstruction(new MCITypeInstruction(mnemonic.addiu, base, reg, offset));
+                base = value2Register(target);
+                cb.addInstruction(new MCRTypeInstruction(addu, base, offsetReg, gepReg));
             }
         } else if (instr instanceof IcmpInstruction) {
             IcmpInstruction icmp = (IcmpInstruction) instr;
             Registers result = value2Register(icmp);
             Value leftValue = icmp.getOperands().get(0);
             Value rightValue = icmp.getOperands().get(1);
-            mnemonic scheme = operator2RType(instr.getOp());
+            mnemonic scheme = op2mnemonic(instr.getOp());
             if (leftValue instanceof ConstantInteger && rightValue instanceof ConstantInteger) {
                 boolean to = compare(instr.getOp(), ((ConstantInteger) leftValue).getValue(), ((ConstantInteger) rightValue).getValue());
-                if (to) {
-                }
+                int imm = to ? 1 : 0;
+                cb.addInstruction(new li(result, imm));
+            } else {
+                Registers rs = value2Register(leftValue);
+                Registers rt = value2Register(rightValue);
+                cb.addInstruction(new MCRTypeInstruction(scheme, rs, rt, result));
             }
         } else if (instr instanceof BinaryInstruction) {
             BinaryInstruction bInstr = (BinaryInstruction) instr;
             Registers result = value2Register(bInstr);
             Value leftValue = bInstr.getOperands().get(0);
             Value rightValue = bInstr.getOperands().get(1);
-            mnemonic op = operator2RType(instr.getOp());
+            mnemonic op = op2mnemonic(instr.getOp());
             if (leftValue instanceof ConstantInteger && rightValue instanceof ConstantInteger) {
                 cb.addInstruction(new li(result, calculate(instr.getOp(), ((ConstantInteger) leftValue).getValue(), ((ConstantInteger) rightValue).getValue())));
-            } else if (leftValue instanceof LoadInstruction && rightValue instanceof ConstantInteger) {
-                switch (instr.getOp()) {
-                    case PLUS:
-                        cb.addInstruction(new MCITypeInstruction(addiu, value2Register(leftValue), result, ((ConstantInteger) rightValue).getValue()));
-                        break;
-                    case MINU:
-                        cb.addInstruction(new MCITypeInstruction(addiu, value2Register(leftValue), result, -((ConstantInteger) rightValue).getValue()));
-                        break;
-                    case MULT:
-                        cb.addInstruction(new mult(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mflo(result));
-                        break;
-                    case DIV:
-                        cb.addInstruction(new div(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mflo(result));
-                        break;
-                    case MOD:
-                        cb.addInstruction(new div(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mfhi(result));
-                        break;
-                    default:
-                        break;
-                }
-            } else if (leftValue instanceof ConstantInteger && rightValue instanceof LoadInstruction) {
-                switch (instr.getOp()) {
-                    case PLUS:
-                        cb.addInstruction(new MCITypeInstruction(addu, value2Register(rightValue), result, ((ConstantInteger) leftValue).getValue()));
-                        break;
-                    case MINU:
-                        cb.addInstruction(new MCRTypeInstruction(sub, value2Register(leftValue), value2Register(rightValue), result));
-                        break;
-                    case MULT:
-                        cb.addInstruction(new mult(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mflo(result));
-                        break;
-                    case DIV:
-                        cb.addInstruction(new div(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mflo(result));
-                        break;
-                    case MOD:
-                        cb.addInstruction(new div(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mfhi(result));
-                        break;
-                    default:
-                        break;
-                }
             } else {
-                switch (instr.getOp()) {
-                    case PLUS:
-                    case MINU:
-                        cb.addInstruction(new MCRTypeInstruction(op, value2Register(leftValue), value2Register(rightValue), result));
-                        break;
-                    case MULT:
-                        cb.addInstruction(new mult(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mflo(result));
-                        break;
-                    case DIV:
-                        cb.addInstruction(new div(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mflo(result));
-                        break;
-                    case MOD:
-                        cb.addInstruction(new div(value2Register(leftValue), value2Register(rightValue)));
-                        cb.addInstruction(new mfhi(result));
-                        break;
-                    default:
-                        break;
-                }
+                Registers rs = value2Register(leftValue);
+                Registers rt = value2Register(rightValue);
+                cb.addInstruction(new MCRTypeInstruction(op, rs, rt, result));
             }
         } else if (instr instanceof CallInstruction) {
             CallInstruction callInstr = (CallInstruction) instr;
@@ -336,6 +315,33 @@ public class CodeGenerate {
                 cb.addInstruction(new move(reg, v0));
             }
             epilogue();
+        } else if (instr instanceof BrInstruction) {
+            BrInstruction br = (BrInstruction) instr;
+            if (br.isUnconditional()) {
+                BasicBlock target = br.getUnconditionalJumpTarget();
+                String name = BasicBlock2MCBlockName(target);
+                cb.addInstruction(new j(name));
+                cb.setTrueBlock(MCBlockNameMap.get(name));
+                cb.addInstruction(new MCInstruction());
+            } else {
+                BasicBlock targetTrue = br.getTargetTrue();
+                BasicBlock targetFalse = br.getTargetFalse();
+                String labelTrue = BasicBlock2MCBlockName(targetTrue);
+                String labelFalse = BasicBlock2MCBlockName(targetFalse);
+                Value result = br.getResult();
+                Registers rs = value2Register(result);
+                cb.addInstruction(new bnez(rs, labelTrue));
+                cb.setTrueBlock(MCBlockNameMap.get(labelTrue));
+                cb.addInstruction(new MCInstruction());
+                cb.addInstruction(new j(labelFalse));
+                cb.setFalseBlock(MCBlockNameMap.get(labelFalse));
+                cb.addInstruction(new MCInstruction());
+            }
+        } else if (instr instanceof ZextInstruction) {
+            ZextInstruction zext = (ZextInstruction) instr;
+            Registers rs = value2Register(zext.getValue());
+            Registers rt = value2Register(zext);
+            cb.addInstruction(new MCITypeInstruction(ori, rs, rt, 0));
         }
     }
 
@@ -355,9 +361,7 @@ public class CodeGenerate {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < fString.length(); i++) {
             char c = fString.charAt(i);
-            if (c != '%') {
-                builder.append(c);
-            } else {
+            if (c == '%') {
                 String format = builder.toString();
                 builder = new StringBuilder();
                 printString(format);
@@ -366,6 +370,18 @@ public class CodeGenerate {
                     printNumber(exps.get(order++));
                 }
                 i++;
+            } else if (c == '\\') {
+                String xy = "0x" + fString.substring(i + 1, i + 3);
+                int num = Integer.decode(xy);
+                if (num > 0) {
+                    char t = (char) num;
+                    if (t == '\n') {
+                        builder.append("\\n");
+                    }
+                }
+                i += 2;
+            } else {
+                builder.append(c);
             }
         }
         printString(builder.toString());
@@ -433,33 +449,69 @@ public class CodeGenerate {
         }
     }
 
-    // binary instruction operator to RType instruction
-    public mnemonic operator2RType(Operator op) {
+
+
+    public Registers value2Register(Value value) {
+        String name = value.getName().replaceAll("[@%]", "");
+        if (val2Reg.containsKey(name)) {
+            return val2Reg.get(name);
+        }
+        if (value instanceof ConstantInteger) {
+            int num = ((ConstantInteger) value).getValue();
+            if (num == 0) {
+                return zero;
+            } else {
+                Registers reg = buildVirtualRegister();
+                cb.addInstruction(new li(reg, num));
+                return reg;
+            }
+        } else if (value instanceof GlobalVariable) {
+            Value gVal = ((GlobalVariable) value).getValue();
+            if (!(gVal instanceof ConstantArray)) {
+                Registers reg = buildVirtualRegister();
+                cb.addInstruction(new la(name, 0, reg));
+                val2Reg.put(name, reg);
+                return reg;
+            }
+            return null;
+        } else {
+            Registers reg = buildVirtualRegister();
+            val2Reg.put(name, reg);
+            return reg;
+        }
+    }
+
+    private String BasicBlock2MCBlockName(BasicBlock bb) {
+        // BasicBlockXXX
+        String bbName = bb.getName();
+        int index = Integer.parseInt(bbName.substring(10));
+        return  "_" + cf.getName() + "_block_" + index;
+    }
+
+    private mnemonic op2mnemonic(Operator op) {
         switch (op) {
             case PLUS:
                 return addu;
             case MINU:
                 return sub;
             case MULT:
-                return mult;
+                return mul;
             case DIV:
                 return div;
-            case AND:
-                return and;
-            case OR:
-                return or;
-            case NEQ:
-                return bne;
+            case MOD:
+                return rem;
             case EQL:
-                return beq;
+                return seq;
+            case NEQ:
+                return sne;
             case LSS:
-                return blt;
+                return slt;
             case LEQ:
-                return ble;
+                return sle;
             case GRE:
-                return bgt;
+                return sgt;
             case GEQ:
-                return bge;
+                return sge;
             default:
                 return nop;
         }
@@ -499,15 +551,15 @@ public class CodeGenerate {
         }
 
         // load global variable which will be used in this function
-//        for (BasicBlock bb : cif.getBasicBlocks()) {
-//            for (Instruction instr : bb.getInstList()) {
-//                for (Value v : instr.getOperands()) {
-//                    if (v instanceof GlobalVariable) {
-//                        value2Register(v);
-//                    }
-//                }
-//            }
-//        }
+        for (BasicBlock bb : cif.getBasicBlocks()) {
+            for (Instruction instr : bb.getInstList()) {
+                for (Value v : instr.getOperands()) {
+                    if (v instanceof GlobalVariable) {
+                        value2Register(v);
+                    }
+                }
+            }
+        }
     }
 
     private void epilogue(){
@@ -517,7 +569,7 @@ public class CodeGenerate {
             cb.addInstruction(new lw(sp, functionSize.get(name) - 4, ra));
         }
         // reset stack pointer
-        cb.addInstruction(new MCITypeInstruction(addiu, sp, sp, functionSize.get(name)));
+        cb.addInstruction(new MCITypeInstruction(addiu, sp, sp, cst));
 
         // reset frame pointer
         cb.addInstruction(new lw(sp, 0, fp));
@@ -836,40 +888,10 @@ public class CodeGenerate {
                 }
             }
         }
-        int size = S + R + A;
+        int size = S + R + A + 4; // 4 is fp
         isLeafFunction.put(name, isLeaf);
         functionSize.put(name, size);
         return size;
-    }
-
-    public Registers value2Register(Value value) {
-        String name = value.getName().replaceAll("[@%]", "");
-        if (val2Reg.containsKey(name)) {
-            return val2Reg.get(name);
-        }
-        if (value instanceof ConstantInteger) {
-            int num = ((ConstantInteger) value).getValue();
-            if (num == 0) {
-                return zero;
-            } else {
-                Registers reg = buildVirtualRegister();
-                cb.addInstruction(new li(reg, num));
-                return reg;
-            }
-        } else if (value instanceof GlobalVariable) {
-            Value gVal = ((GlobalVariable) value).getValue();
-            if (!(gVal instanceof ConstantArray)) {
-                Registers reg = buildVirtualRegister();
-                cb.addInstruction(new lw(name, 0, reg));
-                val2Reg.put(name, reg);
-                return reg;
-            }
-            return null;
-        } else {
-            Registers reg = buildVirtualRegister();
-            val2Reg.put(name, reg);
-            return reg;
-        }
     }
 
     public VirtualRegisters buildVirtualRegister() {

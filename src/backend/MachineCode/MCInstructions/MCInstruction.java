@@ -1,7 +1,6 @@
 package backend.MachineCode.MCInstructions;
 
 import backend.MachineCode.MCBlock;
-import backend.Registers.MCRegisters;
 import backend.Registers.Registers;
 
 import java.util.ArrayList;
@@ -9,12 +8,12 @@ import java.util.ArrayList;
 public class MCInstruction {
     // the first, second and third 8-bit register code in MIPS-32 instructions
     protected Registers rs = null, rt = null, rd = null;
-    private MCBlock bb;
+    protected MCBlock bb;
 
     public MCInstruction() {
     }
 
-    public void addBB(MCBlock bb) {
+    public void setBB(MCBlock bb) {
         this.bb = bb;
     }
 

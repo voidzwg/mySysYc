@@ -7,8 +7,17 @@ public class PointerType extends Type {
         this.tType = tType;
     }
 
+    public void settType(Type tType) {
+        this.tType = tType;
+    }
+
     public Type gettType() {
         return tType;
+    }
+
+    @Override
+    public int getSize() {
+        return tType.getSize();
     }
 
     @Override

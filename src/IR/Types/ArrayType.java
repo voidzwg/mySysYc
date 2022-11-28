@@ -34,7 +34,7 @@ public class ArrayType extends Type {
     public int getSize() {
         int size = maxLength;
         if (elementType instanceof ArrayType) {
-            size *= ((ArrayType) elementType).getSize();
+            size *= elementType.getSize();
         } else {
             size *= 4;
         }

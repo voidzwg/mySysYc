@@ -19,12 +19,7 @@ public class GEPInstruction extends MemBase {
     public GEPInstruction(BasicBlock bb, Value ptr, ArrayList<Value> initial) {
         super(bb, new PointerType(getElementType(ptr, initial)), GEP);
         this.elementType = getElementType(ptr, initial);
-        if (ptr instanceof GEPInstruction) {
-            this.targetValue = ((GEPInstruction) ptr).getTargetValue();
-        }
-        if (ptr instanceof AllocaInstruction || ptr instanceof GlobalVariable) {
-            this.targetValue = ptr;
-        }
+        this.targetValue = ptr;
         this.addOperand(ptr);
         for (Value value : initial) {
             this.addOperand(value);

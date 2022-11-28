@@ -80,7 +80,7 @@ public class MCData {
                     builder.append("\t\t").append(".word ").append(integer).append("\n");
                 }
             } else {
-                builder.append(" .zero ").append(size).append("\n");
+                builder.append(" .word 0:").append(size / 4).append("\n");
             }
         }
         return builder.toString();

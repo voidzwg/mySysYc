@@ -1,7 +1,5 @@
 package IR.Types;
 
-import java.util.Objects;
-
 public abstract class Type {
     public abstract Type getType();
 
@@ -29,7 +27,7 @@ public abstract class Type {
         return false;
     }
 
-    public boolean isString() {
+    public boolean isStringType() {
         return false;
     }
 

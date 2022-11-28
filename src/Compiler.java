@@ -28,9 +28,9 @@ public class Compiler {
             //test.test3();
             //test.submit3();
             //test.test4();
-            test.submit4();
+            //test.submit4();
             //test.test5();
-            //test.submit5();
+            test.submit5();
             //test.tete();
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class Compiler {
     void submit5() throws IOException {
         File fr = new File("testfile.txt");
         File fw = new File("mips.txt");
-        LLVM_VERSION = 6;
+        LLVM_VERSION = 8;
         Visitor visitor;
         CodeGenerate generator;
         while (true) {

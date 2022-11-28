@@ -1,0 +1,2508 @@
+.data
+	c_01: .word 1
+	c_02: .word 2
+	c_03: .word 3
+	c_04: .word 4
+	c_05: .word 11
+	c_06:
+		.word 1
+		.word 2
+		.word 3
+	c_07:
+		.word 1
+		.word 2
+		.word 3
+		.word 4
+	v_01: .word 1
+	v_02: .word 0
+	v_03: .word 3
+	v_04: .word 0
+	v_05: .word 2
+	v_06:
+		.word 1
+		.word 2
+		.word 3
+	v_07:
+		.word 1
+		.word 2
+		.word 3
+		.word 4
+	__fString_0: .asciiz "20377020\n"
+	__fString_1: .asciiz "vm_01 = "
+	__fString_2: .asciiz "\n"
+	__fString_3: .asciiz "vm_02 = "
+	__fString_4: .asciiz ",  vm_03 = "
+	__fString_5: .asciiz "\n"
+	__fString_6: .asciiz "vm_04 = "
+	__fString_7: .asciiz "\n"
+	__fString_8: .asciiz "vm_AE = "
+	__fString_9: .asciiz "\n"
+	__fString_10: .asciiz "vm_ME = "
+	__fString_11: .asciiz "\n"
+	__fString_12: .asciiz "vm_UE = "
+	__fString_13: .asciiz "\n"
+	__fString_14: .asciiz "vm_PE = "
+	__fString_15: .asciiz "\n"
+	__fString_16: .asciiz "vm_i_1 = "
+	__fString_17: .asciiz ",  vm_i_2 = "
+	__fString_18: .asciiz "\n"
+	__fString_19: .asciiz "vs_test = "
+	__fString_20: .asciiz "\n"
+	__fString_21: .asciiz "Hello World\n"
+.text
+# function main()
+_main_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -1160
+	sw		$fp, ($sp)
+	sw		$ra, 244($sp)
+	la		$t0, v_01
+	sw		$t0, 248($sp)
+	la		$t0, v_03
+	sw		$t0, 252($sp)
+	la		$t0, v_05
+	sw		$t0, 256($sp)
+	addiu	$t0, $sp, 240
+	sw		$t0, 260($sp)
+	addiu	$t0, $sp, 236
+	sw		$t0, 264($sp)
+	addiu	$t0, $sp, 232
+	sw		$t0, 268($sp)
+	addiu	$t0, $sp, 228
+	sw		$t0, 272($sp)
+	addiu	$t0, $sp, 224
+	sw		$t0, 276($sp)
+	addiu	$t0, $sp, 220
+	sw		$t0, 280($sp)
+	addiu	$t0, $sp, 216
+	sw		$t0, 284($sp)
+	addiu	$t0, $sp, 212
+	sw		$t0, 288($sp)
+	addiu	$t0, $sp, 208
+	sw		$t0, 292($sp)
+	addiu	$t0, $sp, 204
+	sw		$t0, 296($sp)
+	addiu	$t0, $sp, 200
+	sw		$t0, 300($sp)
+	addiu	$t0, $sp, 196
+	sw		$t0, 304($sp)
+	addiu	$t0, $sp, 192
+	sw		$t0, 308($sp)
+	addiu	$t0, $sp, 188
+	sw		$t0, 312($sp)
+	addiu	$t0, $sp, 184
+	sw		$t0, 316($sp)
+	addiu	$t0, $sp, 180
+	sw		$t0, 320($sp)
+	addiu	$t0, $sp, 144
+	sw		$t0, 324($sp)
+	addiu	$t0, $sp, 132
+	sw		$t0, 328($sp)
+	addiu	$t0, $sp, 96
+	sw		$t0, 332($sp)
+	addiu	$t0, $sp, 84
+	sw		$t0, 336($sp)
+	addiu	$t0, $sp, 76
+	sw		$t0, 340($sp)
+	addiu	$t0, $sp, 72
+	sw		$t0, 344($sp)
+	addiu	$t0, $sp, 68
+	sw		$t0, 348($sp)
+	addiu	$t0, $sp, 64
+	sw		$t0, 352($sp)
+	addiu	$t0, $sp, 60
+	sw		$t0, 356($sp)
+	addiu	$t0, $sp, 56
+	sw		$t0, 360($sp)
+	addiu	$t0, $sp, 52
+	sw		$t0, 364($sp)
+	addiu	$t0, $sp, 48
+	sw		$t0, 368($sp)
+	addiu	$t0, $sp, 44
+	sw		$t0, 372($sp)
+	addiu	$t0, $sp, 40
+	sw		$t0, 376($sp)
+	addiu	$t0, $sp, 36
+	sw		$t0, 380($sp)
+	addiu	$t0, $sp, 32
+	sw		$t0, 384($sp)
+	addiu	$t0, $sp, 28
+	sw		$t0, 388($sp)
+	addiu	$t0, $sp, 24
+	sw		$t0, 392($sp)
+	addiu	$t0, $sp, 20
+	sw		$t0, 396($sp)
+	addiu	$t0, $sp, 16
+	sw		$t0, 400($sp)
+	addiu	$t0, $sp, 12
+	sw		$t0, 404($sp)
+	addiu	$t0, $sp, 8
+	sw		$t0, 408($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 412($sp)
+	li		$t0, 1
+	sw		$t0, 416($sp)
+	lw		$t1, 412($sp)
+	lw		$t2, 416($sp)
+	sw		$t2, ($t1)
+	li		$t0, 3
+	sw		$t0, 420($sp)
+	lw		$t1, 408($sp)
+	lw		$t2, 420($sp)
+	sw		$t2, ($t1)
+	li		$t0, 2
+	sw		$t0, 424($sp)
+	lw		$t1, 404($sp)
+	lw		$t2, 424($sp)
+	sw		$t2, ($t1)
+	li		$t0, 114514
+	sw		$t0, 428($sp)
+	lw		$t1, 400($sp)
+	lw		$t2, 428($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 432($sp)
+	lw		$t1, 396($sp)
+	lw		$t2, 432($sp)
+	sw		$t2, ($t1)
+	li		$t0, 2
+	sw		$t0, 436($sp)
+	lw		$t1, 392($sp)
+	lw		$t2, 436($sp)
+	sw		$t2, ($t1)
+	jal		_func_02_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 440($sp)
+	li		$t0, -169
+	sw		$t0, 444($sp)
+	lw		$t1, 444($sp)
+	lw		$t2, 440($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 448($sp)
+	lw		$t1, 388($sp)
+	lw		$t2, 448($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 400($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 452($sp)
+	lw		$t1, 384($sp)
+	lw		$t2, 452($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 456($sp)
+	lw		$t1, 456($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 460($sp)
+	lw		$t1, 380($sp)
+	lw		$t2, 460($sp)
+	sw		$t2, ($t1)
+	li		$t0, -114514
+	sw		$t0, 464($sp)
+	lw		$t1, 376($sp)
+	lw		$t2, 464($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 468($sp)
+	lw		$t1, 252($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 472($sp)
+	lw		$t1, 468($sp)
+	move	$a0, $t1
+	lw		$t1, 472($sp)
+	move	$a1, $t1
+	jal		_func_04_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 476($sp)
+	lw		$t2, 476($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 480($sp)
+	lw		$t2, 480($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 484($sp)
+	lw		$t2, 484($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 488($sp)
+	lw		$t1, 372($sp)
+	lw		$t2, 488($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 384($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 492($sp)
+	lw		$t1, 368($sp)
+	lw		$t2, 492($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 496($sp)
+	li		$t0, 10
+	sw		$t0, 500($sp)
+	lw		$t1, 500($sp)
+	lw		$t2, 496($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 504($sp)
+	lw		$t1, 364($sp)
+	lw		$t2, 504($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 508($sp)
+	lw		$t1, 508($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 512($sp)
+	li		$t0, 2
+	sw		$t0, 516($sp)
+	lw		$t1, 512($sp)
+	lw		$t2, 516($sp)
+	div		$t0, $t1, $t2
+	sw		$t0, 520($sp)
+	lw		$t1, 360($sp)
+	lw		$t2, 520($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 524($sp)
+	lw		$t1, 256($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 528($sp)
+	lw		$t1, 524($sp)
+	move	$a0, $t1
+	lw		$t1, 528($sp)
+	move	$a1, $t1
+	jal		_func_04_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 532($sp)
+	lw		$t2, 532($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 536($sp)
+	lw		$t2, 536($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 540($sp)
+	lw		$t2, 540($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 544($sp)
+	li		$t0, -1
+	sw		$t0, 548($sp)
+	lw		$t1, 548($sp)
+	lw		$t2, 544($sp)
+	rem		$t0, $t1, $t2
+	sw		$t0, 552($sp)
+	lw		$t1, 356($sp)
+	lw		$t2, 552($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 368($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 556($sp)
+	lw		$t1, 352($sp)
+	lw		$t2, 556($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 560($sp)
+	li		$t0, 114514
+	sw		$t0, 564($sp)
+	lw		$t1, 564($sp)
+	lw		$t2, 560($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 568($sp)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 572($sp)
+	lw		$t1, 572($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 576($sp)
+	li		$t0, 6
+	sw		$t0, 580($sp)
+	lw		$t1, 576($sp)
+	lw		$t2, 580($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 584($sp)
+	li		$t0, 2
+	sw		$t0, 588($sp)
+	lw		$t1, 588($sp)
+	lw		$t2, 584($sp)
+	div		$t0, $t1, $t2
+	sw		$t0, 592($sp)
+	lw		$t1, 568($sp)
+	lw		$t2, 592($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 596($sp)
+	lw		$t1, 348($sp)
+	lw		$t2, 596($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 600($sp)
+	lw		$t1, 256($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 604($sp)
+	lw		$t1, 600($sp)
+	move	$a0, $t1
+	lw		$t1, 604($sp)
+	move	$a1, $t1
+	jal		_func_04_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 608($sp)
+	lw		$t2, 608($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 612($sp)
+	lw		$t2, 612($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 616($sp)
+	lw		$t2, 616($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 620($sp)
+	li		$t0, -1
+	sw		$t0, 624($sp)
+	lw		$t1, 624($sp)
+	lw		$t2, 620($sp)
+	rem		$t0, $t1, $t2
+	sw		$t0, 628($sp)
+	li		$t0, 123
+	sw		$t0, 632($sp)
+	lw		$t1, 628($sp)
+	lw		$t2, 632($sp)
+	sub		$t0, $t1, $t2
+	sw		$t0, 636($sp)
+	lw		$t1, 344($sp)
+	lw		$t2, 636($sp)
+	sw		$t2, ($t1)
+	li		$t0, 0
+	sw		$t0, 640($sp)
+	lw		$t1, 340($sp)
+	lw		$t2, 640($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 644($sp)
+	li		$t0, 1
+	sw		$t0, 648($sp)
+	lw		$t1, 644($sp)
+	lw		$t2, 648($sp)
+	sw		$t2, ($t1)
+	li		$t0, 4
+	sw		$t0, 652($sp)
+	lw		$t1, 340($sp)
+	lw		$t2, 652($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 656($sp)
+	li		$t0, 1
+	sw		$t0, 660($sp)
+	lw		$t1, 656($sp)
+	lw		$t2, 660($sp)
+	sw		$t2, ($t1)
+	li		$t0, 0
+	sw		$t0, 664($sp)
+	lw		$t1, 336($sp)
+	lw		$t2, 664($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 668($sp)
+	li		$t0, 1
+	sw		$t0, 672($sp)
+	lw		$t1, 668($sp)
+	lw		$t2, 672($sp)
+	sw		$t2, ($t1)
+	li		$t0, 4
+	sw		$t0, 676($sp)
+	lw		$t1, 336($sp)
+	lw		$t2, 676($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 680($sp)
+	li		$t0, 2
+	sw		$t0, 684($sp)
+	lw		$t1, 680($sp)
+	lw		$t2, 684($sp)
+	sw		$t2, ($t1)
+	li		$t0, 8
+	sw		$t0, 688($sp)
+	lw		$t1, 336($sp)
+	lw		$t2, 688($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 692($sp)
+	li		$t0, 3
+	sw		$t0, 696($sp)
+	lw		$t1, 692($sp)
+	lw		$t2, 696($sp)
+	sw		$t2, ($t1)
+	li		$t0, 0
+	sw		$t0, 700($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 700($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 704($sp)
+	li		$t0, 11
+	sw		$t0, 708($sp)
+	lw		$t1, 704($sp)
+	lw		$t2, 708($sp)
+	sw		$t2, ($t1)
+	li		$t0, 4
+	sw		$t0, 712($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 712($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 716($sp)
+	li		$t0, 12
+	sw		$t0, 720($sp)
+	lw		$t1, 716($sp)
+	lw		$t2, 720($sp)
+	sw		$t2, ($t1)
+	li		$t0, 8
+	sw		$t0, 724($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 724($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 728($sp)
+	li		$t0, 13
+	sw		$t0, 732($sp)
+	lw		$t1, 728($sp)
+	lw		$t2, 732($sp)
+	sw		$t2, ($t1)
+	li		$t0, 12
+	sw		$t0, 736($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 736($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 740($sp)
+	li		$t0, 21
+	sw		$t0, 744($sp)
+	lw		$t1, 740($sp)
+	lw		$t2, 744($sp)
+	sw		$t2, ($t1)
+	li		$t0, 16
+	sw		$t0, 748($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 748($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 752($sp)
+	li		$t0, 22
+	sw		$t0, 756($sp)
+	lw		$t1, 752($sp)
+	lw		$t2, 756($sp)
+	sw		$t2, ($t1)
+	li		$t0, 20
+	sw		$t0, 760($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 760($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 764($sp)
+	li		$t0, 23
+	sw		$t0, 768($sp)
+	lw		$t1, 764($sp)
+	lw		$t2, 768($sp)
+	sw		$t2, ($t1)
+	li		$t0, 24
+	sw		$t0, 772($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 772($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 776($sp)
+	li		$t0, 31
+	sw		$t0, 780($sp)
+	lw		$t1, 776($sp)
+	lw		$t2, 780($sp)
+	sw		$t2, ($t1)
+	li		$t0, 28
+	sw		$t0, 784($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 784($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 788($sp)
+	li		$t0, 32
+	sw		$t0, 792($sp)
+	lw		$t1, 788($sp)
+	lw		$t2, 792($sp)
+	sw		$t2, ($t1)
+	li		$t0, 32
+	sw		$t0, 796($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 796($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 800($sp)
+	li		$t0, 33
+	sw		$t0, 804($sp)
+	lw		$t1, 800($sp)
+	lw		$t2, 804($sp)
+	sw		$t2, ($t1)
+	li		$t0, 0
+	sw		$t0, 808($sp)
+	lw		$t1, 340($sp)
+	lw		$t2, 808($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 812($sp)
+	lw		$t1, 812($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 816($sp)
+	lw		$t1, 320($sp)
+	lw		$t2, 816($sp)
+	sw		$t2, ($t1)
+	li		$t0, 4
+	sw		$t0, 820($sp)
+	lw		$t1, 336($sp)
+	lw		$t2, 820($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 824($sp)
+	lw		$t1, 824($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 828($sp)
+	lw		$t1, 316($sp)
+	lw		$t2, 828($sp)
+	sw		$t2, ($t1)
+	li		$t0, 20
+	sw		$t0, 832($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 832($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 836($sp)
+	lw		$t1, 836($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 840($sp)
+	lw		$t1, 312($sp)
+	lw		$t2, 840($sp)
+	sw		$t2, ($t1)
+	li		$t0, 0
+	sw		$t0, 844($sp)
+	lw		$t1, 336($sp)
+	lw		$t2, 844($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 848($sp)
+	li		$t0, 10
+	sw		$t0, 852($sp)
+	lw		$t1, 848($sp)
+	lw		$t2, 852($sp)
+	sw		$t2, ($t1)
+	li		$t0, 20
+	sw		$t0, 856($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 856($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 860($sp)
+	li		$t0, 10
+	sw		$t0, 864($sp)
+	lw		$t1, 860($sp)
+	lw		$t2, 864($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 320($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 868($sp)
+	lw		$t1, 316($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 872($sp)
+	lw		$t1, 868($sp)
+	lw		$t2, 872($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 876($sp)
+	lw		$t1, 312($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 880($sp)
+	lw		$t1, 876($sp)
+	lw		$t2, 880($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 884($sp)
+	li		$t0, 0
+	sw		$t0, 888($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 888($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 892($sp)
+	li		$t0, 0
+	sw		$t0, 896($sp)
+	lw		$t1, 892($sp)
+	lw		$t2, 896($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 900($sp)
+	lw		$t1, 900($sp)
+	move	$a0, $t1
+	jal		_func_05_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 904($sp)
+	lw		$t1, 884($sp)
+	lw		$t2, 904($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 908($sp)
+	li		$t0, 0
+	sw		$t0, 912($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 912($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 916($sp)
+	lw		$t1, 916($sp)
+	move	$a0, $t1
+	jal		_func_06_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 920($sp)
+	lw		$t1, 908($sp)
+	lw		$t2, 920($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 924($sp)
+	lw		$t1, 248($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 928($sp)
+	li		$t0, 0
+	sw		$t0, 932($sp)
+	lw		$t1, 336($sp)
+	lw		$t2, 932($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 936($sp)
+	li		$t0, 0
+	sw		$t0, 940($sp)
+	lw		$t1, 332($sp)
+	lw		$t2, 940($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 944($sp)
+	lw		$t1, 928($sp)
+	move	$a0, $t1
+	lw		$t1, 936($sp)
+	move	$a1, $t1
+	lw		$t1, 944($sp)
+	move	$a2, $t1
+	jal		_func_07_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 948($sp)
+	lw		$t1, 924($sp)
+	lw		$t2, 948($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 952($sp)
+	lw		$t1, 308($sp)
+	lw		$t2, 952($sp)
+	sw		$t2, ($t1)
+	li		$t0, 1
+	sw		$t0, 956($sp)
+	lw		$t1, 300($sp)
+	lw		$t2, 956($sp)
+	sw		$t2, ($t1)
+	li		$v0, 5
+	syscall
+	move	$t0, $v0
+	sw		$t0, 960($sp)
+	lw		$t1, 296($sp)
+	lw		$t2, 960($sp)
+	sw		$t2, ($t1)
+	jal		_test_if_and_while_01_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 964($sp)
+	lw		$t1, 292($sp)
+	lw		$t2, 964($sp)
+	sw		$t2, ($t1)
+	jal		_test_if_and_while_02_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 968($sp)
+	lw		$t1, 288($sp)
+	lw		$t2, 968($sp)
+	sw		$t2, ($t1)
+	jal		_func_02_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 972($sp)
+	lw		$t1, 284($sp)
+	lw		$t2, 972($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 252($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 976($sp)
+	lw		$t1, 976($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 980($sp)
+	lw		$t1, 280($sp)
+	lw		$t2, 980($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 300($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 984($sp)
+	lw		$t1, 252($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 988($sp)
+	lw		$t1, 984($sp)
+	move	$a0, $t1
+	lw		$t1, 988($sp)
+	move	$a1, $t1
+	jal		_func_04_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 992($sp)
+	lw		$t1, 276($sp)
+	lw		$t2, 992($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 352($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 996($sp)
+	lw		$t1, 348($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1000($sp)
+	lw		$t1, 996($sp)
+	lw		$t2, 1000($sp)
+	div		$t0, $t1, $t2
+	sw		$t0, 1004($sp)
+	lw		$t1, 344($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1008($sp)
+	lw		$t1, 1004($sp)
+	lw		$t2, 1008($sp)
+	rem		$t0, $t1, $t2
+	sw		$t0, 1012($sp)
+	lw		$t1, 272($sp)
+	lw		$t2, 1012($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 368($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1016($sp)
+	lw		$t1, 364($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1020($sp)
+	lw		$t1, 1016($sp)
+	lw		$t2, 1020($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 1024($sp)
+	lw		$t1, 360($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1028($sp)
+	lw		$t1, 356($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1032($sp)
+	lw		$t1, 1028($sp)
+	lw		$t2, 1032($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 1036($sp)
+	lw		$t1, 1024($sp)
+	lw		$t2, 1036($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 1040($sp)
+	lw		$t1, 268($sp)
+	lw		$t2, 1040($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 384($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1044($sp)
+	lw		$t1, 380($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1048($sp)
+	lw		$t1, 1044($sp)
+	lw		$t2, 1048($sp)
+	sub		$t0, $t1, $t2
+	sw		$t0, 1052($sp)
+	lw		$t1, 376($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1056($sp)
+	lw		$t1, 1052($sp)
+	lw		$t2, 1056($sp)
+	sub		$t0, $t1, $t2
+	sw		$t0, 1060($sp)
+	lw		$t1, 376($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1064($sp)
+	lw		$t1, 1060($sp)
+	lw		$t2, 1064($sp)
+	sub		$t0, $t1, $t2
+	sw		$t0, 1068($sp)
+	lw		$t1, 372($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1072($sp)
+	lw		$t1, 1068($sp)
+	lw		$t2, 1072($sp)
+	sub		$t0, $t1, $t2
+	sw		$t0, 1076($sp)
+	lw		$t1, 264($sp)
+	lw		$t2, 1076($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 400($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1080($sp)
+	lw		$t1, 396($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1084($sp)
+	lw		$t1, 1080($sp)
+	lw		$t2, 1084($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 1088($sp)
+	lw		$t1, 392($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1092($sp)
+	lw		$t1, 1088($sp)
+	lw		$t2, 1092($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 1096($sp)
+	lw		$t1, 388($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1100($sp)
+	lw		$t1, 1096($sp)
+	lw		$t2, 1100($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 1104($sp)
+	lw		$t1, 260($sp)
+	lw		$t2, 1104($sp)
+	sw		$t2, ($t1)
+	la		$a0, __fString_0
+	li		$v0, 4
+	syscall
+	lw		$t1, 296($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1108($sp)
+	li		$t0, 1
+	sw		$t0, 1112($sp)
+	lw		$t1, 1108($sp)
+	lw		$t2, 1112($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 1116($sp)
+	la		$a0, __fString_1
+	li		$v0, 4
+	syscall
+	lw		$t1, 1116($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_2
+	li		$v0, 4
+	syscall
+	lw		$t1, 284($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1120($sp)
+	lw		$t1, 280($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1124($sp)
+	la		$a0, __fString_3
+	li		$v0, 4
+	syscall
+	lw		$t1, 1120($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_4
+	li		$v0, 4
+	syscall
+	lw		$t1, 1124($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_5
+	li		$v0, 4
+	syscall
+	lw		$t1, 276($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1128($sp)
+	la		$a0, __fString_6
+	li		$v0, 4
+	syscall
+	lw		$t1, 1128($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_7
+	li		$v0, 4
+	syscall
+	lw		$t1, 272($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1132($sp)
+	la		$a0, __fString_8
+	li		$v0, 4
+	syscall
+	lw		$t1, 1132($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_9
+	li		$v0, 4
+	syscall
+	lw		$t1, 268($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1136($sp)
+	la		$a0, __fString_10
+	li		$v0, 4
+	syscall
+	lw		$t1, 1136($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_11
+	li		$v0, 4
+	syscall
+	lw		$t1, 264($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1140($sp)
+	la		$a0, __fString_12
+	li		$v0, 4
+	syscall
+	lw		$t1, 1140($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_13
+	li		$v0, 4
+	syscall
+	lw		$t1, 260($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1144($sp)
+	la		$a0, __fString_14
+	li		$v0, 4
+	syscall
+	lw		$t1, 1144($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_15
+	li		$v0, 4
+	syscall
+	lw		$t1, 292($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1148($sp)
+	lw		$t1, 288($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1152($sp)
+	la		$a0, __fString_16
+	li		$v0, 4
+	syscall
+	lw		$t1, 1148($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_17
+	li		$v0, 4
+	syscall
+	lw		$t1, 1152($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_18
+	li		$v0, 4
+	syscall
+	lw		$t1, 308($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 1156($sp)
+	la		$a0, __fString_19
+	li		$v0, 4
+	syscall
+	lw		$t1, 1156($sp)
+	move	$a0, $t1
+	li		$v0, 1
+	syscall
+	la		$a0, __fString_20
+	li		$v0, 4
+	syscall
+	li		$v0, 0
+	lw		$ra, 244($sp)
+	addiu	$sp, $sp, 1160
+	lw		$fp, ($sp)
+	li		$v0, 10
+	syscall
+
+# function func_01()
+_func_01_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -4
+	sw		$fp, ($sp)
+	la		$a0, __fString_21
+	li		$v0, 4
+	syscall
+	j		_func_01_block_1
+	nop
+_func_01_block_1:
+	j		_func_01_block_2
+	nop
+_func_01_block_2:
+	addiu	$sp, $sp, 4
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+	addiu	$sp, $sp, 4
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
+# function func_02()
+_func_02_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -136
+	sw		$fp, ($sp)
+	la		$t0, v_01
+	sw		$t0, 20($sp)
+	addiu	$t0, $sp, 16
+	sw		$t0, 24($sp)
+	addiu	$t0, $sp, 12
+	sw		$t0, 28($sp)
+	addiu	$t0, $sp, 8
+	sw		$t0, 32($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 36($sp)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 40($sp)
+	li		$t0, 1
+	sw		$t0, 44($sp)
+	lw		$t1, 40($sp)
+	lw		$t2, 44($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 48($sp)
+	lw		$t1, 20($sp)
+	lw		$t2, 48($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 36($sp)
+	sw		$zero, ($t1)
+	li		$t0, 1
+	sw		$t0, 52($sp)
+	lw		$t1, 32($sp)
+	lw		$t2, 52($sp)
+	sw		$t2, ($t1)
+	j		_func_02_block_1
+	nop
+_func_02_block_1:
+	li		$t0, 2
+	sw		$t0, 56($sp)
+	lw		$t1, 28($sp)
+	lw		$t2, 56($sp)
+	sw		$t2, ($t1)
+	j		_func_02_block_2
+	nop
+_func_02_block_2:
+	li		$t0, 3
+	sw		$t0, 60($sp)
+	lw		$t1, 24($sp)
+	lw		$t2, 60($sp)
+	sw		$t2, ($t1)
+	j		_func_02_block_3
+	nop
+_func_02_block_3:
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 64($sp)
+	li		$t0, 1
+	sw		$t0, 68($sp)
+	lw		$t1, 64($sp)
+	lw		$t2, 68($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 72($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 72($sp)
+	sw		$t2, ($t1)
+	j		_func_02_block_4
+	nop
+_func_02_block_4:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 76($sp)
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 80($sp)
+	lw		$t1, 76($sp)
+	lw		$t2, 80($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 84($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 84($sp)
+	sw		$t2, ($t1)
+	j		_func_02_block_5
+	nop
+_func_02_block_5:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 88($sp)
+	lw		$t1, 28($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 92($sp)
+	lw		$t1, 88($sp)
+	lw		$t2, 92($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 96($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 96($sp)
+	sw		$t2, ($t1)
+	j		_func_02_block_6
+	nop
+_func_02_block_6:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 100($sp)
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 104($sp)
+	lw		$t1, 100($sp)
+	lw		$t2, 104($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 108($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 108($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 112($sp)
+	li		$t0, 7
+	sw		$t0, 116($sp)
+	lw		$t1, 112($sp)
+	lw		$t2, 116($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 120($sp)
+	lw		$t1, 120($sp)
+	addu	$t0, $t1, $zero
+	sw		$t0, 124($sp)
+	li		$t0, 8
+	sw		$t0, 128($sp)
+	lw		$t1, 124($sp)
+	lw		$t2, 128($sp)
+	sub		$t0, $t1, $t2
+	sw		$t0, 132($sp)
+	lw		$t1, 132($sp)
+	move	$v0, $t1
+	addiu	$sp, $sp, 136
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
+# function func_03()
+_func_03_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -60
+	move	$t0, $a0
+	sw		$t0, 12($sp)
+	sw		$fp, ($sp)
+	la		$t0, v_05
+	sw		$t0, 16($sp)
+	addiu	$t0, $sp, 8
+	sw		$t0, 20($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 24($sp)
+	lw		$t1, 24($sp)
+	lw		$t2, 12($sp)
+	sw		$t2, ($t1)
+	li		$t0, 1
+	sw		$t0, 28($sp)
+	lw		$t1, 20($sp)
+	lw		$t2, 28($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 32($sp)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 36($sp)
+	lw		$t1, 32($sp)
+	lw		$t2, 36($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 40($sp)
+	lw		$t1, 16($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 44($sp)
+	lw		$t1, 40($sp)
+	lw		$t2, 44($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 48($sp)
+	li		$t0, 123
+	sw		$t0, 52($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 52($sp)
+	div		$t0, $t1, $t2
+	sw		$t0, 56($sp)
+	lw		$t1, 56($sp)
+	move	$v0, $t1
+	addiu	$sp, $sp, 60
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
+# function func_04()
+_func_04_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -104
+	move	$t0, $a0
+	sw		$t0, 24($sp)
+	move	$t0, $a1
+	sw		$t0, 28($sp)
+	sw		$fp, ($sp)
+	sw		$ra, 20($sp)
+	addiu	$t0, $sp, 16
+	sw		$t0, 32($sp)
+	addiu	$t0, $sp, 12
+	sw		$t0, 36($sp)
+	addiu	$t0, $sp, 8
+	sw		$t0, 40($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 44($sp)
+	lw		$t1, 44($sp)
+	lw		$t2, 24($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 40($sp)
+	lw		$t2, 28($sp)
+	sw		$t2, ($t1)
+	li		$t0, 1
+	sw		$t0, 48($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 48($sp)
+	sw		$t2, ($t1)
+	li		$t0, 2
+	sw		$t0, 52($sp)
+	lw		$t1, 32($sp)
+	lw		$t2, 52($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 44($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 56($sp)
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 60($sp)
+	lw		$t1, 56($sp)
+	lw		$t2, 60($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 64($sp)
+	lw		$t1, 40($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 68($sp)
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 72($sp)
+	lw		$t1, 68($sp)
+	lw		$t2, 72($sp)
+	div		$t0, $t1, $t2
+	sw		$t0, 76($sp)
+	lw		$t1, 64($sp)
+	lw		$t2, 76($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 80($sp)
+	jal		_func_02_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 84($sp)
+	lw		$t1, 80($sp)
+	lw		$t2, 84($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 88($sp)
+	lw		$t1, 40($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 92($sp)
+	lw		$t1, 92($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 96($sp)
+	lw		$t1, 88($sp)
+	lw		$t2, 96($sp)
+	sub		$t0, $t1, $t2
+	sw		$t0, 100($sp)
+	lw		$t1, 100($sp)
+	move	$v0, $t1
+	lw		$ra, 20($sp)
+	addiu	$sp, $sp, 104
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
+# function func_05()
+_func_05_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -40
+	move	$t0, $a0
+	sw		$t0, 8($sp)
+	sw		$fp, ($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 12($sp)
+	lw		$t1, 12($sp)
+	lw		$t2, 8($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 12($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 16($sp)
+	li		$t0, 0
+	sw		$t0, 20($sp)
+	lw		$t1, 16($sp)
+	lw		$t2, 20($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 24($sp)
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 28($sp)
+	li		$t0, 100
+	sw		$t0, 32($sp)
+	lw		$t1, 28($sp)
+	lw		$t2, 32($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 36($sp)
+	lw		$t1, 36($sp)
+	move	$v0, $t1
+	addiu	$sp, $sp, 40
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
+# function func_06()
+_func_06_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -72
+	move	$t0, $a0
+	sw		$t0, 8($sp)
+	sw		$fp, ($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 12($sp)
+	lw		$t1, 12($sp)
+	lw		$t2, 8($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 12($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 16($sp)
+	li		$t0, 0
+	sw		$t0, 20($sp)
+	lw		$t1, 16($sp)
+	lw		$t2, 20($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 24($sp)
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 28($sp)
+	lw		$t1, 12($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 32($sp)
+	li		$t0, 16
+	sw		$t0, 36($sp)
+	lw		$t1, 32($sp)
+	lw		$t2, 36($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 40($sp)
+	lw		$t1, 40($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 44($sp)
+	lw		$t1, 28($sp)
+	lw		$t2, 44($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 48($sp)
+	lw		$t1, 12($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 52($sp)
+	li		$t0, 32
+	sw		$t0, 56($sp)
+	lw		$t1, 52($sp)
+	lw		$t2, 56($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 60($sp)
+	lw		$t1, 60($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 64($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 64($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 68($sp)
+	lw		$t1, 68($sp)
+	move	$v0, $t1
+	addiu	$sp, $sp, 72
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
+# function func_07()
+_func_07_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -84
+	move	$t0, $a0
+	sw		$t0, 16($sp)
+	move	$t0, $a1
+	sw		$t0, 20($sp)
+	move	$t0, $a2
+	sw		$t0, 24($sp)
+	sw		$fp, ($sp)
+	addiu	$t0, $sp, 12
+	sw		$t0, 28($sp)
+	addiu	$t0, $sp, 8
+	sw		$t0, 32($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 36($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 16($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 32($sp)
+	lw		$t2, 20($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 28($sp)
+	lw		$t2, 24($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 40($sp)
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 44($sp)
+	li		$t0, 0
+	sw		$t0, 48($sp)
+	lw		$t1, 44($sp)
+	lw		$t2, 48($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 52($sp)
+	lw		$t1, 52($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 56($sp)
+	lw		$t1, 40($sp)
+	lw		$t2, 56($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 60($sp)
+	lw		$t1, 28($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 64($sp)
+	li		$t0, 0
+	sw		$t0, 68($sp)
+	lw		$t1, 64($sp)
+	lw		$t2, 68($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 72($sp)
+	lw		$t1, 72($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 76($sp)
+	lw		$t1, 60($sp)
+	lw		$t2, 76($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 80($sp)
+	lw		$t1, 80($sp)
+	move	$v0, $t1
+	addiu	$sp, $sp, 84
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
+# function test_if_and_while_01()
+_test_if_and_while_01_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -280
+	sw		$fp, ($sp)
+	sw		$ra, 28($sp)
+	la		$t0, v_01
+	sw		$t0, 32($sp)
+	la		$t0, v_05
+	sw		$t0, 36($sp)
+	addiu	$t0, $sp, 24
+	sw		$t0, 40($sp)
+	addiu	$t0, $sp, 20
+	sw		$t0, 44($sp)
+	addiu	$t0, $sp, 16
+	sw		$t0, 48($sp)
+	addiu	$t0, $sp, 12
+	sw		$t0, 52($sp)
+	addiu	$t0, $sp, 8
+	sw		$t0, 56($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 60($sp)
+	li		$t0, -10
+	sw		$t0, 64($sp)
+	lw		$t1, 60($sp)
+	lw		$t2, 64($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 56($sp)
+	sw		$zero, ($t1)
+	li		$t0, 1
+	sw		$t0, 68($sp)
+	lw		$t1, 52($sp)
+	lw		$t2, 68($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 48($sp)
+	sw		$zero, ($t1)
+	lw		$t1, 44($sp)
+	sw		$zero, ($t1)
+	li		$t0, 100
+	sw		$t0, 72($sp)
+	lw		$t1, 40($sp)
+	lw		$t2, 72($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 60($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 76($sp)
+	lw		$t1, 76($sp)
+	seq		$t0, $t1, $zero
+	sw		$t0, 80($sp)
+	lw		$t1, 80($sp)
+	ori		$t0, $t1, 0
+	sw		$t0, 84($sp)
+	lw		$t1, 84($sp)
+	sge		$t0, $t1, $zero
+	sw		$t0, 88($sp)
+	lw		$t1, 88($sp)
+	bnez	$t1, _test_if_and_while_01_block_1
+	nop
+	j		_test_if_and_while_01_block_4
+	nop
+_test_if_and_while_01_block_1:
+	j		_test_if_and_while_01_block_2
+	nop
+_test_if_and_while_01_block_2:
+	li		$t0, 2
+	sw		$t0, 92($sp)
+	lw		$t1, 52($sp)
+	lw		$t2, 92($sp)
+	sw		$t2, ($t1)
+	li		$t0, -1
+	sw		$t0, 96($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 96($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_3
+	nop
+_test_if_and_while_01_block_3:
+	j		_test_if_and_while_01_block_4
+	nop
+_test_if_and_while_01_block_4:
+	lw		$t1, 56($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 100($sp)
+	lw		$t1, 100($sp)
+	slt		$t0, $t1, $zero
+	sw		$t0, 104($sp)
+	lw		$t1, 104($sp)
+	bnez	$t1, _test_if_and_while_01_block_5
+	nop
+	j		_test_if_and_while_01_block_11
+	nop
+_test_if_and_while_01_block_5:
+	j		_test_if_and_while_01_block_6
+	nop
+_test_if_and_while_01_block_6:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 108($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 108($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 52($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 112($sp)
+	li		$t0, 1
+	sw		$t0, 116($sp)
+	lw		$t1, 112($sp)
+	lw		$t2, 116($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 120($sp)
+	lw		$t1, 120($sp)
+	bnez	$t1, _test_if_and_while_01_block_7
+	nop
+	j		_test_if_and_while_01_block_8
+	nop
+_test_if_and_while_01_block_7:
+	jal		_func_02_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 124($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 124($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_9
+	nop
+_test_if_and_while_01_block_8:
+	li		$t0, 56088
+	sw		$t0, 128($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 128($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_9
+	nop
+_test_if_and_while_01_block_9:
+	j		_test_if_and_while_01_block_10
+	nop
+_test_if_and_while_01_block_10:
+	j		_test_if_and_while_01_block_14
+	nop
+_test_if_and_while_01_block_11:
+	j		_test_if_and_while_01_block_12
+	nop
+_test_if_and_while_01_block_12:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 132($sp)
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 136($sp)
+	lw		$t1, 132($sp)
+	move	$a0, $t1
+	lw		$t1, 136($sp)
+	move	$a1, $t1
+	jal		_func_04_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 140($sp)
+	lw		$t2, 140($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 144($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 144($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_13
+	nop
+_test_if_and_while_01_block_13:
+	j		_test_if_and_while_01_block_14
+	nop
+_test_if_and_while_01_block_14:
+	j		_test_if_and_while_01_block_15
+	nop
+_test_if_and_while_01_block_15:
+	lw		$t1, 48($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 148($sp)
+	lw		$t1, 148($sp)
+	sgt		$t0, $t1, $zero
+	sw		$t0, 152($sp)
+	lw		$t1, 152($sp)
+	bnez	$t1, _test_if_and_while_01_block_16
+	nop
+	j		_test_if_and_while_01_block_17
+	nop
+_test_if_and_while_01_block_16:
+	lw		$t1, 48($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 156($sp)
+	li		$t0, 1
+	sw		$t0, 160($sp)
+	lw		$t1, 156($sp)
+	lw		$t2, 160($sp)
+	sub		$t0, $t1, $t2
+	sw		$t0, 164($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 164($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_15
+	nop
+_test_if_and_while_01_block_17:
+	j		_test_if_and_while_01_block_18
+	nop
+_test_if_and_while_01_block_18:
+	lw		$t1, 60($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 168($sp)
+	lw		$t1, 168($sp)
+	slt		$t0, $t1, $zero
+	sw		$t0, 172($sp)
+	lw		$t1, 172($sp)
+	bnez	$t1, _test_if_and_while_01_block_19
+	nop
+	j		_test_if_and_while_01_block_28
+	nop
+_test_if_and_while_01_block_19:
+	j		_test_if_and_while_01_block_20
+	nop
+_test_if_and_while_01_block_20:
+	lw		$t1, 44($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 176($sp)
+	li		$t0, 1
+	sw		$t0, 180($sp)
+	lw		$t1, 176($sp)
+	lw		$t2, 180($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 184($sp)
+	lw		$t1, 44($sp)
+	lw		$t2, 184($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 44($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 188($sp)
+	li		$t0, 10
+	sw		$t0, 192($sp)
+	lw		$t1, 188($sp)
+	lw		$t2, 192($sp)
+	sle		$t0, $t1, $t2
+	sw		$t0, 196($sp)
+	lw		$t1, 196($sp)
+	bnez	$t1, _test_if_and_while_01_block_21
+	nop
+	j		_test_if_and_while_01_block_23
+	nop
+_test_if_and_while_01_block_21:
+	j		_test_if_and_while_01_block_18
+	nop
+_test_if_and_while_01_block_22:
+	j		_test_if_and_while_01_block_23
+	nop
+_test_if_and_while_01_block_23:
+	lw		$t1, 44($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 200($sp)
+	li		$t0, 12
+	sw		$t0, 204($sp)
+	lw		$t1, 200($sp)
+	lw		$t2, 204($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 208($sp)
+	lw		$t1, 208($sp)
+	bnez	$t1, _test_if_and_while_01_block_24
+	nop
+	j		_test_if_and_while_01_block_26
+	nop
+_test_if_and_while_01_block_24:
+	j		_test_if_and_while_01_block_28
+	nop
+_test_if_and_while_01_block_25:
+	j		_test_if_and_while_01_block_26
+	nop
+_test_if_and_while_01_block_26:
+	j		_test_if_and_while_01_block_27
+	nop
+_test_if_and_while_01_block_27:
+	j		_test_if_and_while_01_block_18
+	nop
+_test_if_and_while_01_block_28:
+	lw		$t1, 40($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 212($sp)
+	li		$t0, 40
+	sw		$t0, 216($sp)
+	lw		$t1, 212($sp)
+	lw		$t2, 216($sp)
+	sgt		$t0, $t1, $t2
+	sw		$t0, 220($sp)
+	lw		$t1, 220($sp)
+	bnez	$t1, _test_if_and_while_01_block_29
+	nop
+	j		_test_if_and_while_01_block_47
+	nop
+_test_if_and_while_01_block_29:
+	j		_test_if_and_while_01_block_30
+	nop
+_test_if_and_while_01_block_30:
+	lw		$t1, 40($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 224($sp)
+	li		$t0, 50
+	sw		$t0, 228($sp)
+	lw		$t1, 224($sp)
+	lw		$t2, 228($sp)
+	sgt		$t0, $t1, $t2
+	sw		$t0, 232($sp)
+	lw		$t1, 232($sp)
+	bnez	$t1, _test_if_and_while_01_block_31
+	nop
+	j		_test_if_and_while_01_block_44
+	nop
+_test_if_and_while_01_block_31:
+	j		_test_if_and_while_01_block_32
+	nop
+_test_if_and_while_01_block_32:
+	lw		$t1, 40($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 236($sp)
+	li		$t0, 60
+	sw		$t0, 240($sp)
+	lw		$t1, 236($sp)
+	lw		$t2, 240($sp)
+	sgt		$t0, $t1, $t2
+	sw		$t0, 244($sp)
+	lw		$t1, 244($sp)
+	bnez	$t1, _test_if_and_while_01_block_33
+	nop
+	j		_test_if_and_while_01_block_41
+	nop
+_test_if_and_while_01_block_33:
+	j		_test_if_and_while_01_block_34
+	nop
+_test_if_and_while_01_block_34:
+	lw		$t1, 40($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 248($sp)
+	li		$t0, 70
+	sw		$t0, 252($sp)
+	lw		$t1, 248($sp)
+	lw		$t2, 252($sp)
+	sgt		$t0, $t1, $t2
+	sw		$t0, 256($sp)
+	lw		$t1, 256($sp)
+	bnez	$t1, _test_if_and_while_01_block_35
+	nop
+	j		_test_if_and_while_01_block_38
+	nop
+_test_if_and_while_01_block_35:
+	j		_test_if_and_while_01_block_36
+	nop
+_test_if_and_while_01_block_36:
+	lw		$t1, 44($sp)
+	sw		$zero, ($t1)
+	j		_test_if_and_while_01_block_37
+	nop
+_test_if_and_while_01_block_37:
+	j		_test_if_and_while_01_block_39
+	nop
+_test_if_and_while_01_block_38:
+	li		$t0, -1
+	sw		$t0, 260($sp)
+	lw		$t1, 44($sp)
+	lw		$t2, 260($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_39
+	nop
+_test_if_and_while_01_block_39:
+	j		_test_if_and_while_01_block_40
+	nop
+_test_if_and_while_01_block_40:
+	j		_test_if_and_while_01_block_42
+	nop
+_test_if_and_while_01_block_41:
+	li		$t0, -2
+	sw		$t0, 264($sp)
+	lw		$t1, 44($sp)
+	lw		$t2, 264($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_42
+	nop
+_test_if_and_while_01_block_42:
+	j		_test_if_and_while_01_block_43
+	nop
+_test_if_and_while_01_block_43:
+	j		_test_if_and_while_01_block_45
+	nop
+_test_if_and_while_01_block_44:
+	li		$t0, -3
+	sw		$t0, 268($sp)
+	lw		$t1, 44($sp)
+	lw		$t2, 268($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_45
+	nop
+_test_if_and_while_01_block_45:
+	j		_test_if_and_while_01_block_46
+	nop
+_test_if_and_while_01_block_46:
+	j		_test_if_and_while_01_block_48
+	nop
+_test_if_and_while_01_block_47:
+	li		$t0, -4
+	sw		$t0, 272($sp)
+	lw		$t1, 44($sp)
+	lw		$t2, 272($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_01_block_48
+	nop
+_test_if_and_while_01_block_48:
+	lw		$t1, 44($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 276($sp)
+	lw		$t1, 276($sp)
+	move	$v0, $t1
+	lw		$ra, 28($sp)
+	addiu	$sp, $sp, 280
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
+# function test_if_and_while_02()
+_test_if_and_while_02_block_0:
+	move	$fp, $sp
+	addiu	$sp, $sp, -532
+	sw		$fp, ($sp)
+	sw		$ra, 16($sp)
+	la		$t0, v_01
+	sw		$t0, 20($sp)
+	la		$t0, v_05
+	sw		$t0, 24($sp)
+	addiu	$t0, $sp, 12
+	sw		$t0, 28($sp)
+	addiu	$t0, $sp, 8
+	sw		$t0, 32($sp)
+	addiu	$t0, $sp, 4
+	sw		$t0, 36($sp)
+	lw		$t1, 36($sp)
+	sw		$zero, ($t1)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 40($sp)
+	lw		$t1, 40($sp)
+	sne		$t0, $t1, $zero
+	sw		$t0, 44($sp)
+	lw		$t1, 44($sp)
+	bnez	$t1, _test_if_and_while_02_block_1
+	nop
+	j		_test_if_and_while_02_block_2
+	nop
+_test_if_and_while_02_block_1:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 48($sp)
+	li		$t0, 1
+	sw		$t0, 52($sp)
+	lw		$t1, 48($sp)
+	lw		$t2, 52($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 56($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 56($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_2
+	nop
+_test_if_and_while_02_block_2:
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 60($sp)
+	li		$t0, 123
+	sw		$t0, 64($sp)
+	lw		$t1, 64($sp)
+	lw		$t2, 60($sp)
+	slt		$t0, $t1, $t2
+	sw		$t0, 68($sp)
+	lw		$t1, 68($sp)
+	bnez	$t1, _test_if_and_while_02_block_3
+	nop
+	j		_test_if_and_while_02_block_4
+	nop
+_test_if_and_while_02_block_3:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 72($sp)
+	li		$t0, 1
+	sw		$t0, 76($sp)
+	lw		$t1, 72($sp)
+	lw		$t2, 76($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 80($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 80($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_4
+	nop
+_test_if_and_while_02_block_4:
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 84($sp)
+	li		$t0, 114514
+	sw		$t0, 88($sp)
+	lw		$t1, 88($sp)
+	lw		$t2, 84($sp)
+	mul		$t0, $t1, $t2
+	sw		$t0, 92($sp)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 96($sp)
+	lw		$t1, 96($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 100($sp)
+	li		$t0, 6
+	sw		$t0, 104($sp)
+	lw		$t1, 100($sp)
+	lw		$t2, 104($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 108($sp)
+	li		$t0, 1
+	sw		$t0, 112($sp)
+	lw		$t1, 112($sp)
+	lw		$t2, 108($sp)
+	div		$t0, $t1, $t2
+	sw		$t0, 116($sp)
+	lw		$t1, 92($sp)
+	lw		$t2, 116($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 120($sp)
+	li		$t0, 1
+	sw		$t0, 124($sp)
+	lw		$t1, 124($sp)
+	lw		$t2, 120($sp)
+	sgt		$t0, $t1, $t2
+	sw		$t0, 128($sp)
+	lw		$t1, 128($sp)
+	bnez	$t1, _test_if_and_while_02_block_5
+	nop
+	j		_test_if_and_while_02_block_6
+	nop
+_test_if_and_while_02_block_5:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 132($sp)
+	li		$t0, 1
+	sw		$t0, 136($sp)
+	lw		$t1, 132($sp)
+	lw		$t2, 136($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 140($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 140($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_6
+	nop
+_test_if_and_while_02_block_6:
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 144($sp)
+	lw		$t1, 144($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 148($sp)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 152($sp)
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 156($sp)
+	lw		$t1, 152($sp)
+	move	$a0, $t1
+	lw		$t1, 156($sp)
+	move	$a1, $t1
+	jal		_func_04_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 160($sp)
+	lw		$t1, 148($sp)
+	lw		$t2, 160($sp)
+	sle		$t0, $t1, $t2
+	sw		$t0, 164($sp)
+	lw		$t1, 164($sp)
+	bnez	$t1, _test_if_and_while_02_block_7
+	nop
+	j		_test_if_and_while_02_block_8
+	nop
+_test_if_and_while_02_block_7:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 168($sp)
+	li		$t0, 1
+	sw		$t0, 172($sp)
+	lw		$t1, 168($sp)
+	lw		$t2, 172($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 176($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 176($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_8
+	nop
+_test_if_and_while_02_block_8:
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 180($sp)
+	lw		$t1, 180($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 184($sp)
+	lw		$t2, 184($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 188($sp)
+	lw		$t2, 188($sp)
+	sub		$t0, $zero, $t2
+	sw		$t0, 192($sp)
+	li		$t0, 123
+	sw		$t0, 196($sp)
+	lw		$t1, 196($sp)
+	lw		$t2, 192($sp)
+	sge		$t0, $t1, $t2
+	sw		$t0, 200($sp)
+	lw		$t1, 200($sp)
+	bnez	$t1, _test_if_and_while_02_block_9
+	nop
+	j		_test_if_and_while_02_block_10
+	nop
+_test_if_and_while_02_block_9:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 204($sp)
+	li		$t0, 1
+	sw		$t0, 208($sp)
+	lw		$t1, 204($sp)
+	lw		$t2, 208($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 212($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 212($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_10
+	nop
+_test_if_and_while_02_block_10:
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 216($sp)
+	li		$t0, 123
+	sw		$t0, 220($sp)
+	lw		$t1, 220($sp)
+	lw		$t2, 216($sp)
+	slt		$t0, $t1, $t2
+	sw		$t0, 224($sp)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 228($sp)
+	lw		$t1, 228($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 232($sp)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 236($sp)
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 240($sp)
+	lw		$t1, 236($sp)
+	move	$a0, $t1
+	lw		$t1, 240($sp)
+	move	$a1, $t1
+	jal		_func_04_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 244($sp)
+	lw		$t1, 232($sp)
+	lw		$t2, 244($sp)
+	sle		$t0, $t1, $t2
+	sw		$t0, 248($sp)
+	lw		$t1, 224($sp)
+	ori		$t0, $t1, 0
+	sw		$t0, 252($sp)
+	lw		$t1, 248($sp)
+	ori		$t0, $t1, 0
+	sw		$t0, 256($sp)
+	lw		$t1, 252($sp)
+	lw		$t2, 256($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 260($sp)
+	lw		$t1, 260($sp)
+	bnez	$t1, _test_if_and_while_02_block_11
+	nop
+	j		_test_if_and_while_02_block_12
+	nop
+_test_if_and_while_02_block_11:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 264($sp)
+	li		$t0, 1
+	sw		$t0, 268($sp)
+	lw		$t1, 264($sp)
+	lw		$t2, 268($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 272($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 272($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_12
+	nop
+_test_if_and_while_02_block_12:
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 276($sp)
+	li		$t0, 123
+	sw		$t0, 280($sp)
+	lw		$t1, 280($sp)
+	lw		$t2, 276($sp)
+	slt		$t0, $t1, $t2
+	sw		$t0, 284($sp)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 288($sp)
+	lw		$t1, 288($sp)
+	move	$a0, $t1
+	jal		_func_03_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 292($sp)
+	lw		$t1, 20($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 296($sp)
+	lw		$t1, 24($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 300($sp)
+	lw		$t1, 296($sp)
+	move	$a0, $t1
+	lw		$t1, 300($sp)
+	move	$a1, $t1
+	jal		_func_04_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 304($sp)
+	lw		$t1, 292($sp)
+	lw		$t2, 304($sp)
+	sge		$t0, $t1, $t2
+	sw		$t0, 308($sp)
+	lw		$t1, 284($sp)
+	ori		$t0, $t1, 0
+	sw		$t0, 312($sp)
+	lw		$t1, 308($sp)
+	ori		$t0, $t1, 0
+	sw		$t0, 316($sp)
+	lw		$t1, 312($sp)
+	lw		$t2, 316($sp)
+	sne		$t0, $t1, $t2
+	sw		$t0, 320($sp)
+	lw		$t1, 320($sp)
+	bnez	$t1, _test_if_and_while_02_block_13
+	nop
+	j		_test_if_and_while_02_block_14
+	nop
+_test_if_and_while_02_block_13:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 324($sp)
+	li		$t0, 1
+	sw		$t0, 328($sp)
+	lw		$t1, 324($sp)
+	lw		$t2, 328($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 332($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 332($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_14
+	nop
+_test_if_and_while_02_block_14:
+	li		$t0, 1
+	sw		$t0, 336($sp)
+	lw		$t1, 32($sp)
+	lw		$t2, 336($sp)
+	sw		$t2, ($t1)
+	li		$t0, 2
+	sw		$t0, 340($sp)
+	lw		$t1, 28($sp)
+	lw		$t2, 340($sp)
+	sw		$t2, ($t1)
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 344($sp)
+	li		$t0, 1
+	sw		$t0, 348($sp)
+	lw		$t1, 344($sp)
+	lw		$t2, 348($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 352($sp)
+	lw		$t1, 352($sp)
+	bnez	$t1, _test_if_and_while_02_block_15
+	nop
+	j		_test_if_and_while_02_block_18
+	nop
+_test_if_and_while_02_block_15:
+	jal		_func_02_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 356($sp)
+	lw		$t1, 356($sp)
+	sne		$t0, $t1, $zero
+	sw		$t0, 360($sp)
+	lw		$t1, 360($sp)
+	bnez	$t1, _test_if_and_while_02_block_16
+	nop
+	j		_test_if_and_while_02_block_18
+	nop
+_test_if_and_while_02_block_16:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 364($sp)
+	li		$t0, 2
+	sw		$t0, 368($sp)
+	lw		$t1, 364($sp)
+	lw		$t2, 368($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 372($sp)
+	lw		$t1, 372($sp)
+	bnez	$t1, _test_if_and_while_02_block_17
+	nop
+	j		_test_if_and_while_02_block_18
+	nop
+_test_if_and_while_02_block_17:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 376($sp)
+	li		$t0, 1
+	sw		$t0, 380($sp)
+	lw		$t1, 376($sp)
+	lw		$t2, 380($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 384($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 384($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_18
+	nop
+_test_if_and_while_02_block_18:
+	lw		$t1, 28($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 388($sp)
+	li		$t0, 2
+	sw		$t0, 392($sp)
+	lw		$t1, 388($sp)
+	lw		$t2, 392($sp)
+	sne		$t0, $t1, $t2
+	sw		$t0, 396($sp)
+	lw		$t1, 396($sp)
+	bnez	$t1, _test_if_and_while_02_block_20
+	nop
+	j		_test_if_and_while_02_block_19
+	nop
+_test_if_and_while_02_block_19:
+	jal		_func_02_block_0
+	nop
+	move	$t0, $v0
+	sw		$t0, 400($sp)
+	lw		$t1, 400($sp)
+	sne		$t0, $t1, $zero
+	sw		$t0, 404($sp)
+	lw		$t1, 404($sp)
+	bnez	$t1, _test_if_and_while_02_block_20
+	nop
+	j		_test_if_and_while_02_block_21
+	nop
+_test_if_and_while_02_block_20:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 408($sp)
+	li		$t0, 1
+	sw		$t0, 412($sp)
+	lw		$t1, 408($sp)
+	lw		$t2, 412($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 416($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 416($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_21
+	nop
+_test_if_and_while_02_block_21:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 420($sp)
+	li		$t0, 2
+	sw		$t0, 424($sp)
+	lw		$t1, 420($sp)
+	lw		$t2, 424($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 428($sp)
+	lw		$t1, 428($sp)
+	bnez	$t1, _test_if_and_while_02_block_25
+	nop
+	j		_test_if_and_while_02_block_22
+	nop
+_test_if_and_while_02_block_22:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 432($sp)
+	li		$t0, 3
+	sw		$t0, 436($sp)
+	lw		$t1, 432($sp)
+	lw		$t2, 436($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 440($sp)
+	lw		$t1, 440($sp)
+	bnez	$t1, _test_if_and_while_02_block_25
+	nop
+	j		_test_if_and_while_02_block_23
+	nop
+_test_if_and_while_02_block_23:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 444($sp)
+	li		$t0, 4
+	sw		$t0, 448($sp)
+	lw		$t1, 444($sp)
+	lw		$t2, 448($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 452($sp)
+	lw		$t1, 452($sp)
+	bnez	$t1, _test_if_and_while_02_block_25
+	nop
+	j		_test_if_and_while_02_block_24
+	nop
+_test_if_and_while_02_block_24:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 456($sp)
+	li		$t0, 5
+	sw		$t0, 460($sp)
+	lw		$t1, 456($sp)
+	lw		$t2, 460($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 464($sp)
+	lw		$t1, 464($sp)
+	bnez	$t1, _test_if_and_while_02_block_25
+	nop
+	j		_test_if_and_while_02_block_26
+	nop
+_test_if_and_while_02_block_25:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 468($sp)
+	li		$t0, 1
+	sw		$t0, 472($sp)
+	lw		$t1, 468($sp)
+	lw		$t2, 472($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 476($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 476($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_26
+	nop
+_test_if_and_while_02_block_26:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 480($sp)
+	li		$t0, 2
+	sw		$t0, 484($sp)
+	lw		$t1, 480($sp)
+	lw		$t2, 484($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 488($sp)
+	lw		$t1, 488($sp)
+	bnez	$t1, _test_if_and_while_02_block_29
+	nop
+	j		_test_if_and_while_02_block_27
+	nop
+_test_if_and_while_02_block_27:
+	lw		$t1, 32($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 492($sp)
+	li		$t0, 1
+	sw		$t0, 496($sp)
+	lw		$t1, 492($sp)
+	lw		$t2, 496($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 500($sp)
+	lw		$t1, 500($sp)
+	bnez	$t1, _test_if_and_while_02_block_28
+	nop
+	j		_test_if_and_while_02_block_30
+	nop
+_test_if_and_while_02_block_28:
+	lw		$t1, 28($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 504($sp)
+	li		$t0, 2
+	sw		$t0, 508($sp)
+	lw		$t1, 504($sp)
+	lw		$t2, 508($sp)
+	seq		$t0, $t1, $t2
+	sw		$t0, 512($sp)
+	lw		$t1, 512($sp)
+	bnez	$t1, _test_if_and_while_02_block_29
+	nop
+	j		_test_if_and_while_02_block_30
+	nop
+_test_if_and_while_02_block_29:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 516($sp)
+	li		$t0, 1
+	sw		$t0, 520($sp)
+	lw		$t1, 516($sp)
+	lw		$t2, 520($sp)
+	addu	$t0, $t1, $t2
+	sw		$t0, 524($sp)
+	lw		$t1, 36($sp)
+	lw		$t2, 524($sp)
+	sw		$t2, ($t1)
+	j		_test_if_and_while_02_block_30
+	nop
+_test_if_and_while_02_block_30:
+	lw		$t1, 36($sp)
+	lw		$t0, ($t1)
+	sw		$t0, 528($sp)
+	lw		$t1, 528($sp)
+	move	$v0, $t1
+	lw		$ra, 16($sp)
+	addiu	$sp, $sp, 532
+	lw		$fp, ($sp)
+	jr		$ra
+	nop
+
