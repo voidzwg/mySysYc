@@ -6,7 +6,6 @@ public class Reader {
     private int num, line, col;
     private int markedLine, markedCol;
     private String token;
-    private int head = -1;
     private char ch;
     private BufferedInputStream reader;
 
@@ -79,7 +78,12 @@ public class Reader {
             return ret;
         } else {
             ch = (char) ret;
-            col++;
+            if (ch == '\n') {
+                line++;
+                col = 1;
+            } else {
+                col++;
+            }
             //System.out.println("Already read " + ch);
             return 0;
         }
@@ -87,7 +91,6 @@ public class Reader {
 
     protected void catToken() {
         token += ch;
-        head++;
     }
 
     protected void retract() {
@@ -102,11 +105,5 @@ public class Reader {
 
     protected void clearToken() {
         token = "";
-        head = -1;
-    }
-
-    protected void nextLine() {
-        line++;
-        col = 1;
     }
 }

@@ -36,4 +36,9 @@ public class BinaryInstruction extends Instruction {
         }
         return builder.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 }

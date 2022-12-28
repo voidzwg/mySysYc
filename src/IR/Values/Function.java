@@ -14,6 +14,7 @@ import utils.List;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 import static Error.Error.ParamNumbersMismatched;
 import static Error.Error.ParamTypeMismatched;
@@ -56,11 +57,22 @@ public class Function extends Value {
     }
 
     public void match(ArrayList<Value> realParameters, int line, int col) throws CompileErrorException {
+        if (realParameters == null) {
+            return;
+        }
         if (realParameters.size() != parameters.size()) {
             CompileErrorException.error(ParamNumbersMismatched, line, col);
         }
         for (int i = 0; i < parameters.size(); i++) {
-            Value parameter = realParameters.get(i);
+            Value parameter;
+            if (i < realParameters.size()) {
+                parameter = realParameters.get(i);
+            } else {
+                parameter = null;
+            }
+            if (parameter == null) {
+                return;
+            }
             Type type = parameter.getType();
             if (!type.equals(parameters.get(i).getType())) {
                 CompileErrorException.error(ParamTypeMismatched, line, col);
@@ -133,5 +145,18 @@ public class Function extends Value {
         }
         builder.append("}\n");
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Function function = (Function) o;
+        return Objects.equals(parameters, function.parameters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parameters);
     }
 }

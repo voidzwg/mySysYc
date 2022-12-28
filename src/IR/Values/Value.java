@@ -4,6 +4,7 @@ import IR.Types.Type;
 import IR.Use;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 abstract public class Value {
     protected Type type;
@@ -38,5 +39,18 @@ abstract public class Value {
 
     public ArrayList<Use> getUses() {
         return uses;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Value value = (Value) o;
+        return Objects.equals(type, value.type) && Objects.equals(name, value.name) && Objects.equals(uses, value.uses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, name, uses);
     }
 }

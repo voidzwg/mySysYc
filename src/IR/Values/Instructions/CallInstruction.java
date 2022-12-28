@@ -7,6 +7,7 @@ import IR.Values.Instructions.Instruction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static IR.Types.IntegerType.i32;
 import static IR.Values.Instructions.Operator.CALL;
@@ -109,5 +110,19 @@ public class CallInstruction extends Instruction {
             builder.append(")");
         }
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CallInstruction that = (CallInstruction) o;
+        return isPrintf == that.isPrintf && Objects.equals(function, that.function) && Objects.equals(realParameters, that.realParameters) && Objects.equals(fString, that.fString);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), function, realParameters, fString, isPrintf);
     }
 }

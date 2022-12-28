@@ -60,6 +60,9 @@ public class Module {
     }
 
     public Value find(String s) {
+        if (s == null) {
+            return null;
+        }
         Value v = null;
         String t = "%" + s.replaceAll("[%@]", "");
         for (int i = symbolTable.size() - 1; i >= 0 && v == null; i--) {

@@ -5,6 +5,7 @@ import IR.Types.IntegerType;
 import IR.Types.Type;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class   ConstantArray extends Constant {
     private Type elementType;
@@ -177,5 +178,18 @@ public class   ConstantArray extends Constant {
             builder.append("]");
         }
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConstantArray array = (ConstantArray) o;
+        return capacity == array.capacity && blockLength == array.blockLength && needInit == array.needInit && isConst == array.isConst && Objects.equals(elementType, array.elementType) && Objects.equals(values, array.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(elementType, capacity, blockLength, values, needInit, isConst);
     }
 }

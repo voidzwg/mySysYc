@@ -16,17 +16,23 @@ public class Parser {
     private Token token;
     private String symbol;
     private int head = 0, tail = 0;
-    private int line, col;
+    private int beforeWordLine, beforeWordCol;
+    private int thisWordLine, thisWordCol;
+    private Token cft;  // current func type
     private final ArrayList<Token> tokensQueue;
     private final ArrayList<String> symbolsQueue;
-    private final ArrayList<Integer> lines;
-    private final ArrayList<Integer> cols;
+    private final ArrayList<Integer> beforeWordLines;
+    private final ArrayList<Integer> beforeWordCols;
+    private final ArrayList<Integer> thisWordLines;
+    private final ArrayList<Integer> thisWordCols;
 
     public Parser(File fr) {
         tokensQueue = new ArrayList<>();
         symbolsQueue = new ArrayList<>();
-        lines = new ArrayList<>();
-        cols = new ArrayList<>();
+        beforeWordLines = new ArrayList<>();
+        beforeWordCols = new ArrayList<>();
+        thisWordLines = new ArrayList<>();
+        thisWordCols = new ArrayList<>();
         lexer = new Lexer(fr);
     }
 
@@ -84,11 +90,13 @@ public class Parser {
         return count;
     }
 
-    private void push(Token tok, String sym, int line, int col) {
+    private void push(Token tok, String sym, int beforeWordLine, int beforeWordCol, int thisWordLine, int thisWOrdCol) {
         tokensQueue.add(tok);
         symbolsQueue.add(sym);
-        lines.add(line);
-        cols.add(col);
+        beforeWordLines.add(beforeWordLine);
+        beforeWordCols.add(beforeWordCol);
+        thisWordLines.add(thisWordLine);
+        thisWordCols.add(thisWOrdCol);
         head++;
     }
 
@@ -97,8 +105,10 @@ public class Parser {
         if (head > tail) {
             token = tokensQueue.get(tail);
             symbol = symbolsQueue.get(tail);
-            line = lines.get(tail);
-            col = cols.get(tail);
+            beforeWordLine = beforeWordLines.get(tail);
+            beforeWordCol = beforeWordCols.get(tail);
+            thisWordLine = thisWordLines.get(tail);
+            thisWordCol = thisWordCols.get(tail);
             tail++;
         } else {
             token = EOF;
@@ -110,31 +120,40 @@ public class Parser {
     private int readLexer() {
         Token token;
         String symbol;
-        int line, col;
+        int beforeWordLine, beforeWordCol, thisWordLine, thisWordCol;
         while (true) {
-            line = lexer.getLine();
-            col = lexer.getCol();
+            beforeWordLine = lexer.getLine();
+            beforeWordCol = lexer.getCol();
             token = lexer.next();
+            thisWordLine = lexer.getLine();
+            thisWordCol = lexer.getCol();
             symbol = lexer.getToken();
             if (token == EOF) {
-                //System.out.println("End of the first pass!");
                 return -1;
             }
             if (token == NOTE) {
                 continue;
             }
-            push(token, symbol, line, col);
+            push(token, symbol, beforeWordLine, beforeWordCol, thisWordLine, thisWordCol);
             break;
         }
         return 0;
     }
 
-    private void setPos(SyntaxParsingTree node) {
+    private void setPosAsBeforeWordPos(SyntaxParsingTree node) {
         if (node == null) {
             return;
         }
-        node.setLine(line);
-        node.setCol(col);
+        node.setLine(beforeWordLine);
+        node.setCol(beforeWordCol);
+    }
+
+    private void setPosAsThisWordPos(SyntaxParsingTree node) {
+        if (node == null) {
+            return;
+        }
+        node.setLine(thisWordLine);
+        node.setCol(thisWordCol);
     }
 
     // 读取token队列队尾开始序号为n的元素，序号从0开始
@@ -203,8 +222,6 @@ public class Parser {
             decl.setConstDecl(parseConstDecl());
         } else if (token == INTTK) {
             decl.setVarDecl(parseVarDecl());
-        } else {
-            error(UnknownSymbol, line, col);
         }
         return decl;
     }
@@ -222,11 +239,9 @@ public class Parser {
                     read();
                     break;
                 } else {
-                    error(MissedSemicolon, line, col);
+                    error(MissedSemicolon, beforeWordLine, beforeWordCol);
                 }
             }
-        } else {
-            error(UndefinedError, line, col);
         }
         return constDecl;
     }
@@ -239,32 +254,29 @@ public class Parser {
             if (token == LBRACK) {
                 read();
                 constDef.addConstExp(parseConstExp());
+                constDef.setMode1();
                 if (token != RBRACK) {
-                    error(MissedRightBrackets, line, col);
-                }
-                read();
-                if (token == LBRACK) {
-                    read();
-                    constDef.addConstExp(parseConstExp());
-                    if (token != RBRACK) {
-                        error(MissedRightBrackets, line, col);
-                    }
-                    read();
-                    constDef.setMode2();
+                    error(MissedRightBrackets, beforeWordLine, beforeWordCol);
                 } else {
-                    constDef.setMode1();
+                    read();
+                    if (token == LBRACK) {
+                        read();
+                        constDef.addConstExp(parseConstExp());
+                        if (token != RBRACK) {
+                            error(MissedRightBrackets, beforeWordLine, beforeWordCol);
+                        }
+                        read();
+                        constDef.setMode2();
+                    }
                 }
             }
-            if (token == ASSIGN) {
+            while (token != ASSIGN) {
                 read();
-                constDef.setConstInitVal(parseConstInitVal());
-            } else {
-                error(UninitializedConstant, line, col);
             }
-        } else {
-            error(UndefinedError, line, col);
+            read();
+            constDef.setConstInitVal(parseConstInitVal());
         }
-        setPos(constDef);
+        setPosAsBeforeWordPos(constDef);
         return constDef;
     }
 
@@ -285,14 +297,14 @@ public class Parser {
                         read();
                         constInitVal.addConstInitVal(parseConstInitVal());
                     } else {
-                        error(UnknownSymbol, line, col);
+                        read();
                     }
                 }
             }
         } else {
             constInitVal.setConstExp(parseConstExp());
         }
-        setPos(constInitVal);
+        setPosAsBeforeWordPos(constInitVal);
         return constInitVal;
     }
 
@@ -312,12 +324,13 @@ public class Parser {
                 } else if (token == COMMA) {
                     read();
                 } else {
-                    error(MissedSemicolon, line, col);
+                    error(MissedSemicolon, beforeWordLine, beforeWordCol);
                 }
             }
         } else {
-            error(MissedSemicolon, line, col);
+            error(MissedSemicolon, beforeWordLine, beforeWordCol);
         }
+        setPosAsBeforeWordPos(varDecl);
         return varDecl;
     }
 
@@ -329,30 +342,31 @@ public class Parser {
             if (token == LBRACK) {
                 read();
                 varDef.addConstExp(parseConstExp());
+                varDef.setMode1();
                 if (token != RBRACK) {
-                    error(MissedRightBrackets, line, col);
-                }
-                read();
-                if (token == LBRACK) {
-                    read();
-                    varDef.addConstExp(parseConstExp());
-                    if (token != RBRACK) {
-                        error(MissedRightBrackets, line, col);
-                    }
-                    read();
-                    varDef.setMode2();
+                    error(MissedRightBrackets, beforeWordLine, beforeWordCol);
                 } else {
-                    varDef.setMode1();
+                    read();
+                    if (token == LBRACK) {
+                        read();
+                        varDef.addConstExp(parseConstExp());
+                        if (token != RBRACK) {
+                            error(MissedRightBrackets, beforeWordLine, beforeWordCol);
+                        }
+                        read();
+                        varDef.setMode2();
+                    }
                 }
+            }
+            while (token != ASSIGN && token != COMMA && token != SEMICN) {
+                read();
             }
             if (token == ASSIGN) {
                 read();
                 varDef.setInitVal(parseInitVal());
             }
-        } else {
-            error(UndefinedError, line, col);
         }
-        setPos(varDef);
+        setPosAsBeforeWordPos(varDef);
         return varDef;
     }
 
@@ -373,14 +387,14 @@ public class Parser {
                         read();
                         initVal.addInitVal(parseInitVal());
                     } else {
-                        error(UnknownSymbol, line, col);
+                        read();
                     }
                 }
             }
         } else {
             initVal.setExp(parseExp());
         }
-        setPos(initVal);
+        setPosAsBeforeWordPos(initVal);
         return initVal;
     }
 
@@ -389,41 +403,39 @@ public class Parser {
         funcDef.setFuncType(parseFuncType());
         if (token == IDENFR) {
             funcDef.setIdent(symbol);
+            funcDef.setIdentPos(thisWordLine, thisWordCol);
             read();
             if (token == LPARENT) {
                 read();
                 if (token == RPARENT) {
                     read();
+                } else if (token == LBRACE) {
+                    error(MissedRightParentheses, beforeWordLine, beforeWordCol);
                 } else {
                     funcDef.setFuncFParams(parseFuncFParams());
                     if (token == RPARENT) {
                         read();
                     } else {
-                        error(MissedRightParentheses, line, col);
+                        error(MissedRightParentheses, beforeWordLine, beforeWordCol);
                     }
                 }
             } else {
-                error(MissedSemicolon, line, col);
+                error(MissedSemicolon, beforeWordLine, beforeWordCol);
             }
-        } else {
-            error(UnknownSymbol, line, col);
         }
         Block tempBlock = parseBlock();
         int mode = tempBlock.getMode();
-        if (funcDef.getFuncType().getType().equals("void")) {
-            if (mode == 6 || mode == 2) {
-                // TODO: find return statement
-                error(ReturnValueExists, -1, -1);
-            }
-        }
         funcDef.setBlock(tempBlock);
-        setPos(funcDef);
+        setPosAsBeforeWordPos(funcDef);
+        cft = null;
         return funcDef;
     }
 
     public MainFuncDef parseMainFuncDef() throws IOException, CompileErrorException {
         MainFuncDef mainFuncDef = new MainFuncDef();
+        cft = INTTK;
         read();
+        mainFuncDef.setIdentPos(thisWordLine, thisWordCol);
         read();
         if (token == LPARENT) {
             read();
@@ -431,12 +443,11 @@ public class Parser {
                 read();
                 mainFuncDef.setBlock(parseBlock());
             } else {
-                error(MissedRightParentheses, line, col);
+                error(MissedRightParentheses, beforeWordLine, beforeWordCol);
             }
-        } else {
-            error(UndefinedError, line, col);
         }
-        setPos(mainFuncDef);
+        setPosAsBeforeWordPos(mainFuncDef);
+        cft = null;
         return mainFuncDef;
     }
 
@@ -444,10 +455,10 @@ public class Parser {
         FuncType funcType = new FuncType();
         if (token == INTTK) {
             funcType.setTypeInt();
+            cft = INTTK;
         } else if (token == VOIDTK) {
             funcType.setTypeVoid();
-        } else {
-            error(UndefinedError, line, col);
+            cft = VOIDTK;
         }
         read();
         return funcType;
@@ -457,9 +468,13 @@ public class Parser {
         FuncFParams funcFParams = new FuncFParams();
         funcFParams.addFuncFParam(parseFuncFParam());
         while (true) {
-            if (token == COMMA) {
-                read();
-                funcFParams.addFuncFParam(parseFuncFParam());
+            if (token != RPARENT) {
+                if (token == COMMA) {
+                    read();
+                    funcFParams.addFuncFParam(parseFuncFParam());
+                } else {
+                    break;
+                }
                 continue;
             }
             break;
@@ -471,36 +486,33 @@ public class Parser {
         FuncFParam funcFParam = new FuncFParam();
         if (token == INTTK) {
             read();
-        } else {
-            error(UnknownSymbol, line, col);
         }
         if (token == IDENFR) {
             funcFParam.setIdent(symbol);
             read();
-        } else {
-            error(UnknownSymbol, line, col);
         }
+        funcFParam.setMode0();
         if (token == LBRACK) {
             read();
             if (token == RBRACK) {
                 read();
+                funcFParam.setMode1();
                 if (token == LBRACK) {
                     read();
+                    funcFParam.setMode2();
                     funcFParam.setConstExp(parseConstExp());
                     if (token == RBRACK) {
-                        funcFParam.setMode2();
                         read();
                     } else {
-                        error(MissedRightBrackets, line, col);
+                        error(MissedRightBrackets, beforeWordLine, beforeWordCol);
                     }
-                } else {
-                    funcFParam.setMode1();
                 }
             } else {
-                error(MissedRightBrackets, line, col);
+                error(MissedRightBrackets, beforeWordLine, beforeWordCol);
             }
-        } else {
-            funcFParam.setMode0();
+            while (token != COMMA && token != RPARENT && token != LBRACE) {
+                read();
+            }
         }
 //        if (token == INTTK) {
 //            read();
@@ -536,7 +548,7 @@ public class Parser {
 //            error(UnknownSymbol, line, col);
 //            funcFParam = null;
 //        }
-        setPos(funcFParam);
+        setPosAsBeforeWordPos(funcFParam);
         return funcFParam;
     }
 
@@ -547,6 +559,7 @@ public class Parser {
             read();
             while (true) {
                 if (token == RBRACE) {
+                    block.setEndPos(thisWordLine, thisWordCol);
                     read();
                     break;
                 }
@@ -602,10 +615,8 @@ public class Parser {
                 }
                 block.addBlockItem(tempBlockItem);
             }
-        } else {
-            error(UnknownSymbol, line, col);
         }
-        setPos(block);
+        setPosAsBeforeWordPos(block);
         return block;
     }
 
@@ -634,10 +645,8 @@ public class Parser {
                         stmt.addStmt(parseStmt());
                     }
                 } else {
-                    error(MissedRightParentheses, line, col);
+                    error(MissedRightParentheses, beforeWordLine, beforeWordCol);
                 }
-            } else {
-                error(UnknownSymbol, line, col);
             }
             stmt.setType2();
         } else if (token == WHILETK) {
@@ -653,45 +662,52 @@ public class Parser {
                     }
                     stmt.addStmt(tempStmt);
                 } else {
-                    error(MissedRightParentheses, line, col);
+                    error(MissedRightParentheses, beforeWordLine, beforeWordCol);
                 }
-            } else {
-                error(UnknownSymbol, line, col);
             }
             stmt.setType3();
         } else if (token == BREAKTK) {
+            stmt.setBreakContinuePos(thisWordLine, thisWordCol);
             read();
             if (token != SEMICN) {
-                error(MissedSemicolon, line, col);
+                error(MissedSemicolon, beforeWordLine, beforeWordCol);
             }
             read();
             stmt.setType4();
         } else if (token == CONTINUETK) {
+            stmt.setBreakContinuePos(thisWordLine, thisWordCol);
             read();
             if (token != SEMICN) {
-                error(MissedSemicolon, line, col);
+                error(MissedSemicolon, beforeWordLine, beforeWordCol);
             }
             read();
             stmt.setType5();
         } else if (token == RETURNTK) {
             read();
             if (token == SEMICN) {
+                if (cft == INTTK) {
+                    error(ReturnValueNotExists, beforeWordLine, beforeWordCol);
+                }
                 read();
             } else {
+                if (cft == VOIDTK) {
+                    error(ReturnValueExists, beforeWordLine, beforeWordCol);
+                }
                 stmt.setExp(parseExp());
                 if (token == SEMICN) {
                     read();
                 } else {
-                    error(MissedSemicolon, line, col);
+                    error(MissedSemicolon, beforeWordLine, beforeWordCol);
                 }
             }
             stmt.setType6();
         } else if (token == PRINTFTK) {
+            int line = thisWordLine, col = thisWordCol;
             read();
             if (token == LPARENT) {
                 read();
                 if (token == STRCON) {
-                    int count = checkFormatString(symbol, line, col);
+                    int count = checkFormatString(symbol, thisWordLine, thisWordCol);
                     int num = 0;
                     stmt.setFormatString(symbol);
                     read();
@@ -712,16 +728,14 @@ public class Parser {
                         if (token == SEMICN) {
                             read();
                         } else {
-                            error(MissedSemicolon, line, col);
+                            error(MissedSemicolon, beforeWordLine, beforeWordCol);
                         }
                     } else {
-                        error(MissedRightParentheses, line, col);
+                        error(MissedRightParentheses, beforeWordLine, beforeWordCol);
                     }
                 } else {
-                    error(ParamTypeMismatched, line, col);
+                    error(ParamTypeMismatched, beforeWordLine, beforeWordCol);
                 }
-            } else {
-                error(UnknownSymbol, line, col);
             }
             stmt.setType7();
         } else if (token == SEMICN) {
@@ -743,25 +757,21 @@ public class Parser {
                                 read();
                                 stmt.setType9();
                             } else {
-                                error(MissedSemicolon, line, col);
+                                error(MissedSemicolon, beforeWordLine, beforeWordCol);
                             }
                         } else {
-                            error(MissedRightParentheses, line, col);
+                            error(MissedRightParentheses, beforeWordLine, beforeWordCol);
                         }
-                    } else {
-                        error(UnknownSymbol, line, col);
                     }
                 } else {
                     stmt.setExp(parseExp());
                     if (token == SEMICN) {
                         read();
                     } else {
-                        error(MissedSemicolon, line, col);
+                        error(MissedSemicolon, beforeWordLine, beforeWordCol);
                     }
                     stmt.setType8();
                 }
-            } else {
-                error(UndefinedError, line, col);
             }
         } else {
             stmt.setExp(parseExp());
@@ -769,10 +779,10 @@ public class Parser {
                 read();
                 stmt.setType1();
             } else {
-                error(MissedSemicolon, line, col);
+                error(MissedSemicolon, beforeWordLine, beforeWordCol);
             }
         }
-        setPos(stmt);
+        setPosAsBeforeWordPos(stmt);
         return stmt;
     }
 
@@ -804,20 +814,18 @@ public class Parser {
                         if (token == RBRACK) {
                             read();
                         } else {
-                            error(MissedRightBrackets, line, col);
+                            error(MissedRightBrackets, beforeWordLine, beforeWordCol);
                         }
                         lVal.setMode2();
                     } else {
                         lVal.setMode1();
                     }
                 } else {
-                    error(MissedRightBrackets, line, col);
+                    error(MissedRightBrackets, beforeWordLine, beforeWordCol);
                 }
             }
-        } else {
-            error(UnknownSymbol, line, col);
         }
-        setPos(lVal);
+        setPosAsBeforeWordPos(lVal);
         return lVal;
     }
 
@@ -829,14 +837,14 @@ public class Parser {
             if (token == RPARENT) {
                 read();
             } else {
-                error(MissedRightParentheses, line, col);
+                error(MissedRightParentheses, beforeWordLine, beforeWordCol);
             }
         } else if (token == INTCON) {
             primaryExp.setNumber(parseNumber());
         } else {
             primaryExp.setlVal(parseLVal());
         }
-        setPos(primaryExp);
+        setPosAsBeforeWordPos(primaryExp);
         return primaryExp;
     }
 
@@ -845,10 +853,8 @@ public class Parser {
         if (token == INTCON) {
             number.setNumber(symbol);
             read();
-        } else {
-            error(UnknownSymbol, line, col);
         }
-        setPos(number);
+        setPosAsBeforeWordPos(number);
         return number;
     }
 
@@ -856,7 +862,7 @@ public class Parser {
         UnaryExp unaryExp = new UnaryExp();
         if (token == IDENFR) {
             unaryExp.setIdent(symbol);
-            //read();
+            unaryExp.setIdentPos(thisWordLine, thisWordCol);
             if (readToken(0) == LPARENT) {
                 read();
                 read();
@@ -867,7 +873,7 @@ public class Parser {
                     if (token == RPARENT) {
                         read();
                     } else {
-                        error(MissedRightParentheses, line, col);
+                        error(MissedRightParentheses, beforeWordLine, beforeWordCol);
                     }
                 }
             } else {
@@ -878,10 +884,8 @@ public class Parser {
             unaryExp.setUnaryExp(parseUnaryExp());
         } else if (token == LPARENT || token == INTCON){
             unaryExp.setPrimaryExp(parsePrimaryExp());
-        } else {
-            error(UnknownSymbol, line, col);
         }
-        setPos(unaryExp);
+        setPosAsBeforeWordPos(unaryExp);
         return unaryExp;
     }
 
@@ -890,25 +894,29 @@ public class Parser {
         if (token == PLUS || token == MINU || token == NOT) {
             unaryOp.setOp(symbol);
             read();
-        } else {
-            error(UnknownSymbol, line, col);
         }
-        setPos(unaryOp);
+        setPosAsBeforeWordPos(unaryOp);
         return unaryOp;
     }
 
     public FuncRParams parseFuncRParams() throws IOException, CompileErrorException {
         FuncRParams funcRParams = new FuncRParams();
         funcRParams.addExp(parseExp());
+        while (token != COMMA && token != RPARENT && token != SEMICN) {
+            read();
+        }
         while (true) {
             if (token == COMMA) {
                 read();
                 funcRParams.addExp(parseExp());
+                while (token != COMMA && token != RPARENT && token != SEMICN) {
+                    read();
+                }
                 continue;
             }
             break;
         }
-        setPos(funcRParams);
+        setPosAsBeforeWordPos(funcRParams);
         return funcRParams;
     }
 
@@ -920,7 +928,7 @@ public class Parser {
             read();
             mulExp.setMulExp(parseMulExp());
         }
-        setPos(mulExp);
+        setPosAsBeforeWordPos(mulExp);
         return mulExp;
     }
 
@@ -932,9 +940,9 @@ public class Parser {
             read();
             addExp.setAddExp(parseAddExp());
         }
-        addExp.setLine(line);
-        addExp.setCol(col);
-        setPos(addExp);
+        addExp.setLine(beforeWordLine);
+        addExp.setCol(beforeWordCol);
+        setPosAsBeforeWordPos(addExp);
         return addExp;
     }
 
@@ -946,7 +954,7 @@ public class Parser {
             read();
             relExp.setRelExp(parseRelExp());
         }
-        setPos(relExp);
+        setPosAsBeforeWordPos(relExp);
         return relExp;
     }
 
@@ -958,7 +966,7 @@ public class Parser {
             read();
             eqExp.setEqExp(parseEqExp());
         }
-        setPos(eqExp);
+        setPosAsBeforeWordPos(eqExp);
         return eqExp;
     }
 
@@ -969,7 +977,7 @@ public class Parser {
             read();
             lAndExp.setlAndExp(parseLAndExp());
         }
-        setPos(lAndExp);
+        setPosAsBeforeWordPos(lAndExp);
         return lAndExp;
     }
 
@@ -980,7 +988,7 @@ public class Parser {
             read();
             lOrExp.setlOrExp(parseLOrExp());
         }
-        setPos(lOrExp);
+        setPosAsBeforeWordPos(lOrExp);
         return lOrExp;
     }
 

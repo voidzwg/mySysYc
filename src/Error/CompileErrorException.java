@@ -7,7 +7,7 @@ public class CompileErrorException extends RuntimeException implements Comparabl
     private final int line;
     private final int col;
     private final String eCode;
-    public static final HashMap<Integer, ArrayList<Integer>> eList = new HashMap<>();
+    public static final ArrayList<CompileErrorException> eList = new ArrayList<>();
 
     public CompileErrorException(Error e, int line, int col) {
         super(e.getDescription());
@@ -35,21 +35,8 @@ public class CompileErrorException extends RuntimeException implements Comparabl
         return pos;
     }
 
-    public static void error(Error e, int line, int col) throws CompileErrorException {
-        ArrayList<Integer> arrayList;
-        CompileErrorException compileErrorException = new CompileErrorException(e, line, col);
-        if (eList.containsKey(line)) {
-            arrayList = eList.get(line);
-            if (arrayList.contains(col)){
-                return;
-            }
-            arrayList.add(col);
-        } else {
-            arrayList = new ArrayList<>();
-            arrayList.add(col);
-            eList.put(line, arrayList);
-        }
-        throw compileErrorException;
+    public static void error(Error e, int line, int col) {
+        eList.add(new CompileErrorException(e, line, col));
     }
 
     @Override

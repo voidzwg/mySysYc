@@ -10,6 +10,7 @@ public class FuncDef extends SyntaxParsingTree {
     private String ident;
     private FuncFParams funcFParams;
     private Block block;
+    private int identLine, identCol;
 
     public FuncDef() {
         label = State.FuncDef.toLabel();
@@ -17,6 +18,27 @@ public class FuncDef extends SyntaxParsingTree {
         ident = null;
         funcFParams = null;
         block = null;
+    }
+
+    public int getIdentLine() {
+        return identLine;
+    }
+
+    public void setIdentLine(int identLine) {
+        this.identLine = identLine;
+    }
+
+    public int getIdentCol() {
+        return identCol;
+    }
+
+    public void setIdentCol(int identCol) {
+        this.identCol = identCol;
+    }
+
+    public void setIdentPos(int line, int col) {
+        setIdentLine(line);
+        setIdentCol(col);
     }
 
     public String toString() {

@@ -40,9 +40,6 @@ public class Lexer {
                 symbol = EOF;
                 return symbol;
             }
-            if (isRet(token.getCh())) {
-                token.nextLine();
-            }
         } while (isBlank(token.getCh()));
         if (isLetterOr_(token.getCh())) {
             while (isIdent(token.getCh())) {
@@ -186,7 +183,6 @@ public class Lexer {
                     token.catToken();
                     token.readChar();
                 }
-                token.nextLine();
                 symbol = NOTE;
             } else {
                 token.retract();

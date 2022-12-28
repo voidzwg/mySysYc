@@ -9,6 +9,7 @@ import IR.Values.GlobalVariable;
 import IR.Values.Value;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static IR.Values.Instructions.Operator.GEP;
 
@@ -78,5 +79,18 @@ public class GEPInstruction extends MemBase {
             builder.append(s);
         }
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GEPInstruction that = (GEPInstruction) o;
+        return elementType.equals(that.elementType) && targetValue.equals(that.targetValue) && getOperands().equals(that.getOperands());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(elementType, targetValue);
     }
 }

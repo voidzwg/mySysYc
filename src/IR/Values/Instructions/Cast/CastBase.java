@@ -5,6 +5,8 @@ import IR.Values.BasicBlock;
 import IR.Values.Instructions.Instruction;
 import IR.Values.Value;
 
+import java.util.Objects;
+
 import static IR.Values.Instructions.Operator.ZEXT;
 
 public class CastBase extends Instruction {
@@ -41,5 +43,19 @@ public class CastBase extends Instruction {
 
     public void setNewType(Type newType) {
         this.newType = newType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CastBase castBase = (CastBase) o;
+        return Objects.equals(oldType, castBase.oldType) && Objects.equals(newType, castBase.newType) && Objects.equals(value, castBase.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), oldType, newType, value);
     }
 }

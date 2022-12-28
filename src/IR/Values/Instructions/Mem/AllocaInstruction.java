@@ -6,6 +6,8 @@ import IR.Types.Type;
 import IR.Values.BasicBlock;
 import IR.Values.Instructions.Operator;
 
+import java.util.Objects;
+
 public class AllocaInstruction extends MemBase {
     private boolean isConstant;
     private Type allocated;
@@ -46,5 +48,18 @@ public class AllocaInstruction extends MemBase {
     @Override
     public String toString() {
         return this.getName() + " = alloca " + allocated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AllocaInstruction that = (AllocaInstruction) o;
+        return isConstant == that.isConstant && allocated.equals(that.allocated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isConstant, allocated);
     }
 }

@@ -14,6 +14,7 @@ import java.util.*;
 
 import static java.util.Collections.sort;
 import static IR.Visitor.LLVM_VERSION;
+import static Error.CompileErrorException.eList;
 
 public class Compiler {
     char ch;
@@ -30,10 +31,35 @@ public class Compiler {
             //test.test4();
             //test.submit4();
             //test.test5();
-            test.submit5();
+            //test.submit5();
             //test.tete();
+            test.llvm();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    void llvm() throws IOException {
+        File fr = new File("testfile.txt");
+        File fw = new File("llvm_ir.txt");
+        File fe = new File("error.txt");
+        eList.clear();
+        try (FileWriter out = new FileWriter(fw)) {
+            Visitor visitor = new Visitor(fr);
+            visitor.visit();
+            if (eList.isEmpty()) {
+                String str = visitor.toString();
+                out.append(str);
+            }
+            visitor.close();
+        }
+        if (!eList.isEmpty()) {
+            sort(eList);
+            try (FileWriter err = new FileWriter(fe)) {
+                for (CompileErrorException e : eList) {
+                    err.append(String.valueOf(e.getLine())).append(" ").append(e.getECode()).append("\n");
+                }
+            }
         }
     }
 

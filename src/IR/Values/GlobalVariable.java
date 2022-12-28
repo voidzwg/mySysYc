@@ -2,6 +2,8 @@ package IR.Values;
 
 import IR.Types.*;
 
+import java.util.Objects;
+
 public class GlobalVariable extends Value {
     private final boolean isConstant;
     private Value value;
@@ -40,4 +42,16 @@ public class GlobalVariable extends Value {
         return builder.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GlobalVariable that = (GlobalVariable) o;
+        return isConstant == that.isConstant && Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isConstant, value);
+    }
 }

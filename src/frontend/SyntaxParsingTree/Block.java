@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Block extends SyntaxParsingTree {
     private final ArrayList<BlockItem> blockItems;
+    private int blockEndLine, blockEndCol;
     private int mode;
     /*
     mode = 0: 无return、无break continue
@@ -21,6 +22,27 @@ public class Block extends SyntaxParsingTree {
         label = State.Block.toLabel();
         blockItems = new ArrayList<>();
         mode = 0;
+    }
+
+    public int getBlockEndLine() {
+        return blockEndLine;
+    }
+
+    public void setBlockEndLine(int blockEndLine) {
+        this.blockEndLine = blockEndLine;
+    }
+
+    public int getBlockEndCol() {
+        return blockEndCol;
+    }
+
+    public void setBlockEndCol(int blockEndCol) {
+        this.blockEndCol = blockEndCol;
+    }
+
+    public void setEndPos(int line, int col) {
+        setBlockEndLine(line);
+        setBlockEndCol(col);
     }
 
     public String toString() {

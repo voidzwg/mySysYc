@@ -30,4 +30,9 @@ public class StoreInstruction extends MemBase {
                 + this.getOperands().get(1).getType()
                 + " " + this.getOperands().get(1).getName();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 }

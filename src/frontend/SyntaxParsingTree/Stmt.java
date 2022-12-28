@@ -12,6 +12,7 @@ public class Stmt extends SyntaxParsingTree {
     private final ArrayList<Stmt> stmts;
     private final ArrayList<Exp> exps;
     private String formatString;
+    int breakContinueLine, breakContinueCol;
     private int type;
     /*
     type = 0: ';'
@@ -37,6 +38,27 @@ public class Stmt extends SyntaxParsingTree {
         exps = new ArrayList<>();
         formatString = null;
         type = 0;
+    }
+
+    public int getBreakContinueLine() {
+        return breakContinueLine;
+    }
+
+    public void setBreakContinueLine(int breakContinueLine) {
+        this.breakContinueLine = breakContinueLine;
+    }
+
+    public int getBreakContinueCol() {
+        return breakContinueCol;
+    }
+
+    public void setBreakContinueCol(int breakContinueCol) {
+        this.breakContinueCol = breakContinueCol;
+    }
+
+    public void setBreakContinuePos(int line, int col) {
+        setBreakContinueLine(line);
+        setBreakContinueCol(col);
     }
 
     public String toString() {

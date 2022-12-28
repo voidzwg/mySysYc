@@ -12,10 +12,22 @@ public class LoadInstruction extends MemBase {
         setName("");
     }
 
+    public Value getPointer() {
+        return getOperands().get(0);
+    }
+
     @Override
     public String toString() {
         return this.getName() + " = " + "load " + this.getType() + ", "
                 + this.getOperands().get(0).getType()
                 +  " " + this.getOperands().get(0).getName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoadInstruction that = (LoadInstruction) o;
+        return getPointer().equals(that.getPointer());
     }
 }
